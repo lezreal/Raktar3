@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<script>
+
+function calc(id)
+{
+  if (document.getElementById(id).checked) 
+  {
+      document.getElementById('rogzit').disabled = false;
+  } else {
+	  document.getElementById('rogzit').disabled = true;
+  }
+}
+</script>
+
+</head>
+<body>
+
+<div layout:fragment="infoBar">
+<h1>Termékek listája</h1>
+  <p>A törléssel csak óvatosan</p>
+
+</div>
+
+<div layout:fragment="workBar">
+<form method="post" th:action="@{/delproduct}">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Megnevezés</th>
+        <th>Raktáron</th>
+        <th>Leírás</th>
+        <th>Törlés</th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr th:each="list:${productlist}">
+        <td th:text="${list.name}">John</td>
+        <td th:text="${list.amount}">Doe</td>
+        <td th:text="${list.description}">Doe</td>
+        <td > 
+
+            <input type="checkbox" name="boxok"  th:id="${list.id}" th:value="${list.id}"  autocomplete="off"  onclick="calc(this.id);" />
+                
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+<button type="submit" id="rogzit" disabled="true">RÖGZÍT</button>
+</form>
+</div>
+
+</body>
+</html>

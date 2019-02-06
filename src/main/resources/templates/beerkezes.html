@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+
+<div layout:fragment="infoBar">
+<h1>Áru beérkezés</h1>
+  <p>Készletre vétel...</p>
+  
+  <div th:if="${empregok}" class="alert alert-success">
+  <strong>Siker!</strong> Az új kolléga sikeresn regisztrálva
+</div>
+
+<div th:if="${vanmar}" class="alert alert-danger">
+  <strong>Van már ilyen!</strong> Már létezik ilyen névvel kolléga!
+</div>
+  
+</div>
+
+
+<div layout:fragment="workBar">
+
+<form method="post"  th:action="@{/newBeerkezes}">
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required >
+</div>
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Helység</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" >
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Cím</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" >
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási napok</span>
+  </div>&nbsp&nbsp
+  &nbsp&nbsp<input type="checkbox" value="H" >Hétfő</input>
+  &nbsp&nbsp<input type="checkbox" value="K"  >Kedd</input>
+  &nbsp&nbsp<input type="checkbox"  value="S" >Szerda</input>
+  &nbsp&nbsp<input type="checkbox"  value="C" >Csütörtök</input>
+  &nbsp&nbsp<input type="checkbox"  value="P" >Péntek</input>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Futár</span>&nbsp&nbsp
+  </div>
+
+<select><option value="valami">Pina</option></select><br/><br/>
+</div>
+<p><button type="submit" class="btn btn-outline-success">Rögzítés</button></p>
+
+</div>
+
+</form>
+
+</body>
+</html>
