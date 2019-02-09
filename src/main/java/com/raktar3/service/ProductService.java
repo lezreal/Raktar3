@@ -59,6 +59,14 @@ public class ProductService {
 	}
 	
 	
+	public void addCompany(Company c) {
+		companyRepo.save(c);
+	}
+	
+	public List<Company> findAllCompany(){
+		return companyRepo.findAll();
+	}
+	
 	
 	
 	@PostConstruct
@@ -71,19 +79,22 @@ public class ProductService {
 		Product p2 = new Product("Milotai");
 		productRepo.save(p2);
 		
-		Company comp = new Company("Bumet");
-		Company comp1 = new Company("Manz");
+		
+
 //		comp.addProduct(p);
 //		comp.addProduct(p1);
-//		
-		companyRepo.save(comp);
-		companyRepo.save(comp1);
+		
 		
 		Employe e = new Employe("Vencel");
 		Employe e2 = new Employe("Sanyi");
-		
+		Company comp = new Company("Bumet","Debrecen","Határ út","H,S,P",e);
+		Company comp1 = new Company("Manz","Debrecen","Határ út","H",e2);
 		employeRepo.save(e);
 		employeRepo.save(e2);
+		
+		companyRepo.save(comp);
+		companyRepo.save(comp1);
+		
 		
 		
 	}

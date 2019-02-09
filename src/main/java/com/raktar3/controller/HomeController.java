@@ -7,13 +7,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.raktar3.entities.Company;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.Product;
+import com.raktar3.entities.Stock;
+import com.raktar3.service.EmployeService;
 import com.raktar3.service.ProductService;
+import com.raktar3.service.StockService;
 
 @Controller
 public class HomeController {
 
+	@Autowired
+	EmployeService employeService;
+	
+	@Autowired
+	StockService stockService;
 	
 	@Autowired
 	ProductService productService;
@@ -47,13 +56,23 @@ public class HomeController {
 	
 	@RequestMapping("/beerkezes")
 	public String beerkezes(Model model) {
+		model.addAttribute("stock", new Stock());
+		model.addAttribute("emps", employeService.findAllEmploye());
+		model.addAttribute("products", productService.findAll());
 		return "beerkezes";
 	}
 	
 	@RequestMapping("/newcompany")
 	public String newcompany(Model model) {
 		model.addAttribute("futar", productService.findAllEmploye());
+		model.addAttribute("company", new Company());
 		return "newCompany";
+	}
+	
+	@RequestMapping("/companylist")
+	public String companylist(Model model) {
+		model.addAttribute("companies", productService.findAllCompany());
+		return "companyList";
 	}
 	
 }

@@ -15,6 +15,16 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Company {
+	
+	public Company(String name, String city, String address, String delday, Employe e) {
+		this.name=name;
+		this.address=address;
+		this.city=city;
+		this.deliverydays=delday;
+		this.employe=e;
+		
+	}
+	
 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
@@ -23,12 +33,24 @@ public class Company {
 	@Column(nullable=false,length=50)
 	String name;
 	
-	@Column(nullable=true,length=50)
+	@Column(nullable=false,length=50)
 	String city;
 	
 	@Column(nullable=true,length=6)
 	String deliverydays;
+	@Column(nullable=true)
+	String comment;
 	
+	public String getComment() {
+		return comment;
+	}
+
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+
 	@ManyToOne
 	Employe employe;
 	
@@ -79,7 +101,7 @@ public class Company {
 	
 	Set<Product> products = new HashSet<Product>();
 
-	@Column(length=200,nullable=true)
+	@Column(length=200,nullable=false)
 	String address;
 
 

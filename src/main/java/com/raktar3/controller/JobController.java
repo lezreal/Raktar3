@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.raktar3.entities.Company;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.Product;
+import com.raktar3.entities.Stock;
 import com.raktar3.repository.EmployeRepository;
 import com.raktar3.service.ProductService;
+import com.raktar3.service.StockService;
 
 @Controller
 public class JobController {
@@ -25,6 +28,9 @@ public class JobController {
 	
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	StockService stockService;
 	
 	@Autowired
 	ProductService employeService;
@@ -54,6 +60,18 @@ public class JobController {
 		return "newEmp";
 	}
 	
+	@RequestMapping("/newCompany")
+	public String newCompany(@ModelAttribute("company") Company company) {
+		productService.addCompany(company);
+		return "index";
+	}
 	
+	@RequestMapping("/beerkezesToDb")
+	public String beerkToDb(@ModelAttribute("stock") Stock stock) {
+		stock.setIncoming(true);
+		stockService.addIncoming(stock);
+		
+		return "index";
+	}
 	
 }

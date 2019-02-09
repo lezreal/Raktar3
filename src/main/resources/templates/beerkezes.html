@@ -7,15 +7,15 @@
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Áru beérkezés</h1>
-  <p>Készletre vétel...</p>
+<h1>Bevételezés</h1>
   
-  <div th:if="${empregok}" class="alert alert-success">
-  <strong>Siker!</strong> Az új kolléga sikeresn regisztrálva
+  
+  <div th:if="${regok}" class="alert alert-success">
+  <strong>Siker!</strong> Termék sikeresn regisztrálva
 </div>
 
 <div th:if="${vanmar}" class="alert alert-danger">
-  <strong>Van már ilyen!</strong> Már létezik ilyen névvel kolléga!
+  <strong>Van már ilyen!</strong> Mondtam, hogy nézd meg a listát!
 </div>
   
 </div>
@@ -23,48 +23,46 @@
 
 <div layout:fragment="workBar">
 
-<form method="post"  th:action="@{/newBeerkezes}">
+<form method="post" th:object="${stock}" th:action="@{/beerkezesToDb}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ki hozta?</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required >
+  <select th:field="*{employe}"><option  th:each="emp:${emps}" th:text="${emp.name}" th:value="${emp.id}"></option></select>
 </div>
 
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Helység</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mit hozott?</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" >
+  <select th:field="*{product}"><option  th:each="prod:${products}" th:text="${prod.name}" th:value="${prod.id}"></option></select>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Cím</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" >
+  <input type="number" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{amount}">
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási napok</span>
-  </div>&nbsp&nbsp
-  &nbsp&nbsp<input type="checkbox" value="H" >Hétfő</input>
-  &nbsp&nbsp<input type="checkbox" value="K"  >Kedd</input>
-  &nbsp&nbsp<input type="checkbox"  value="S" >Szerda</input>
-  &nbsp&nbsp<input type="checkbox"  value="C" >Csütörtök</input>
-  &nbsp&nbsp<input type="checkbox"  value="P" >Péntek</input>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Futár</span>&nbsp&nbsp
+    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
   </div>
-
-<select><option value="valami">Pina</option></select><br/><br/>
+  <input type="date" name="bday" th:field="*{date}">
 </div>
-<p><button type="submit" class="btn btn-outline-success">Rögzítés</button></p>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
+</div>
+
+<button type="submit" class="btn btn-outline-success">Rögzítés</button>
+
+
 
 </div>
 

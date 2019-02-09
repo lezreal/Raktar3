@@ -23,12 +23,12 @@
 
 <div layout:fragment="workBar">
 
-<form method="post"  th:action="@{/newBeerkezes}">
+<form method="post"  th:action="@{/newCompany}" th:object="${company}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required >
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required th:field="*{name}">
 </div>
 
 
@@ -36,25 +36,25 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Helység</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" >
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required  th:field="*{city}">
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Cím</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" >
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required  th:field="*{address}">
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási napok</span>
   </div>&nbsp&nbsp
-  &nbsp&nbsp<input type="checkbox" value="H" >Hétfő</input>
-  &nbsp&nbsp<input type="checkbox" value="K"  >Kedd</input>
-  &nbsp&nbsp<input type="checkbox"  value="S" >Szerda</input>
-  &nbsp&nbsp<input type="checkbox"  value="C" >Csütörtök</input>
-  &nbsp&nbsp<input type="checkbox"  value="P" >Péntek</input>
+  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}" value="H" >Hétfő</input>
+  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}" value="K"  >Kedd</input>
+  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}"  value="S" >Szerda</input>
+  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}"  value="C" >Csütörtök</input>
+  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}"  value="P" >Péntek</input>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -62,8 +62,16 @@
     <span class="input-group-text" id="inputGroup-sizing-sm">Futár</span>&nbsp&nbsp
   </div>
 
-<select><option  th:each="emp:${futar}" th:text="${emp.name}" ></option></select><br/><br/>
+<select th:field="*{employe}"><option  th:each="emp:${futar}" th:text="${emp.name}" th:value="${emp.id}"></option></select><br/><br/>
 </div>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Megjegyzés</span>
+  </div>
+  <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" th:field="*{comment}"></textarea>
+  
+</div>
+
 <p><button type="submit" class="btn btn-outline-success">Rögzítés</button></p>
 
 </div>

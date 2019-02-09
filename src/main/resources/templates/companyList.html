@@ -5,10 +5,14 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/list.css">
 <script src="js/list.js"></script>
+
+
 <script>
 $(document).ready( function () {
     $('#myTable').DataTable();
 } );
+
+
 function calc(id)
 {
   if (document.getElementById(id).checked) 
@@ -24,7 +28,7 @@ function calc(id)
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Termékek listája</h1>
+<h1>Ügyfelek listája</h1>
   <p>A törléssel csak óvatosan</p>
 
 </div>
@@ -37,14 +41,16 @@ function calc(id)
         <th>Megnevezés</th>
         <th>Raktáron</th>
         <th>Leírás</th>
+        <th>Futár</th>
         <th>Törlés</th>
       </tr>
     </thead>
     <tbody >
-      <tr th:each="list:${productlist}">
+      <tr th:each="list:${companies}">
         <td th:text="${list.name}">John</td>
-        <td th:text="${list.amount}">Doe</td>
-        <td th:text="${list.description}">Doe</td>
+        <td th:text="${list.city}">Doe</td>
+        <td th:text="${list.address}">Doe</td>
+        <td th:text="${list.employe.name}">Doe</td>
         <td > 
 
             <input type="checkbox" name="boxok"  th:id="${list.id}" th:value="${list.id}"  autocomplete="off"  onclick="calc(this.id);" />

@@ -73,6 +73,14 @@ public class Stock {
 	@ManyToOne
 	Employe employe;
 	
+	public Employe getEmploye() {
+		return employe;
+	}
+
+	public void setEmploye(Employe employe) {
+		this.employe = employe;
+	}
+
 	@Column(columnDefinition="tinyint(1) default 0")
 	boolean isIncoming;
 	
