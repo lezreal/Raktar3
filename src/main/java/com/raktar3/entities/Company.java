@@ -28,7 +28,7 @@ public class Company {
 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
-	Long id;
+	int id;
 	
 	@Column(nullable=false,length=50)
 	String name;
@@ -115,13 +115,13 @@ public class Company {
 	}
 
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
 
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

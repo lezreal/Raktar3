@@ -26,10 +26,10 @@ public class Product {
 	
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
-	Long id;
+	int id;
 
 	@Column(columnDefinition="tinyint(1) default 0")
-	boolean hasEmpty=false;
+	boolean isEmpty=false;
 	
 	
 	@Column(length=50,nullable=true)
@@ -65,11 +65,11 @@ public class Product {
 		this.stockes = stockes;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -81,12 +81,12 @@ public class Product {
 		this.name = name;
 	}
 
-	public boolean isHasEmpty() {
-		return hasEmpty;
+	public boolean isIsEmpty() {
+		return isEmpty;
 	}
 
-	public void setHasEmpty(boolean hasEmpty) {
-		this.hasEmpty = hasEmpty;
+	public void setIsEmpty(boolean hasEmpty) {
+		this.isEmpty = hasEmpty;
 	}
 
 	public String getDescription() {

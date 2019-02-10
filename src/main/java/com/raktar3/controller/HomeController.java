@@ -44,6 +44,7 @@ public class HomeController {
 		model.addAttribute("productlist", productService.findAll());
 		ArrayList<Long> boxi=new ArrayList<Long>();
 		model.addAttribute("boxok", boxi);
+		model.addAttribute("keszletrol","");
 		return "productList";
 	}
 	
@@ -56,10 +57,28 @@ public class HomeController {
 	
 	@RequestMapping("/beerkezes")
 	public String beerkezes(Model model) {
+		if (employeService.findAllEmploye().isEmpty()) {
+			model.addAttribute("noemploye","");
+			return "index";
+		}
+		
+		if (productService.findAll().isEmpty()) {
+			model.addAttribute("noproduct","");
+			return "index";
+		}
+		model.addAttribute("products", productService.findAll());
+		model.addAttribute("emps", employeService.findAllEmploye());
+		
+		model.addAttribute("stock", new Stock());
+		return "beerkezes";
+	}
+	
+	@RequestMapping("/eladas")
+	public String eladas(Model model) {
 		model.addAttribute("stock", new Stock());
 		model.addAttribute("emps", employeService.findAllEmploye());
 		model.addAttribute("products", productService.findAll());
-		return "beerkezes";
+		return "eladas";
 	}
 	
 	@RequestMapping("/newcompany")

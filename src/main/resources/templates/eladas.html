@@ -7,8 +7,8 @@
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Bevételezés</h1>
-<p>Ide írod a nap végi visszahozott <strong>üres ballonokat, és a kamionos, vagy más fajta teli ballonok, gépek</strong> beérkezését</p>
+<h1>Eladás</h1>
+<p>Ide írod az eladott <strong>teli vizeket, gépeket, pumpát, szörpöt</strong></p>
   
   
   <div th:if="${regok}" class="alert alert-success">
@@ -24,10 +24,10 @@
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${stock}" th:action="@{/beerkezesToDb}">
+<form method="post" th:object="${stock}" th:action="@{/keszletrolLevetel}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Ki hozta?</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ki adta el?</span>
   </div>
   <select th:field="*{employe}"><option  th:each="emp:${emps}" th:text="${emp.name}" th:value="${emp.id}"></option></select>
 </div>
@@ -35,7 +35,7 @@
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mit hozott?</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mit adott el?</span>
   </div>
   <select th:field="*{product}"><option  th:each="prod:${products}" th:text="${prod.name}" th:value="${prod.id}"></option></select>
 </div>
@@ -44,14 +44,14 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
   </div>
-  <input type="number" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{amount}">
+  <input type="number" name="amount" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
   </div>
-  <input type="date" name="bday" th:field="*{date}">
+  <input type="date" name="bday" th:field="*{date}" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -60,12 +60,6 @@
   </div>
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
 </div>
-
-
-
-
-
-
 
 <button type="submit" class="btn btn-outline-success">Rögzítés</button>
 

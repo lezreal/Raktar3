@@ -26,6 +26,9 @@ function calc(id)
 <div layout:fragment="infoBar">
 <h1>Termékek listája</h1>
   <p>A törléssel csak óvatosan</p>
+  <div th:if="${nemtorolheto}" class="alert alert-danger">
+  <strong>Nem törölhető!!</strong> Készlet adat hivatkozik rá!
+</div>
 
 </div>
 
@@ -36,16 +39,16 @@ function calc(id)
       <tr>
         <th>Megnevezés</th>
         <th>Raktáron</th>
-        <th>Leírás</th>
-        <th>Törlés</th>
+        <th th:if="${keszletrol}">Leírás</th>
+        <th th:if="${keszletrol}">Törlés</th>
       </tr>
     </thead>
     <tbody >
       <tr th:each="list:${productlist}">
         <td th:text="${list.name}">John</td>
         <td th:text="${list.amount}">Doe</td>
-        <td th:text="${list.description}">Doe</td>
-        <td > 
+        <td  th:if="${keszletrol}" th:text="${list.description}">Doe</td>
+        <td  th:if="${keszletrol}" > 
 
             <input type="checkbox" name="boxok"  th:id="${list.id}" th:value="${list.id}"  autocomplete="off"  onclick="calc(this.id);" />
                 

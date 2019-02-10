@@ -1,7 +1,8 @@
 package com.raktar3.controller;
 
-import java.awt.List;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,17 @@ public class JobController {
 	@RequestMapping("/delproduct")
 	public String Product(@RequestParam("boxok") ArrayList<Product> vmi, Model model) {
 		for (Product x:vmi) {
-			productService.deleteProduct(x);
+			
+			try {
+				productService.deleteProduct(x);
+			} catch (Exception e) {
+				
+				//e.printStackTrace();
+				model.addAttribute("nemtorolheto","");
+				model.addAttribute("keszletrol","");
+				model.addAttribute("productlist", productService.findAll());
+				return "productList";
+			}
 		}
 		model.addAttribute("productlist", productService.findAll());
 		return "productList";
@@ -74,4 +85,27 @@ public class JobController {
 		return "index";
 	}
 	
+	
+	@RequestMapping("/keszletrolLevetel")
+	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, @RequestParam("amount") int mennyiseg) {
+		stock.setIncoming(false);
+		stock.setAmount(mennyiseg);
+		stockService.saleStock(stock);
+		return "index";
+	}
+
+	@RequestMapping("/keszletlista")
+	public String keszletlista(Model model) {
+		List<Integer> id_lista =stockService.findProducts();
+		List<Product> lista = new ArrayList();
+		for (int i=0;i<id_lista.size();i++) {
+			Product p =productService.findById(id_lista.get(i)).get();
+			int osszes=stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i));
+			p.setAmount(osszes);
+			lista.add(p);
+		}
+		model.addAttribute("productlist", lista);
+		
+		return "productList";
+	}
 }

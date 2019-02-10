@@ -12,11 +12,21 @@ public class Stock {
 
 	public Stock() {}
 	
-	public Long getId() {
+	public Stock(int amount, String date,boolean is_incoming, Employe e,Product p, String comment) {
+		
+		this.amount=amount;
+		this.date=date;
+		this.isIncoming=is_incoming;
+		this.employe=e;
+		this.product=p;
+		this.comment=comment;
+	}
+	
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -62,7 +72,7 @@ public class Stock {
 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
-	Long id;
+	int id;
 	
 	
 	

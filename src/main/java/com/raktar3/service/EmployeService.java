@@ -1,6 +1,7 @@
 package com.raktar3.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class EmployeService {
 		return employeRepo.findAll();
 	}
 	
-	
+	public Optional<Employe> findById(Long id) {
+		return employeRepo.findById(id);
+	}
 	
 }
