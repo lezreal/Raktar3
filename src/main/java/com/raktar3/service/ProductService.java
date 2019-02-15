@@ -37,6 +37,10 @@ public class ProductService {
 		return productRepo.findById(id);
 	}
 	
+	public List<Product> findUres(String name){
+		return productRepo.findProductsWithPartOfName(name);
+	}
+	
 	public boolean findProductByName(String name) {
 		if (productRepo.findByNameIgnoreCase(name)==null) return true; else return false;
 	}
@@ -80,30 +84,34 @@ public class ProductService {
 	
 	
 	
-//	@PostConstruct
-//	public void init() {
-//		
-//		Product p = new Product("Aqua Via");
-//		productRepo.save(p);
-//		Product p1 = new Product("Brill");
-//		productRepo.save(p1);
-//		Product p2 = new Product("Milotai");
-//		productRepo.save(p2);
-//		
-//
-//		
-//		
-//		Employe e = new Employe("Vencel");
-//		Employe e2 = new Employe("Sanyi");
-//		Company comp = new Company("Bumet","Debrecen","Határ út","H,S,P",e);
-//		Company comp1 = new Company("Manz","Debrecen","Határ út","H",e2);
-//		employeRepo.save(e);
-//		employeRepo.save(e2);
-//		
-//		companyRepo.save(comp);
-//		companyRepo.save(comp1);
-//		
-//			
+	@PostConstruct
+	public void init() {
+		
+		Product p = new Product("Aqua Via");productRepo.save(p);
+		Product p1 = new Product("Brill");productRepo.save(p1);
+		Product p2 = new Product("Milotai");productRepo.save(p2);
+		Product p3 = new Product("via-ÜRES BALLON ");productRepo.save(p3);
+		Product p4 = new Product("brill-ÜRES BALLON");productRepo.save(p4);
+		Product p5 = new Product("milotai-ÜRES BALLON");productRepo.save(p5);
+		
+
+		Employe e = new Employe("KAMION");
+		Employe e1 = new Employe("ALAPKÉSZLET");
+		Employe e2 = new Employe("Vencel");
+		Employe e3 = new Employe("Sanyi");
+		
+		
+		employeRepo.save(e);
+		employeRepo.save(e1);
+		employeRepo.save(e2);
+		employeRepo.save(e3);
+
+		
+ 		Company comp = new Company("Bumet","Debrecen","Határ út","H,S,P",e);
+		Company comp1 = new Company("Manz","Debrecen","Határ út","H",e2);		
+		companyRepo.save(comp);
+		companyRepo.save(comp1);
+		
 //		Stock s = new Stock(50,"2019-02-08",true,e,p,"nincs komment");
 //		Stock s2 = new Stock(120,"2019-02-07",true,e2,p2,"második");
 //		Stock s3 = new Stock(15,"2019-02-08",false,e,p,"eladas");
@@ -114,7 +122,7 @@ public class ProductService {
 //		stockRepo.save(s3);
 //		stockRepo.save(s4);
 //		
-//	}
+	}
 
 
 	

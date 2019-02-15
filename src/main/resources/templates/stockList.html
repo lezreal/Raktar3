@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/list.css">
+<script src="js/list.js"></script>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+function calc(id)
+{
+  if (document.getElementById(id).checked) 
+  {
+      document.getElementById('rogzit').disabled = false;
+  } else {
+	  document.getElementById('rogzit').disabled = true;
+  }
+}
+</script>
+
+</head>
+<body>
+
+<div layout:fragment="infoBar">
+<h1>Termékek listája</h1>
+  <p>A törléssel csak óvatosan</p>
+  <div th:if="${nemtorolheto}" class="alert alert-danger">
+  <strong>Nem törölhető!!</strong> Készlet adat hivatkozik rá!
+</div>
+
+</div>
+
+<div layout:fragment="workBar">
+<form method="post" th:action="@{/delstock}">
+  <table class="table table-striped" id="myTable">
+    <thead>
+      <tr>
+        <th>Dátum</th>
+        <th>Bejövő/Kimenő</th>
+        <th>Mennyiség</th>
+        <th>Ki hozta</th>
+        <th>Termék</th>
+        <th>Megjegyzés</th>
+        <th>Töröl</th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr th:each="list:${stocklist}">
+        <td th:text="${list.date}">John</td>
+        <div th:if="${list.incoming==true}">
+        <td ><font color="lightgreen">Beérkezés</font></td>
+        </div>
+        <div th:if="${list.incoming==false}">
+        <td ><font color="red">Kiadás</font></td>
+        </div>
+        <td  th:text="${list.amount}">Doe</td>
+        <td  th:text="${list.employe.name}">Doe</td>
+        <td  th:text="${list.product.name}">Doe</td>
+        <td  th:text="${list.comment}">Doe</td>
+        
+        <td > 
+
+            <input type="checkbox" name="boxok"  th:id="${list.id}" th:value="${list.id}"  autocomplete="off"  onclick="calc(this.id);" />
+                
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+<button type="submit" id="rogzit" disabled="true">RÖGZÍT</button>
+</form>
+</div>
+
+</body>
+</html>

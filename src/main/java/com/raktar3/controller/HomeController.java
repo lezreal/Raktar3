@@ -2,11 +2,12 @@ package com.raktar3.controller;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.raktar3.entities.Company;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.Product;
@@ -15,9 +16,13 @@ import com.raktar3.service.EmployeService;
 import com.raktar3.service.ProductService;
 import com.raktar3.service.StockService;
 
+import net.bytebuddy.asm.Advice.This;
+
 @Controller
 public class HomeController {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	EmployeService employeService;
 	
@@ -29,6 +34,8 @@ public class HomeController {
 	
 	@RequestMapping("/")
 	public String home() {
+		log.info("INDULÁS info");
+		log.debug("INDULÁS debug");
 		return "index";
 	}
 	
@@ -75,9 +82,19 @@ public class HomeController {
 	
 	@RequestMapping("/eladas")
 	public String eladas(Model model) {
+		if (employeService.findAllEmploye().isEmpty()) {
+			model.addAttribute("noemploye","");
+			return "index";
+		}
+		
+		if (productService.findAll().isEmpty()) {
+			model.addAttribute("noproduct","");
+			return "index";
+		}
 		model.addAttribute("stock", new Stock());
 		model.addAttribute("emps", employeService.findAllEmploye());
 		model.addAttribute("products", productService.findAll());
+		model.addAttribute("uresek", productService.findUres("ÜRES"));
 		return "eladas";
 	}
 	
@@ -93,5 +110,13 @@ public class HomeController {
 		model.addAttribute("companies", productService.findAllCompany());
 		return "companyList";
 	}
+	
+	@RequestMapping("/kamion")
+	public String kamion(Model model) {
+		model.addAttribute("stock",new Stock());
+		model.addAttribute("products", productService.findAll());
+		return "kamion";
+	}
+	
 	
 }

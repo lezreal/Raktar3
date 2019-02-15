@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org" layout:decorator="layouts/main">
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+
+
+<div layout:fragment="infoBar">
+  <h1>Kamionos fuvar rögzítése</h1>
+  
+</div>
+
+
+<div layout:fragment="workBar">
+
+<form th:object="${stock}" method="post" action="/kamionToDb">
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Hozott vagy vitt?</span>
+  </div>
+ </div>  
+  <p class="radio">&nbsp;&nbsp;
+  <label><input type="radio" name="hozott" value="1" checked>&nbsp;&nbsp;Hozott</label>
+</p>
+
+<p class="radio">&nbsp;&nbsp;
+  <label><input type="radio" name="hozott" value="0">&nbsp;&nbsp;Vitt</label>
+</p>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
+  </div>
+  <input type="date" name="bday" th:field="*{date}"  required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Termék</span>
+  </div>
+  <select th:field="*{product}"><option  th:each="prod:${products}" th:text="${prod.name}" th:value="${prod.id}"></option></select>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
+  </div>
+  <input type="number" th:field="*{amount}" name="amount" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
+</div>
+<input type="hidden" value="1" name="employe">
+<button type="submit" class="btn btn-outline-success" >Rögzítés</button>
+</form>
+</div>
+
+</body>
+</html>

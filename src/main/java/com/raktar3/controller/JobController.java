@@ -1,8 +1,13 @@
 package com.raktar3.controller;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +24,7 @@ import com.raktar3.entities.Employe;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Stock;
 import com.raktar3.repository.EmployeRepository;
+import com.raktar3.service.EmployeService;
 import com.raktar3.service.ProductService;
 import com.raktar3.service.StockService;
 
@@ -26,6 +32,9 @@ import com.raktar3.service.StockService;
 public class JobController {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	FileOutputStream fos=null;
+	
+	
 	
 	@Autowired
 	ProductService productService;
@@ -34,7 +43,7 @@ public class JobController {
 	StockService stockService;
 	
 	@Autowired
-	ProductService employeService;
+	EmployeService employeService;
 	
 	@RequestMapping("/regProductToDb")
 	public String regProductToDb(@ModelAttribute("product") Product p, Model model) {
@@ -87,10 +96,26 @@ public class JobController {
 	
 	
 	@RequestMapping("/keszletrolLevetel")
-	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, @RequestParam("amount") int mennyiseg) {
+	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, @RequestParam("amount") int mennyiseg,@RequestParam("ures") int ures,@RequestParam("amountures") int uresamount,@RequestParam("ureskomment") String ureskomment) {
+		
+		if (stock.isIncoming()) {
+			log.info("BEJÖTT");
+			Product p = productService.findById(ures).get();
+			Stock ns = new Stock();
+			ns.setProduct(p);
+			ns.setIncoming(true);
+			ns.setDate(stock.getDate());
+			ns.setEmploye(stock.getEmploye());
+			ns.setAmount(uresamount);
+			ns.setComment(ureskomment);
+			stockService.addIncoming(ns);
+		}
+		
+		
 		stock.setIncoming(false);
 		stock.setAmount(mennyiseg);
 		stockService.saleStock(stock);
+
 		return "index";
 	}
 
@@ -108,4 +133,31 @@ public class JobController {
 		
 		return "productList";
 	}
+	
+	@RequestMapping("/keszletmozgaslista")
+	public String keszletmozgaslista(Model model) {
+		model.addAttribute("stocklist", stockService.stockList());
+		
+		return "stockList";
+	}
+	
+	@RequestMapping("/kamionToDb")
+	public String kamiontodb(@ModelAttribute("stock") Stock s,@RequestParam("hozott") int hozott,@RequestParam("employe") int emp) {
+		
+		
+		s.setEmploye( employeService.findById(emp).get());
+		
+		if (hozott==1) {
+			s.setIncoming(true);
+			stockService.addIncoming(s); 
+		} else {
+			s.setIncoming(false);
+			stockService.saleStock(s);
+		}
+		
+		
+		return "index";
+	}
+	
+	
 }

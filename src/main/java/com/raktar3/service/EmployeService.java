@@ -20,8 +20,18 @@ public class EmployeService {
 		return employeRepo.findAll();
 	}
 	
-	public Optional<Employe> findById(Long id) {
+	public Optional<Employe> findById(Integer id) {
 		return employeRepo.findById(id);
+	}
+
+	public boolean addUserToDb(Employe emp) {
+		try {
+		employeRepo.save(emp);
+		return true;
+		} catch(Exception ex) {
+			return false;
+		}
+		
 	}
 	
 }

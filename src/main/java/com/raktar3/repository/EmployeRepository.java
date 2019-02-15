@@ -13,6 +13,6 @@ public interface EmployeRepository extends CrudRepository<Employe, Integer> {
 	
 	List<Employe> findAll();
 	
-	Optional<Employe> findById(Long id);
+	Optional<Employe> findById(Integer id);
 
 }

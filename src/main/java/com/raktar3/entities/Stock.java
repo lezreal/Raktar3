@@ -16,7 +16,7 @@ public class Stock {
 		
 		this.amount=amount;
 		this.date=date;
-		this.isIncoming=is_incoming;
+		this.incoming=is_incoming;
 		this.employe=e;
 		this.product=p;
 		this.comment=comment;
@@ -38,13 +38,7 @@ public class Stock {
 		this.product = product;
 	}
 
-	public boolean isIncoming() {
-		return isIncoming;
-	}
-
-	public void setIncoming(boolean isIncoming) {
-		this.isIncoming = isIncoming;
-	}
+	
 
 	public String getDate() {
 		return date;
@@ -92,8 +86,18 @@ public class Stock {
 	}
 
 	@Column(columnDefinition="tinyint(1) default 0")
-	boolean isIncoming;
+	boolean incoming;
 	
+	
+
+	public boolean isIncoming() {
+		return incoming;
+	}
+
+	public void setIncoming(boolean incoming) {
+		this.incoming = incoming;
+	}
+
 	String date;
 	
 	

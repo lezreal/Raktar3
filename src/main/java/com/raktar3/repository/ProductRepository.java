@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.raktar3.entities.Product;
 
@@ -19,6 +20,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 	
 	Optional<Product> findById(Integer id);
 	
-
+	@Query(value="SELECT * FROM product WHERE name LIKE CONCAT('%',?1,'%')",nativeQuery=true)
+	List<Product> findProductsWithPartOfName(String username);
 
 }

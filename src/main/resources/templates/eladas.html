@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset="UTF-8">
+<script>
+
+
+
+function calc(id)
+{
+	  if (document.getElementById(id).checked) 
+	  {
+		  
+	      document.getElementById('uresvane').style.visibility = 'visible';
+	  } else {
+		  
+		  document.getElementById('uresvane').style.visibility = 'hidden';
+	  }
+}
+</script>
+
 
 </head>
 <body>
@@ -24,7 +42,7 @@
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${stock}" th:action="@{/keszletrolLevetel}">
+<form method="post" th:object="${stock}" th:action="@{/keszletrolLevetel}" >
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ki adta el?</span>
@@ -61,7 +79,37 @@
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
 </div>
 
-<button type="submit" class="btn btn-outline-success">Rögzítés</button>
+<div class="alert alert-danger">
+
+<input type="checkbox" th:field="*{incoming}" id="chk"  onclick="calc(this.id);" /><font size="5"><strong> Üres ballon vagy palack változás?</strong></font>
+</div>
+<div id="uresvane" style="visibility:hidden">
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Csere ballon vagy palack?</span>
+  </div>
+  <select name="ures"><option  th:each="prod2:${uresek}" th:text="${prod2.name}" th:value="${prod2.id}"></option></select>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
+  </div>
+  <input type="number" name="amountures" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="2" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="ureskomment">
+</div>
+
+
+</div>
+
+
+<button type="submit" class="btn btn-outline-success" >Rögzítés</button>
 
 
 
