@@ -7,7 +7,7 @@
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Új termék rögzítése</h1>
+<h1>Új termék rögzítése - <font color="red">Itt gépet ne rögzíts!</font></h1>
   <p>Ellenőrizd, hogy nincs-e már az adatbázisban!</p>
   
   <div th:if="${regok}" class="alert alert-success">
@@ -50,7 +50,22 @@
   </div>
 </div>
 </div>
+<div layout:fragment="sideBar">
 
+    <ul class="list-inline">
+
+        <li>Vizek</li>
+
+        <li>Üres ballonok</li>
+
+        <li>CO palackok</li>
+
+        <li>Szörpök</li>
+        <li>Pumpa</li>
+
+    </ul>
+
+</div>
 </form>
 
 </body>

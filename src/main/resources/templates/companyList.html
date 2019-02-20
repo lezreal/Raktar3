@@ -39,10 +39,10 @@ function calc(id)
     <thead>
       <tr>
         <th>Megnevezés</th>
-        <th>Raktáron</th>
+        <th>Helység</th>
         <th>Leírás</th>
         <th>Futár</th>
-        <th>Törlés</th>
+        <th>Száll. nap</th>
       </tr>
     </thead>
     <tbody >
@@ -51,11 +51,8 @@ function calc(id)
         <td th:text="${list.city}">Doe</td>
         <td th:text="${list.address}">Doe</td>
         <td th:text="${list.employe.name}">Doe</td>
-        <td > 
-
-            <input type="checkbox" name="boxok"  th:id="${list.id}" th:value="${list.id}"  autocomplete="off"  onclick="calc(this.id);" />
-                
-        </td>
+        <td th:if="${list.deliverydays==null}" >Kötetlen</td>
+        <td th:unless="${list.deliverydays==null}" th:text="${list.deliverydays}"></td>
       </tr>
       
     </tbody>

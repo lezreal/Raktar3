@@ -11,4 +11,5 @@ public interface CompanyRepository extends CrudRepository<Company, Integer> {
 	
 	List<Company> findAll();
 	
+	Company findById(int id);
 }

@@ -49,11 +49,14 @@ function calc(id)
     <tbody >
       <tr th:each="list:${stocklist}">
         <td th:text="${list.date}">John</td>
-        <div th:if="${list.incoming==true}">
+        <div th:if="${list.incoming==1}">
         <td ><font color="lightgreen">Beérkezés</font></td>
         </div>
-        <div th:if="${list.incoming==false}">
+        <div th:if="${list.incoming==0}">
         <td ><font color="red">Kiadás</font></td>
+        </div>
+        <div th:if="${list.incoming==2}">
+        <td ><font color="navy">Selejt</font></td>
         </div>
         <td  th:text="${list.amount}">Doe</td>
         <td  th:text="${list.employe.name}">Doe</td>

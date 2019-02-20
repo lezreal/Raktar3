@@ -20,7 +20,7 @@ public class EmployeService {
 		return employeRepo.findAll();
 	}
 	
-	public Optional<Employe> findById(Integer id) {
+	public Employe findById(int id) {
 		return employeRepo.findById(id);
 	}
 
@@ -33,5 +33,15 @@ public class EmployeService {
 		}
 		
 	}
+
+	public Employe findByNameIgnoreCase(String name) {
+		return employeRepo.findByNameIgnoreCase(name);
+	}
+
+	public List<Employe> findAllHumanEmploye() {
+		return employeRepo.findAllHumanEmploye();
+	}
+
+	
 	
 }

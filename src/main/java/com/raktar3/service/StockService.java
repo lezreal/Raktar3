@@ -46,5 +46,25 @@ public class StockService {
 		if (stockRepo.getAmountByProductSale(i)==null) return 0; else
 		return stockRepo.getAmountByProductSale(i);
 	}
+	public boolean vaneKeszlet() {
+		try {
+			if (stockRepo.findToSelejt()>0)
+			return true; else return false;
+		} catch(Exception ex) {
+		return false;	
+		}
+	}
 	
+	public boolean vaneProduct(int id) {
+		if (stockRepo.isProductinStock(id) ==0) return false; else return true;
+		
+	}
+	
+	public void deleteAll() {
+	stockRepo.deleteAll();
+	}
+	
+	public void deleteById(int id) {
+		stockRepo.deleteById(id);
+		}
 }

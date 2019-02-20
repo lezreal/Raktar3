@@ -12,7 +12,7 @@ public class Stock {
 
 	public Stock() {}
 	
-	public Stock(int amount, String date,boolean is_incoming, Employe e,Product p, String comment) {
+	public Stock(int amount, String date,int is_incoming, Employe e,Product p, String comment) {
 		
 		this.amount=amount;
 		this.date=date;
@@ -85,16 +85,18 @@ public class Stock {
 		this.employe = employe;
 	}
 
-	@Column(columnDefinition="tinyint(1) default 0")
-	boolean incoming;
+	@Column(columnDefinition="tinyint(1) default 0") // ha 1 akkor bejövő, ha 0 akkor kimenő, ha 2 akkor selejt
+	int incoming;
 	
 	
 
-	public boolean isIncoming() {
+	
+
+	public int getIncoming() {
 		return incoming;
 	}
 
-	public void setIncoming(boolean incoming) {
+	public void setIncoming(int incoming) {
 		this.incoming = incoming;
 	}
 

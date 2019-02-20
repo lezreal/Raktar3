@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+
+<div layout:fragment="infoBar">
+<h1>Új berendezés rögzítése</h1>
+  
+  
+  <div th:if="${machregok}" class="alert alert-success">
+  <strong>Siker!</strong> Az új gép sikeresen regisztrálva
+</div>
+
+<div th:if="${machregid}" class="alert alert-danger">
+  Az új gép sorszáma: <h2><strong th:text="${machregid}">Valami gond van!</strong></h2>
+</div>
+  
+</div>
+
+
+<div layout:fragment="workBar">
+
+<form method="post" th:object="${newmach}" th:action="@{/newMachToDb}" id="myForm">
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="" placeholder="gép típusa" required th:field="*{name}" onclick="document.getElementById('subbutton').disabled=false">
+  
+</div>
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Sima, Co2, Hálózati</span>
+  </div>
+  <select th:field="*{type}">
+  	<option value="1">Hideg-Meleg vizes</option>
+  	<option value="2">CO2 - szódás</option>
+  	<option value="3">Hálózati gép</option>
+  </select>
+</div>
+
+<button type="submit" class="btn btn-outline-success" disabled id="subbutton">Rögzítés</button>
+
+</div>
+
+</form>
+
+</body>
+</html>

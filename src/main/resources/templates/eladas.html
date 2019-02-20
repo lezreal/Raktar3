@@ -12,10 +12,14 @@ function calc(id)
 	  if (document.getElementById(id).checked) 
 	  {
 		  
-	      document.getElementById('uresvane').style.visibility = 'visible';
+		  document.getElementById('uresvane').style.visibility = 'visible';
+		  document.getElementById('uresbox').value = 1;
+		  
+	      
 	  } else {
 		  
 		  document.getElementById('uresvane').style.visibility = 'hidden';
+		  document.getElementById('uresbox').value = 0;
 	  }
 }
 </script>
@@ -81,7 +85,8 @@ function calc(id)
 
 <div class="alert alert-danger">
 
-<input type="checkbox" th:field="*{incoming}" id="chk"  onclick="calc(this.id);" /><font size="5"><strong> Üres ballon vagy palack változás?</strong></font>
+<input type="checkbox" id="chk"  onclick="calc(this.id);" /><font size="5"><strong> Üres ballon vagy palack változás?</strong></font>
+<input type="hidden" id="uresbox" name="uresbox" value="0" />
 </div>
 <div id="uresvane" style="visibility:hidden">
 <div class="input-group input-group-sm mb-3">

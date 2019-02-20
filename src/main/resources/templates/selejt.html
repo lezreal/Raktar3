@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset="UTF-8">
 
 </head>
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Bevételezés</h1>
-<p>Ide írod a nap végi visszahozott <strong>üres ballonokat, és a kamionos, vagy más fajta teli ballonok, gépek</strong> beérkezését</p>
+<h1>Selejtezés</h1>
+<p>Ha csak a víz zöldült meg, ne felejtsd el készletre venni az üres ballont (beérkezés).</p>
   
   
   <div th:if="${regok}" class="alert alert-success">
@@ -24,10 +25,10 @@
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${stock}" th:action="@{/beerkezesToDb}">
+<form method="post" th:object="${stock}" th:action="@{/selejtToDb}" >
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Ki hozta?</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ki selejtezte?</span>
   </div>
   <select th:field="*{employe}"><option  th:each="emp:${emps}" th:text="${emp.name}" th:value="${emp.id}"></option></select>
 </div>
@@ -35,41 +36,37 @@
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mit hozott?</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mit selejtezett?</span>
   </div>
   <select th:field="*{product}"><option  th:each="prod:${products}" th:text="${prod.name}" th:value="${prod.id}"></option></select>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség (ha meg mered mondani):</span>
   </div>
-  <input type="number" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{amount}">
+  <input type="number" name="amount" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
   </div>
-  <input type="date" name="bday" th:field="*{date}">
+  <input type="date" name="bday" th:field="*{date}" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Mi a picsa történt</span>
   </div>
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
 </div>
 
 
 
+<button type="submit" class="btn btn-outline-success" >Rögzítés</button>
 
-
-
-
-<button type="submit" class="btn btn-outline-success">Rögzítés</button>
-
-
+ 
 
 </div>
 

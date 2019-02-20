@@ -18,7 +18,8 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 	
 	public void delete(Product p);
 	
-	Optional<Product> findById(Integer id);
+	@Query(value="select * from product where id=?1",nativeQuery=true)
+	Product findById(int id);
 	
 	@Query(value="SELECT * FROM product WHERE name LIKE CONCAT('%',?1,'%')",nativeQuery=true)
 	List<Product> findProductsWithPartOfName(String username);

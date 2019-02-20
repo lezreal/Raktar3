@@ -27,11 +27,14 @@
 <div th:if="${noproduct}" class="alert alert-danger">
   <strong>Nincs terméked!</strong> Előbb regisztrálj legalább egy terméket!
 </div>
+<div th:if="${nostock}" class="alert alert-danger">
+  <strong>Nincs miből selejtezni!</strong> Vigyél fel készletet!
+</div>
   </div> 
 </div>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <a class="navbar-brand" href="#">Aqua Royal</a>
+  <a class="navbar-brand" href="/">Aqua Royal</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -60,52 +63,44 @@
 		  <div class="dropdown-menu">
 		    <a class="dropdown-item" href="/eladas">Eladás</a>
 		    <a class="dropdown-item" href="/beerkezes">Beérkezés</a>
-		    <a class="dropdown-item" href="#">Selejt</a>
+		    <a class="dropdown-item" href="/selejt">Selejt</a>
 		    <a class="dropdown-item" href="/kamion">Kamion</a>
+		    <a class="dropdown-item" href="/alapkeszlet"><font color="red">Alapkészlet beállítás</font></a>
 		    <div class="dropdown-divider"></div>
 		    <a class="dropdown-item" href="/keszletlista">Készlet lista</a>
 		    <a class="dropdown-item" href="/keszletmozgaslista">Készletmozgás lista</a>
+		    
+		    
 		  </div>
 		</div>
 		<div class="btn-group" style="padding-right:20px">
           <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kollégák</button>
 		  <div class="dropdown-menu">
-		    <a class="dropdown-item" href="newemp">Új kolléga</a>
+		    <a class="dropdown-item" href="/newemp">Új kolléga</a>
 		    <a class="dropdown-item" href="#">Lista</a>
 		  </div>
 		</div>
+		<div class="btn-group" style="padding-right:20px">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gépek</button>
+		  <div class="dropdown-menu">
+		    <a class="dropdown-item" href="/newmachine">Új gép</a>
+		    <a class="dropdown-item" href="/machinelist">Géplista</a>
+		    
+		    
+		  </div>
+		</div>
     
-    
+    </div>
    
-  
+ 
 </nav>
 
-<div class="container" style="margin-top:30px">
+<div class="container" style="margin-top:30px" >
+
   <div class="row">
-    <div class="col-sm-4">
-      <h2>About Me</h2>
-      <h5>Photo of me:</h5>
-      <div class="fakeimg"><img src="images/superman.jpg" class="img-thumbnail" width="200"/></div>
-      <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
-      <h3>Some Links</h3>
-      <p>Lorem ipsum dolor sit ame.</p>
-      <ul class="nav nav-pills flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Active</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-      </ul>
-      <hr class="d-sm-none">
-    </div>
-    <div class="col-sm-8">
+   
+    
+    <div class="col-sm-12">
     <div layout:fragment="workBar">
       <h2>TITLE HEADING</h2>
       <h5>Title description, Dec 7, 2017</h5>
@@ -123,8 +118,8 @@
   </div>
 </div>
 
-<div class="jumbotron text-center" style="margin-bottom:0">
-  <p>Footer</p>
-</div>
+<!-- <div class="jumbotron text-center" style="margin-bottom:0;position:absolute"> -->
+<!--   <p>Footer</p> -->
+<!-- </div> -->
 </body>
 </html>
