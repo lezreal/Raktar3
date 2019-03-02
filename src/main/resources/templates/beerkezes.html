@@ -24,7 +24,7 @@
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${stock}" th:action="@{/beerkezesToDb}">
+<form method="post" th:object="${stock}" th:action="@{/beerkezesToDb}" onSubmit="if (!confirm('Biztos vagy benne?')) return false;">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ki hozta?</span>

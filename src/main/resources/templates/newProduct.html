@@ -11,7 +11,7 @@
   <p>Ellenőrizd, hogy nincs-e már az adatbázisban!</p>
   
   <div th:if="${regok}" class="alert alert-success">
-  <strong>Siker!</strong> Termék sikeresn regisztrálva
+  <strong>Siker!</strong> Termék sikeresen regisztrálva
 </div>
 
 <div th:if="${vanmar}" class="alert alert-danger">
@@ -23,7 +23,7 @@
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${product}" th:action="@{/regProductToDb}">
+<form method="post" th:object="${product}" th:action="@{/regProductToDb}"  onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Termék megnevezése</span>

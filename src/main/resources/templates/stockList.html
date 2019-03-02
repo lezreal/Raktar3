@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="UTF-8">
@@ -9,15 +9,6 @@
 $(document).ready( function () {
     $('#myTable').DataTable();
 } );
-function calc(id)
-{
-  if (document.getElementById(id).checked) 
-  {
-      document.getElementById('rogzit').disabled = false;
-  } else {
-	  document.getElementById('rogzit').disabled = true;
-  }
-}
 </script>
 
 </head>
@@ -33,10 +24,11 @@ function calc(id)
 </div>
 
 <div layout:fragment="workBar">
-<form method="post" th:action="@{/delstock}">
+
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
+      	<th>ID</th>
         <th>Dátum</th>
         <th>Bejövő/Kimenő</th>
         <th>Mennyiség</th>
@@ -48,11 +40,12 @@ function calc(id)
     </thead>
     <tbody >
       <tr th:each="list:${stocklist}">
+      <td th:text="${list.id}">John</td>
         <td th:text="${list.date}">John</td>
-        <div th:if="${list.incoming==1}">
+        <div th:if="${list.incoming==0}">
         <td ><font color="lightgreen">Beérkezés</font></td>
         </div>
-        <div th:if="${list.incoming==0}">
+        <div th:if="${list.incoming==1}">
         <td ><font color="red">Kiadás</font></td>
         </div>
         <div th:if="${list.incoming==2}">
@@ -63,9 +56,11 @@ function calc(id)
         <td  th:text="${list.product.name}">Doe</td>
         <td  th:text="${list.comment}">Doe</td>
         
-        <td > 
-
-            <input type="checkbox" name="boxok"  th:id="${list.id}" th:value="${list.id}"  autocomplete="off"  onclick="calc(this.id);" />
+        <td >
+        <form method="post" th:action="@{/delstock}" onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
+         
+			<button type="submit" th:value="${list.id}" name="gomb" >TÖRÖL</button>
+			</form>            
                 
         </td>
       </tr>
@@ -73,7 +68,7 @@ function calc(id)
     </tbody>
   </table>
 <button type="submit" id="rogzit" disabled="true">RÖGZÍT</button>
-</form>
+
 </div>
 
 </body>

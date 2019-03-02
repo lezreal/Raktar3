@@ -46,7 +46,7 @@ function calc(id)
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${stock}" th:action="@{/keszletrolLevetel}" >
+<form method="post" th:object="${stock}" th:action="@{/keszletrolLevetel}" onSubmit="if (!confirm('Biztos vagy benne?')) return false;" >
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ki adta el?</span>
@@ -66,7 +66,7 @@ function calc(id)
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
   </div>
-  <input type="number" name="amount" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" name="amount" min="1" max="2000" class="form-control" th:field="*{amount}" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -83,35 +83,7 @@ function calc(id)
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
 </div>
 
-<div class="alert alert-danger">
 
-<input type="checkbox" id="chk"  onclick="calc(this.id);" /><font size="5"><strong> Üres ballon vagy palack változás?</strong></font>
-<input type="hidden" id="uresbox" name="uresbox" value="0" />
-</div>
-<div id="uresvane" style="visibility:hidden">
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Csere ballon vagy palack?</span>
-  </div>
-  <select name="ures"><option  th:each="prod2:${uresek}" th:text="${prod2.name}" th:value="${prod2.id}"></option></select>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
-  </div>
-  <input type="number" name="amountures" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="2" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="ureskomment">
-</div>
-
-
-</div>
 
 
 <button type="submit" class="btn btn-outline-success" >Rögzítés</button>

@@ -5,8 +5,6 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/list.css">
 <script src="js/list.js"></script>
-
-
 <script>
 function PopupCenter(url, title, w, h) {
     // Fixes dual-screen position                         Most browsers      Firefox
@@ -30,59 +28,48 @@ var top = (height - h) / 2 / systemZoom + dualScreenTop
 $(document).ready( function () {
     $('#myTable').DataTable();
 } );
-
-
-function calc(id)
-{
-  if (document.getElementById(id).checked) 
-  {
-      document.getElementById('rogzit').disabled = false;
-  } else {
-	  document.getElementById('rogzit').disabled = true;
-  }
-}
 </script>
 
 </head>
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Ügyfelek listája</h1>
-  <p>A törléssel csak óvatosan</p>
-<div th:if="${compok}" class="alert alert-success">
-  <strong>Sikeres módosítás</strong>
+<h1>Alkalmazottak listája</h1>
+
+<div th:if="${delfail}" class="alert alert-danger">
+  <strong>Nem törölhető!</strong> Ügyfelek hivatkoznak rá!
 </div>
+
+</div>
+
 </div>
 
 <div layout:fragment="workBar">
-
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
-        <th>Megnevezés</th>
-        <th>Helység</th>
-        <th>Leírás</th>
-        <th>Futár</th>
-        <th>Száll. nap</th>
-        <th>Szerkesztés</th>
-
+        <th>Név</th>
+        <th>Megjegyzés</th>
+        <th >Szerkesztés</th>
+        <th >Törlés</th>
+        
+        
       </tr>
     </thead>
     <tbody >
-      <tr th:each="list:${companies}">
+      <tr th:each="list:${employes}">
         <td th:text="${list.name}">John</td>
-        <td th:text="${list.city}">Doe</td>
-        <td th:text="${list.address}">Doe</td>
-        <td th:text="${list.employe.name}">Doe</td>
-        <td th:if="${list.deliverydays==null}" >Kötetlen</td>
-        <td th:unless="${list.deliverydays==null}" th:text="${list.deliverydays}"></td>
-        <td><button class="btn btn-primary" th:value="'http://localhost:8080/company/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkesztés</button></td>
+        <td th:text="${list.description}">Doe</td>
+        <td> 
+
+            <button class="btn btn-primary" th:value="'http://localhost:8080/employe/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Edit</button>
+                
+        </td>
+		<td><form th:action="@{/delEmploye}" method="post" ><input type="hidden" name="delempid" th:value="${list.id}"></input><button type="submit">TÖRÖL</button></form></td>
       </tr>
       
     </tbody>
   </table>
-
-
 </div>
 
 </body>

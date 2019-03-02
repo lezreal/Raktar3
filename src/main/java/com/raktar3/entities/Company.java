@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Company {
@@ -92,13 +93,7 @@ public class Company {
 		
 	}
 	
-	@ManyToMany
-	@JoinTable(
-			name="companies_products",
-			joinColumns= {@JoinColumn(name="company_id")},
-			inverseJoinColumns= {@JoinColumn(name="product_id")}
-			)
-	
+	@OneToMany
 	Set<Product> products = new HashSet<Product>();
 
 	@Column(length=200,nullable=false)

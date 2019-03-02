@@ -5,9 +5,15 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/list.css">
 <script src="js/list.js"></script>
-
-
 <script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+
+
+
+
+
 function PopupCenter(url, title, w, h) {
     // Fixes dual-screen position                         Most browsers      Firefox
     var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
@@ -25,64 +31,54 @@ var top = (height - h) / 2 / systemZoom + dualScreenTop
     if (window.focus) newWindow.focus();
 }
 
-
-
-$(document).ready( function () {
-    $('#myTable').DataTable();
-} );
-
-
-function calc(id)
-{
-  if (document.getElementById(id).checked) 
-  {
-      document.getElementById('rogzit').disabled = false;
-  } else {
-	  document.getElementById('rogzit').disabled = true;
-  }
-}
 </script>
-
 </head>
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Ügyfelek listája</h1>
-  <p>A törléssel csak óvatosan</p>
-<div th:if="${compok}" class="alert alert-success">
-  <strong>Sikeres módosítás</strong>
+<h1>Termékek listája</h1>
+<div th:if="${delok}" class="alert alert-success">
+  <strong>Sikeres törlés</strong>
 </div>
+<div th:if="${delfail}" class="alert alert-danger">
+  <strong>Nem törölhető! Készletadat hivatkozik rá.</strong>
+</div>
+
+</div>
+
 </div>
 
 <div layout:fragment="workBar">
-
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
         <th>Megnevezés</th>
-        <th>Helység</th>
+        
         <th>Leírás</th>
-        <th>Futár</th>
-        <th>Száll. nap</th>
         <th>Szerkesztés</th>
-
+        <th>Törlés</th>
       </tr>
     </thead>
     <tbody >
-      <tr th:each="list:${companies}">
-        <td th:text="${list.name}">John</td>
-        <td th:text="${list.city}">Doe</td>
-        <td th:text="${list.address}">Doe</td>
-        <td th:text="${list.employe.name}">Doe</td>
-        <td th:if="${list.deliverydays==null}" >Kötetlen</td>
-        <td th:unless="${list.deliverydays==null}" th:text="${list.deliverydays}"></td>
-        <td><button class="btn btn-primary" th:value="'http://localhost:8080/company/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkesztés</button></td>
+      <tr th:each="list:${productlist}">
+        <td id="nev" th:text="${list.name}">John</td>
+        
+        <td   th:text="${list.description}">Doe</td>
+         
+<td><button class="btn btn-primary" th:value="'http://localhost:8080/product/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkesztés</button></td>
+            
+                
+        </td>
+        <td>
+        <form method="post" th:action="@{/delproduct}" onSubmit="if(!confirm('Törölhetem?')){return false;}">
+         
+			<button type="submit" th:value="${list.id}"  name="gomb" class="btn btn-outline-danger" th:text="${list.name}">TÖRÖL</button>
+			</form>            
+        </td>
       </tr>
       
     </tbody>
   </table>
-
-
 </div>
 
 </body>

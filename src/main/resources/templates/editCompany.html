@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html th:xmlns="www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="../main/bootstrap.min.css">
+<script src="../main/jquery.min.js"></script>
+<script src="../main/popper.min.js"></script>
+<meta charset="UTF-8">
+<title>Ügyfél szerkesztés</title>
+</head>
+<body>
+<div>
+<center><h2><font th:text="${company.name}"></font> adatai</h2></center>
+
+</div>
+<div th:if="${editsuccess}" class="alert alert-success">
+  <strong>Sikeres módosítás</strong>
+</div>
+<div>
+
+
+<form method="post" th:action="@{/editCompanyToDb}" th:object="${company}">
+
+   <input type="hidden" name="compid" th:value="${company.id}"></input>
+  
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ügyfél megnevezése</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${company.name}" th:field="*{name}" name="compnev">
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Helység:</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${company.city}" name="compcity" th:field="*{city}">
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Cím:</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${company.address}" name="compaddress" th:field="*{address}">
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Megjegyzés:</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${company.comment}" th:field="*{comment}" name="compcomment">
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Kiszállító:</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${company.employe.name}"  readonly>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" th:text="'Szállítási napok: ('+${company.deliverydays}+')'" id="inputGroup-sizing-sm"></span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  id="deldays" readonly name="deldays">
+</div>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási napok</span>
+  </div>&nbsp&nbsp
+  &nbsp&nbsp<input type="checkbox" value="H" id="hetfo" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'H'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('H','')">Hétfő</input>
+  &nbsp&nbsp<input type="checkbox" value="K" id="kedd" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'K'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('K','')">Kedd</input>
+  &nbsp&nbsp<input type="checkbox"  value="S" id="szerda" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'S'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('S','')">Szerda</input>
+  &nbsp&nbsp<input type="checkbox"  value="C" id="csutortok" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'C'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('C','')">Csütörtök</input>
+  &nbsp&nbsp<input type="checkbox"  value="P" id="pentek" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'P'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('P','')">Péntek</input>
+</div>
+
+
+<select name="empid">
+<option th:each="emps:${employes}" th:text="${emps.name}" th:value="${emps.id}"></option>
+</select>
+
+<button type="submit">Módosítás mentése</button>
+
+</form>
+</div>
+
+
+
+</body>
+</html>

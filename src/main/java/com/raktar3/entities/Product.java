@@ -27,9 +27,6 @@ public class Product {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	int id;
-
-	@Column(columnDefinition="tinyint(1) default 0")
-	boolean isEmpty=false;
 	
 	
 	@Column(length=50,nullable=true)
@@ -42,8 +39,6 @@ public class Product {
 	@Column(length=30,nullable=false)
 	String name;
 	
-	@OneToMany(mappedBy="product")
-	List<Stock> stockes;
 	
 	
 	@ManyToMany(mappedBy="products")
@@ -57,13 +52,9 @@ public class Product {
 		this.companies = companies;
 	}
 
-	public List<Stock> getStockes() {
-		return stockes;
-	}
+	
 
-	public void setStockes(List<Stock> stockes) {
-		this.stockes = stockes;
-	}
+	
 
 	public int getId() {
 		return id;
@@ -81,13 +72,6 @@ public class Product {
 		this.name = name;
 	}
 
-	public boolean isIsEmpty() {
-		return isEmpty;
-	}
-
-	public void setIsEmpty(boolean hasEmpty) {
-		this.isEmpty = hasEmpty;
-	}
 
 	public String getDescription() {
 		return description;

@@ -23,12 +23,12 @@
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${newmach}" th:action="@{/newMachToDb}" id="myForm">
+<form method="post" th:object="${newmach}" th:action="@{/newMachToDb}" id="myForm" onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="" placeholder="gép típusa" required th:field="*{name}" onclick="document.getElementById('subbutton').disabled=false">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="" placeholder="gép típusa" required th:field="*{name}">
   
 </div>
 
@@ -51,7 +51,7 @@
   </select>
 </div>
 
-<button type="submit" class="btn btn-outline-success" disabled id="subbutton">Rögzítés</button>
+<button type="submit" class="btn btn-outline-success" id="subbutton">Rögzítés</button>
 
 </div>
 

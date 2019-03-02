@@ -64,6 +64,11 @@ public class StockService {
 	stockRepo.deleteAll();
 	}
 	
+	
+	public void deleteAllStock() {
+		stockRepo.deleteAll();
+		}
+	
 	public void deleteById(int id) {
 		stockRepo.deleteById(id);
 		}

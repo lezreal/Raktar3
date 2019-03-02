@@ -1,11 +1,13 @@
 package com.raktar3.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Stock {
@@ -85,7 +87,7 @@ public class Stock {
 		this.employe = employe;
 	}
 
-	@Column(columnDefinition="tinyint(1) default 0") // ha 1 akkor bejövő, ha 0 akkor kimenő, ha 2 akkor selejt
+	@Column(columnDefinition="tinyint(1) default 0") // ha 0 akkor bejövő, ha 1 akkor kimenő, ha 2 akkor selejt
 	int incoming;
 	
 	

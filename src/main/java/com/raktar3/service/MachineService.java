@@ -35,29 +35,29 @@ public class MachineService {
 		return machineRepo.findById(id);
 	}
 	
-	@PostConstruct
-	public void init() {
-		byte vmi=1;
-		Machine m1 = new Machine();
-		m1.setName("HC-66L");
-		m1.setComment("repedt az oldala");
-		m1.setCompany(companyRepo.findById(1));
-		m1.setType(vmi);
-		machineRepo.save(m1);
-		
-		Machine m2 = new Machine();
-		m2.setName("Fairline");
-		m2.setComment("régi fos");
-		m2.setType(vmi);
-		machineRepo.save(m2);
-		vmi=2;
-		
-		Machine m3 = new Machine();
-		m3.setName("WaterPia");
-		m3.setComment("szódás");
-		m3.setType(vmi);
-		m3.setCompany(companyRepo.findById(2));
-		machineRepo.save(m3);
-	}
+//	@PostConstruct
+//	public void init() {
+//		byte vmi=1;
+//		Machine m1 = new Machine();
+//		m1.setName("HC-66L");
+//		m1.setComment("repedt az oldala");
+//		m1.setCompany(companyRepo.findById(1));
+//		m1.setType(vmi);
+//		machineRepo.save(m1);
+//		
+//		Machine m2 = new Machine();
+//		m2.setName("Fairline");
+//		m2.setComment("régi fos");
+//		m2.setType(vmi);
+//		machineRepo.save(m2);
+//		vmi=2;
+//		
+//		Machine m3 = new Machine();
+//		m3.setName("WaterPia");
+//		m3.setComment("szódás");
+//		m3.setType(vmi);
+//		m3.setCompany(companyRepo.findById(2));
+//		machineRepo.save(m3);
+//	}
 	
 }

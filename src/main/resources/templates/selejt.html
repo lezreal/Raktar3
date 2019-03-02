@@ -12,20 +12,17 @@
 <p>Ha csak a víz zöldült meg, ne felejtsd el készletre venni az üres ballont (beérkezés).</p>
   
   
-  <div th:if="${regok}" class="alert alert-success">
-  <strong>Siker!</strong> Termék sikeresn regisztrálva
+  <div th:if="${selejt}" class="alert alert-success">
+  <strong>Szomorú eset!</strong> Rögzítve...
 </div>
 
-<div th:if="${vanmar}" class="alert alert-danger">
-  <strong>Van már ilyen!</strong> Mondtam, hogy nézd meg a listát!
-</div>
   
 </div>
 
 
 <div layout:fragment="workBar">
 
-<form method="post" th:object="${stock}" th:action="@{/selejtToDb}" >
+<form method="post" th:object="${stock}" th:action="@{/selejtToDb}" onSubmit="if (!confirm('Biztos vagy benne?')) return false;">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ki selejtezte?</span>

@@ -41,6 +41,10 @@ public class EmployeService {
 	public List<Employe> findAllHumanEmploye() {
 		return employeRepo.findAllHumanEmploye();
 	}
+	
+	public void delEmploye(Employe e) {
+		employeRepo.delete(e);
+	}
 
 	
 	

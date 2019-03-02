@@ -1,43 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="www.thymeleaf.org" layout:decorate="layouts/main">
 <head>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/redmond/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.11.2.js"></script>
-<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#submit_button').click(function(event) {
-        event.preventDefault();
-        var currentForm = $(this).closest('form');
-        
-        /** Create div element for delete confirmation dialog*/
-        var dynamicDialog = $('<div id="conformBox">'+
-        '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;">'+
-        '</span>Helyesek az adatok?</div>');
-        
-        dynamicDialog.dialog({
-                title : "Biztos vagy benne?",
-                closeOnEscape: true,
-                modal : true,
-        
-               buttons : 
-                        [{
-                                text : "Yes",
-                                click : function() {
-                                        $(this).dialog("close");
-                                        currentForm.submit();
-                                }
-                        },
-                        {
-                                text : "No",
-                                click : function() {
-                                        $(this).dialog("close");
-                                }
-                        }]
-        });
-        return false;
-    });
-}); </script>
+
+</script>
 
 
 
@@ -54,7 +19,7 @@ $(document).ready(function(){
 
 <p>Miből akarsz alapkészletet megadni?</p>
 
-<form method="post" action="/alapkeszletToDb">
+<form method="post" action="/alapkeszletToDb" onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
 <select name="pid">
 
 <option th:each="product:${products}" th:text="${product.name}" th:value="${product.id}" ></option>
@@ -64,14 +29,14 @@ $(document).ready(function(){
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
   </div>
-  <input type="number" name="darab" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+  <input type="number" name="darab" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3" style="margin-top:20px">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
   </div>
-  <input type="date" name="bday" >
+  <input type="date" name="bday" required>
 </div> 
 
 <div class="input-group input-group-sm mb-3">

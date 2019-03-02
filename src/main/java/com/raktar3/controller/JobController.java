@@ -3,6 +3,7 @@ package com.raktar3.controller;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -57,29 +58,15 @@ public class JobController {
 		if (productService.findProductByName(p.getName())) { 
 			model.addAttribute("regok","");
 			productService.regNewProduct(p);
-		} else model.addAttribute("vanmar",""); 
+			model.addAttribute("product_list", productService.findAll());
+		} else {
+			model.addAttribute("product_list", productService.findAll());
+			model.addAttribute("vanmar",""); 
+		}
 		return "newProduct";
 	}
 	
-	@RequestMapping("/delproduct")
-	public String Product(@RequestParam("boxok") ArrayList<Product> vmi, Model model) {
-		for (Product x:vmi) {
-			
-			
-			if (!productService.deleteProduct(x))
-			{
-				
-				//e.printStackTrace();
-				model.addAttribute("nemtorolheto","");
-				model.addAttribute("keszletrol","");
-				model.addAttribute("productlist", productService.findAll());
-				return "productList";
-			}
-			
-		}
-		model.addAttribute("productlist", productService.findAll());
-		return "productList";
-	}
+	
 	
 	@RequestMapping("/newEmpToDb")
 	public String newEmploye(@ModelAttribute("newemp") Employe emp, Model model) {
@@ -89,14 +76,18 @@ public class JobController {
 	}
 	
 	@RequestMapping("/newCompany")
-	public String newCompany(@ModelAttribute("company") Company company) {
+	public String newCompany(@ModelAttribute("company") Company company, Model model) {
 		productService.addCompany(company);
-		return "index";
+		model.addAttribute("futar", employeService.findAllHumanEmploye());
+		model.addAttribute("company", new Company());
+		model.addAttribute("clientregok","");
+		return "newCompany";
+		
 	}
 	
 	@RequestMapping("/beerkezesToDb")
 	public String beerkToDb(@ModelAttribute("stock") Stock stock) {
-		stock.setIncoming(1);
+		stock.setIncoming(0);
 		stockService.addIncoming(stock);
 		
 		return "index";
@@ -104,24 +95,14 @@ public class JobController {
 	
 	
 	@RequestMapping("/keszletrolLevetel")
-	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, @RequestParam("amount") int mennyiseg,@RequestParam("ures") int ures,@RequestParam("amountures") int uresamount,@RequestParam("ureskomment") String ureskomment, @RequestParam("uresbox") int uresbox) {
-		
-		if (uresbox==1) {
-			log.info("BEJÖTT");
-			Product p = productService.findById(ures);
-			Stock ns = new Stock();
-			ns.setProduct(p);
-			ns.setIncoming(1);
-			ns.setDate(stock.getDate());
-			ns.setEmploye(stock.getEmploye());
-			ns.setAmount(uresamount);
-			ns.setComment(ureskomment);
-			stockService.addIncoming(ns);
-		}
+	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, @RequestParam("amount") int mennyiseg) {
 		
 		
-		stock.setIncoming(0);
-		stock.setAmount(mennyiseg);
+		
+		
+		
+		stock.setIncoming(1 );
+		
 		stockService.saleStock(stock);
 
 		return "index";
@@ -133,8 +114,8 @@ public class JobController {
 		List<Product> lista = new ArrayList();
 		for (int i=0;i<id_lista.size();i++) {
 			Product p =productService.findById(id_lista.get(i));
-			int osszes=stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i));
-			p.setAmount(osszes);
+			
+			p.setAmount(stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i)));
 			lista.add(p);
 		}
 		model.addAttribute("productlist", lista);
@@ -142,12 +123,7 @@ public class JobController {
 		return "productList";
 	}
 	
-	@RequestMapping("/keszletmozgaslista")
-	public String keszletmozgaslista(Model model) {
-		model.addAttribute("stocklist", stockService.stockList());
-		
-		return "stockList";
-	}
+	
 	
 	@RequestMapping("/kamionToDb")
 	public String kamiontodb(@ModelAttribute("stock") Stock s,@RequestParam("hozott") int hozott,@RequestParam("employe") int emp) {
@@ -171,11 +147,29 @@ public class JobController {
 	}
 	
 	@RequestMapping("/selejtToDb")
-	public String selejtToDb(@ModelAttribute("stock") Stock stock) {
+	public String selejtToDb(@ModelAttribute("stock") Stock stock, Model model) {
 		stock.setIncoming(2);
 		stockService.addIncoming(stock);
+		model.addAttribute("selejt", "");
+		if (employeService.findAllEmploye().isEmpty()) {
+			model.addAttribute("noemploye","");
+			return "index";
+		}
 		
-		return "index";
+		if (productService.findAll().isEmpty()) {
+			model.addAttribute("noproduct","");
+			return "index";
+		}
+		
+		if (!stockService.vaneKeszlet()) {
+			model.addAttribute("nostock","");
+			return "index";
+		}
+		
+		model.addAttribute("stock", new Stock());
+		model.addAttribute("emps", employeService.findAllEmploye());
+		model.addAttribute("products", productService.findAll());
+		return "selejt";
 	}
 	
 	@RequestMapping("/newMachToDb")
@@ -225,7 +219,7 @@ public class JobController {
 		return "index";
 	}
 
-// ITT JŰÁROK
+
 	@RequestMapping("/alapkeszletToDb")
 	public String alapkeszlet(@RequestParam("pid") int pid, @RequestParam("darab") String darab, Model model, @RequestParam("bday") String datum, @RequestParam("comment") String comment) {
 		if (darab==null || darab.isEmpty()) {
@@ -234,7 +228,7 @@ public class JobController {
 			return "alapkeszlet";
 		}
 		log.info("ID: "+pid+" - DB: "+darab);
-		stockService.deleteById(pid);
+		stockService.deleteAllStock();   // összes STOCK bejegyzés törlése adott product_id-ra
 		Stock stock = new Stock();
 		stock.setProduct(productService.findById(pid));
 		stock.setEmploye(employeService.findById(1));
@@ -249,6 +243,115 @@ public class JobController {
 		return "alapkeszlet";
 	}
 	
+	@RequestMapping("/probafeldolgoz")
+	public String probafeldolgoz( ) {
+		return "index";
+	}
+	
+	@RequestMapping("/company/{id}")
+	public String editCompany(@PathVariable("id") int id, Model model) {
+		model.addAttribute("company", companyService.findById(id));
+		List<Employe> emplist = employeService.findAllHumanEmploye();
+		
+		log.info("Index: "+emplist.indexOf(companyService.findById(id).getEmploye()));
+		Collections.swap(emplist, 0, emplist.indexOf(companyService.findById(id).getEmploye()));
+		
+		model.addAttribute("employes", emplist);
+		return "editCompany";
+	}
+	
+	
+	@RequestMapping("/product/{id}")
+	public String editProduct(@PathVariable("id") int id, Model model) {
+		model.addAttribute("product", productService.findById(id));
+		List<Employe> emplist = employeService.findAllHumanEmploye();
+		
+		
+		return "editProduct";
+	}
+	
+	
+	@RequestMapping("/editCompanyToDb")
+	public String editCompany(@ModelAttribute("company") Company c,@RequestParam("empid") int empid, @RequestParam("deldays") String deldays, @RequestParam("compid") int compid, Model model) {
+		Company oldcomp = companyService.findById(compid);
+		oldcomp.setName(c.getName());
+		oldcomp.setCity(c.getCity());
+		oldcomp.setAddress(c.getAddress());
+		oldcomp.setComment(c.getComment());
+		oldcomp.setEmploye(employeService.findById(empid));
+		if (deldays!=null && !deldays.isEmpty()) oldcomp.setDeliverydays(deldays);
+		companyService.addNewCompany(oldcomp);
+		model.addAttribute("compok", "");
+		model.addAttribute("company", oldcomp);
+		List<Employe> emplist = employeService.findAllHumanEmploye();
+		Collections.swap(emplist, 0, emplist.indexOf(oldcomp.getEmploye()));
+		model.addAttribute("editsuccess", "");
+		model.addAttribute("employes", emplist);
+		return "editCompany";
+	}
+	
+	@RequestMapping("/editProductToDb")
+	public String editProduct(@RequestParam("productid") int id,@RequestParam("productname") String name,@RequestParam("productcomment") String comment, Model model) {
+		Product p = productService.findById(id);
+		p.setName(name);
+		p.setDescription(comment);
+		productService.regNewProduct(p);
+		model.addAttribute("product", p);
+		model.addAttribute("editsuccess", "");
+		return "editProduct";
+	}
+	
+	@RequestMapping("/delstock")
+	public String delstock(Model model, @RequestParam("gomb") int gomb) {
+		log.info(""+gomb);
+		stockService.deleteById(gomb);
+		model.addAttribute("stocklist", stockService.stockList());
+		return "stockList";
+	}
+	
+	@RequestMapping("/employe/{id}")
+	public String editEmploye(@PathVariable("id") int id, Model model) {
+		
+			model.addAttribute("employe",employeService.findById(id) );
+			model.addAttribute("employeok","" );
+			
+		
+		return "editEmploye";
+	}
+	
+	@RequestMapping("editEmployeToDb")
+	public String editemployetodb(@ModelAttribute("employe") Employe emp, Model model) {
+		log.info(emp.getName());
+		log.info(emp.getDescription());
+		employeService.addUserToDb(emp);
+		model.addAttribute("editsuccess", "");
+		return "editEmploye";
+	}
+	
+	@RequestMapping("delEmploye")
+	public String delemploye(@RequestParam("delempid") int id, Model model) {
+		
+		if (companyService.findByEmploye(employeService.findById(id))) {
+			employeService.delEmploye(employeService.findById(id));
+			model.addAttribute("employes", employeService.findAllHumanEmploye());
+			model.addAttribute("delsuccess", "");
+			return "employeList";
+		}
+			else {
+				model.addAttribute("employes", employeService.findAllHumanEmploye());
+				model.addAttribute("delfail", "");
+				return "employeList";
+			}
+	}
+	
+	@RequestMapping("/delproduct")
+	public String delProduct(Model model, @RequestParam("gomb") int id) {
+		if (productService.deleteProduct(productService.findById(id))) {
+			model.addAttribute("delok","");
+		} else model.addAttribute("delfail", "");
+		model.addAttribute("productlist", productService.findAll());
+		return "productListSimple";
+	}
 }
 
 

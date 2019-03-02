@@ -7,23 +7,21 @@
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Áru beérkezés</h1>
-  <p>Készletre vétel...</p>
+<h1>Új ügyfél rögzítése</h1>
   
-  <div th:if="${empregok}" class="alert alert-success">
+  
+  <div th:if="${clientregok}" class="alert alert-success">
   <strong>Siker!</strong> Az új kolléga sikeresn regisztrálva
 </div>
 
-<div th:if="${vanmar}" class="alert alert-danger">
-  <strong>Van már ilyen!</strong> Már létezik ilyen névvel kolléga!
-</div>
+
   
 </div>
 
 
 <div layout:fragment="workBar">
 
-<form method="post"  th:action="@{/newCompany}" th:object="${company}">
+<form method="post"  th:action="@{/newCompany}" th:object="${company}"  onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>

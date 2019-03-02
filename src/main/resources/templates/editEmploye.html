@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html th:xmlns="www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="../main/bootstrap.min.css">
+<script src="../main/jquery.min.js"></script>
+<script src="../main/popper.min.js"></script>
+<meta charset="UTF-8">
+<title>Ügyfél szerkesztés</title>
+</head>
+
+<body>
+
+
+<div>
+<center><h2><font th:text="${employe.name}"></font> adatai</h2></center>
+<div th:if="${editsuccess}" class="alert alert-success">
+  <strong>Sikeres módosítás</strong>
+</div>
+</div>
+<div>
+
+
+<form method="post" th:action="@{/editEmployeToDb}" th:object="${employe}" onSubmit="if (!confirm('Biztos vagy benne?')) return false;">
+
+   <input type="hidden" name="empid" th:field="*{id}" th:value="${employe.id}"></input>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Alkalmazott neve:</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${employe.name}" th:field="*{name}" name="empnev">
+</div>
+
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Megjegyzés:</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${employe.description}" th:field="*{description}" name="empcomment">
+</div>
+
+
+
+
+<button type="submit">Módosítás mentése</button>
+
+
+</form>
+
+</div>
+
+
+
+</body>
+</html>

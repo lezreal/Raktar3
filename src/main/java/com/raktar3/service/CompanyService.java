@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.raktar3.entities.Company;
+import com.raktar3.entities.Employe;
 import com.raktar3.repository.CompanyRepository;
 
 @Service
@@ -22,5 +23,18 @@ public class CompanyService {
 	public Company findById(int id) {
 		return companyRepo.findById(id);
 	}
+	
+	public void addNewCompany(Company c) {
+		companyRepo.save(c);
+	}
+
+	public boolean findByEmploye(Employe e) {
+		Company tmp =companyRepo.findFirstByEmploye(e);
+		
+		if (tmp!=null) return false; else return true;
+		
+	}
+	
+	
 	
 }
