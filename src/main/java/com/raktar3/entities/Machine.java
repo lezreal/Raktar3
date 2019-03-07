@@ -60,6 +60,21 @@ public class Machine {
 	@Column(nullable=false)
 	byte type;
 
+
+	int sorszam;
+
+	
+	
+
+
+	public int getSorszam() {
+		return sorszam;
+	}
+
+	public void setSorszam(int sorszam) {
+		this.sorszam = sorszam;
+	}
+
 	public byte getType() {
 		return type;
 	}

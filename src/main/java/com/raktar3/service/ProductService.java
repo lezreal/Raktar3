@@ -89,44 +89,23 @@ public class ProductService {
 	
 	
 	
-	@PostConstruct
-	public void init() {
-//		
-//		Product p = new Product("Aqua Via");productRepo.save(p);
-//		Product p1 = new Product("Brill");productRepo.save(p1);
-//		Product p2 = new Product("Milotai");productRepo.save(p2);
-//		Product p3 = new Product("via-ÜRES BALLON ");productRepo.save(p3);
-//		Product p4 = new Product("brill-ÜRES BALLON");productRepo.save(p4);
-//		Product p5 = new Product("milotai-ÜRES BALLON");productRepo.save(p5);
-//		
+//	@PostConstruct
+//	public void init() {
 //
 //		Employe e = new Employe("ALAPKÉSZLET");
 //		Employe e1 = new Employe("KAMION");
-//		Employe e2 = new Employe("Vencel");
-//		Employe e3 = new Employe("Sanyi");
-//		
-//		
-		
 //		employeService.addUserToDb(e);
 //		employeService.addUserToDb(e1);
+//		
+//		Company c= new Company();
+//		c.setAddress("");
+//		c.setCity("");
+//		c.setName("RAKTÁR");
+//		companyRepo.save(c);
 //
-//		
-// 		Company comp = new Company("Bumet","Debrecen","Határ út","H,S,P",e);
-//		Company comp1 = new Company("Manz","Debrecen","Határ út","H",e2);		
-//		companyRepo.save(comp);
-//		companyRepo.save(comp1);
-//		
-//		Stock s = new Stock(50,"2019-02-08",true,e,p,"nincs komment");
-//		Stock s2 = new Stock(120,"2019-02-07",true,e2,p2,"második");
-//		Stock s3 = new Stock(15,"2019-02-08",false,e,p,"eladas");
-//		Stock s4 = new Stock(70,"2019-02-07",false,e2,p2,"eladas");
-//		
-//		stockService.addIncoming(s);
-//		stockService.addIncoming(s2);
-//		stockService.addIncoming(s3);
-//		stockService.addIncoming(s4);
-//		
-	}
+//	}
+				
+
 
 	
 

@@ -25,7 +25,7 @@ function calc(id)
 
 <div layout:fragment="infoBar">
 <h1>Gépek listája</h1>
-  <p>A törléssel csak óvatosan</p>
+  
   <div th:if="${nemtorolheto}" class="alert alert-danger">
   <strong>Nem törölhető!!</strong> Készlet adat hivatkozik rá!
 </div>
@@ -46,10 +46,11 @@ function calc(id)
     </thead>
     <tbody >
       <tr th:each="list:${machinelist}">
-        <td align="center" ><a th:text="${list.id}" th:href="@{'/machine/'+${list.id}}"></a>.</td>
+        <td align="center" ><a th:text="${list.sorszam}" th:href="@{'/machine/'+${list.id}}"></a>.</td>
         <td th:text="${list.name}">Doe</td>
         <td th:text="${list.comment}">Doe</td>
-        <td  th:if="${list.company==null}">Raktáron</td>
+        
+        <td  th:if="${list.company==null}" >RAKTÁR</td>
         <td  th:unless="${list.company==null}" th:text="${list.company.name}"></td>
          
 		<td th:if="${list.type==1}">Sima</td>

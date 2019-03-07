@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.raktar3.entities.Employe;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Stock;
 import com.raktar3.repository.StockRepository;
@@ -60,14 +61,26 @@ public class StockService {
 		
 	}
 	
+	public List<Stock> findByProduct(Product p){
+		return stockRepo.findByProduct(p);
+	}
+	
 	public void deleteAll() {
 	stockRepo.deleteAll();
 	}
 	
+	public void deleteByProduct(Integer id) {
+		stockRepo.deleteByProduct(id);
+	}
 	
-	public void deleteAllStock() {
-		stockRepo.deleteAll();
-		}
+	public void deleteStock(Stock s) {
+		stockRepo.delete(s);
+	}
+	
+	public boolean findEmploye(Employe e) {
+		if (stockRepo.findFirstByEmploye(e)==null) return true; else return false;
+	}
+	
 	
 	public void deleteById(int id) {
 		stockRepo.deleteById(id);

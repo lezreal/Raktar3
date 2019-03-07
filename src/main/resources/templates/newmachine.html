@@ -9,6 +9,9 @@
 <div layout:fragment="infoBar">
 <h1>Új berendezés rögzítése</h1>
   
+  <div th:if="${machregfail}" class="alert alert-danger">
+  <strong>Siker!</strong> Van már ilyen sorszám
+</div>
   
   <div th:if="${machregok}" class="alert alert-success">
   <strong>Siker!</strong> Az új gép sikeresen regisztrálva
@@ -30,6 +33,13 @@
   </div>
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="" placeholder="gép típusa" required th:field="*{name}">
   
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Sorszám:</span>
+  </div>
+  <input type="text" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{sorszam}">
 </div>
 
 

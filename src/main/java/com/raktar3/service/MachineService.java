@@ -22,9 +22,16 @@ public class MachineService {
 	
 	
 	
-	public int addMachineToDb(Machine m) {  
+	public int addMachineToDb(Machine m) {
+		
+	
+		
 		machineRepo.save(m);
-		return machineRepo.findLastId();  // visszatér az utoljára rögzített gép ID-jával
+		return m.getId();  // visszatér az utoljára rögzített gép ID-jával
+	}
+	
+	public void editMachineSave(Machine m) {
+		machineRepo.save(m);
 	}
 	
 	public List<Machine> findAll(){
@@ -34,6 +41,11 @@ public class MachineService {
 	public Machine findById(int id) {
 		return machineRepo.findById(id);
 	}
+	
+	public boolean findSorszam(Integer sorszam) {
+		if (machineRepo.findSorszam(sorszam)==null) return true; else return false;
+	}
+	
 	
 //	@PostConstruct
 //	public void init() {
@@ -58,6 +70,6 @@ public class MachineService {
 //		m3.setType(vmi);
 //		m3.setCompany(companyRepo.findById(2));
 //		machineRepo.save(m3);
-//	}
+	//}
 	
 }

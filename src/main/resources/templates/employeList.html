@@ -65,7 +65,7 @@ $(document).ready( function () {
             <button class="btn btn-primary" th:value="'http://localhost:8080/employe/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Edit</button>
                 
         </td>
-		<td><form th:action="@{/delEmploye}" method="post" ><input type="hidden" name="delempid" th:value="${list.id}"></input><button type="submit">TÖRÖL</button></form></td>
+		<td><form   onSubmit="if(!confirm('BIZTOSAN TÖRLÖD?')){return false;}" th:action="@{/delEmploye}" method="post" ><input type="hidden" name="delempid" th:value="${list.id}"></input><button type="submit">TÖRÖL</button></form></td>
       </tr>
       
     </tbody>

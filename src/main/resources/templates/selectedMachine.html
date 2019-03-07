@@ -1,112 +1,84 @@
 <!DOCTYPE html>
-<html th:xmlns="www.thymeleaf.org" layout:decorate="layouts/main">
+<html xmlns:th="www.thymeleaf.org" layout:decorate="layouts/main">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
 
 <link rel="stylesheet" href="../main/bootstrap.min.css">
 <script src="../main/jquery.min.js"></script>
 <script src="../main/popper.min.js"></script>
-<!-- <script src="main/js/bootstrap.min.js"></script> -->
+<script src="../main/js/bootstrap.min.js"></script>
 
-
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"> -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script> -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-
-
-
-<script>
-
-function kijelol(){
-	
-	document.getElementById("menu").style.visibility='visible';
-}
-
-function kijelol2(){
-	
-	document.getElementById("menu").style.visibility='hidden';
-}
-
-</script>
-<meta charset="UTF-8">
-<title>Insert title here</title>
 </head>
 <body>
 
 <div layout:fragment="workBar">
 
 <center><h2><font th:text="${selected.id}"></font>-s sorszámú gép adatai</h2></center>
+<div th:if="${siker}" class="alert alert-success">
+  <strong>Változtatások rögzítve</strong> 
+</div>
+<div th:if="${foglalt}" class="alert alert-danger">
+  <strong>Sikertelen módosítás!</strong> Ez a sorszám foglalt!
+</div>
+
+
+
 <form method="post" th:action="@{/machHistoryToDb}" th:object="${selected}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Sorszám</span>
   </div>
-  <input type="hidden" name="gepid" th:value="${selected.id}"></input>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled  th:value="${selected.id}" >
+    <input type="text"  class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="ujsorszam" th:value="${selected.sorszam}" >
+  <input type="hidden"  class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="regisorszam" th:value="${selected.sorszam}" >
+  <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{id}">
+  <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{type}">
+  
 </div>
+
+
+
 
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Gép</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${selected.name}" name="reginev">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{name}">
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Leírása:</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${selected.comment}" name="regicomment">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  th:field="*{comment}">
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Jelenlegi hely:</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:if="${selected.company}" disabled th:value="${selected.company.name}" name="regicomp">
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:unless="${selected.company}" value="Raktár" name="regicomp">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled th:field="*{company.name}" >
+  
 </div>
+
+
+<select name="compid">
+<option th:text="${selected.company.name}" th:value="${selected.company.id}"  selected></option>
+<option th:each="list:${comps}" th:text="${list.name}" th:value="${list.id}"></option>
+
+</select>
+
 <button type="submit" >Rögzít</button>
-<p>Új cím megadása:</p>
-
-<div class="form-check">
-  <input type="radio" class="form-check-input" id="materialUncheckedDisabled1" name="ujcim"  onclick="kijelol()" value="1">
-  <label class="form-check-label disabled" for="materialUncheckedDisabled2">Igen</label>
-</div>
-<div class="form-check">
-  <input type="radio" class="form-check-input" id="materialCheckedDisabled2" name="ujcim" checked onclick="kijelol2()" value="0">
-  <label class="form-check-label disabled md-disabled" for="materialCheckedDisabled2">Nem </label>
-</div>
-
-<div id="menu" style="visibility:hidden" >
- <div class="form-group">
-  <label for="sel1">Hova helyezed a gépet:</label>
-  <select class="form-control" id="sel1" name="compid">
-  	  <option value="0">Raktár</option>
-    <option th:each="comps:${comps}" th:text="${comps.name}" th:value="${comps.id}">1</option>
-    
-  </select>
-</div>
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
-  </div>
-  <input type="date" name="bday" >
-</div> 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Megjegyzés:</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="historycomment">
-</div>
- </div>
-
 
 </form>
 </div>
+ 
+
+
+
+
 
 
 

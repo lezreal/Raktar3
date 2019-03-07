@@ -24,4 +24,5 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 	@Query(value="SELECT * FROM product WHERE name LIKE CONCAT('%',?1,'%')",nativeQuery=true)
 	List<Product> findProductsWithPartOfName(String username);
 
+	
 }

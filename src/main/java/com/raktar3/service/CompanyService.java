@@ -2,6 +2,8 @@ package com.raktar3.service;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,10 @@ public class CompanyService {
 		return companyRepo.findAll();
 	}
 	
+	public List<Company> findAllReal(){
+		return companyRepo.findAllReal();
+	}
+	
 	public Company findById(int id) {
 		return companyRepo.findById(id);
 	}
@@ -36,5 +42,20 @@ public class CompanyService {
 	}
 	
 	
+	public List<Company> finddelday(String mit, int id){
+		return companyRepo.findDelDay(mit, id);
+	}
+
 	
+	
+	
+//	@PostConstruct
+//	public void init() {
+//		Company c= new Company();
+//		c.setAddress("");
+//		c.setCity("");
+//		c.setName("RAKTÁR");
+//		companyRepo.save(c);
+//		
+//	}
 }

@@ -3,26 +3,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset="UTF-8">
-<script>
 
-
-
-function calc(id)
-{
-	  if (document.getElementById(id).checked) 
-	  {
-		  
-		  document.getElementById('uresvane').style.visibility = 'visible';
-		  document.getElementById('uresbox').value = 1;
-		  
-	      
-	  } else {
-		  
-		  document.getElementById('uresvane').style.visibility = 'hidden';
-		  document.getElementById('uresbox').value = 0;
-	  }
-}
-</script>
 
 
 </head>
@@ -33,13 +14,10 @@ function calc(id)
 <p>Ide írod az eladott <strong>teli vizeket, gépeket, pumpát, szörpöt</strong></p>
   
   
-  <div th:if="${regok}" class="alert alert-success">
-  <strong>Siker!</strong> Termék sikeresn regisztrálva
+  <div th:if="${eladasok}" class="alert alert-success">
+  <strong>Eladás rögzítve</strong> Ha keletkezett üres, akkor ne felejtsd el rögzíteni.
 </div>
 
-<div th:if="${vanmar}" class="alert alert-danger">
-  <strong>Van már ilyen!</strong> Mondtam, hogy nézd meg a listát!
-</div>
   
 </div>
 

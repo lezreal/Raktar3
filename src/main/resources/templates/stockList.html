@@ -59,7 +59,7 @@ $(document).ready( function () {
         <td >
         <form method="post" th:action="@{/delstock}" onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
          
-			<button type="submit" th:value="${list.id}" name="gomb" >TÖRÖL</button>
+			<button type="submit" th:value="${list.id}" onSubmit="if(!confirm('BIZTOSAN TÖRLÖD?')){return false;}" name="gomb" >TÖRÖL</button>
 			</form>            
                 
         </td>

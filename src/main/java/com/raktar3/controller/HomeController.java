@@ -14,6 +14,7 @@ import com.raktar3.entities.Employe;
 import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Stock;
+import com.raktar3.service.CompanyService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachineService;
 import com.raktar3.service.ProductService;
@@ -37,6 +38,9 @@ public class HomeController {
 	
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	CompanyService companyService;
 	
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -124,13 +128,17 @@ public class HomeController {
 		model.addAttribute("stock", new Stock());
 		model.addAttribute("emps", employeService.findAllHumanEmploye());
 		model.addAttribute("products", productService.findAll());
-		if (productService.findUres("ÜRES")!=null) model.addAttribute("uresek", productService.findUres("ÜRES"));
-		model.addAttribute("uresvane", new Boolean(false));
+		
 		return "eladas";
 	}
 	
 	@RequestMapping("/newcompany")
 	public String newcompany(Model model) {
+		if (employeService.findAllHumanEmploye().isEmpty()) {
+			model.addAttribute("noemploye","");
+			return "index";
+		}
+		
 		model.addAttribute("futar", employeService.findAllHumanEmploye());
 		model.addAttribute("company", new Company());
 		return "newCompany";
@@ -138,7 +146,7 @@ public class HomeController {
 	
 	@RequestMapping("/companylist")
 	public String companylist(Model model) {
-		model.addAttribute("companies", productService.findAllCompany());
+		model.addAttribute("companies", companyService.findAllReal());
 		return "companyList";
 	}
 	
@@ -198,8 +206,7 @@ public class HomeController {
 	@RequestMapping("/machinelist")
 	public String machineList(Model model) {
 		model.addAttribute("machinelist", machineService.findAll());
-		ArrayList<Long> boxi=new ArrayList<Long>();
-		model.addAttribute("boxok", boxi);
+
 		return "machineList";
 	}
 	
@@ -211,6 +218,14 @@ public class HomeController {
 		}
 		model.addAttribute("products", productService.findAll());
 		return "alapkeszlet";
+	}
+	
+	
+	@RequestMapping("/daylist")
+	public String daylist(Model model) {
+		model.addAttribute("employes", employeService.findAllHumanEmploye());
+		
+		return "daylist";
 	}
 	
 	@RequestMapping("/proba")

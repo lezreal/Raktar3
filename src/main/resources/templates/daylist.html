@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+
+</head>
+<body>
+<script>
+           
+$('#mytable input.move').click(function() {
+	    var row = $(this).closest('tr');
+	    if ($(this).hasClass('up'))
+	        row.prev().before(row);
+	    else
+	        row.next().after(row);
+	});
+           
+       </script>
+
+<div th:if="${companies}">VAN MÁR LISTA</div>
+<!-- <table id="table"> -->
+<!--     <tr th:each="list:${companies}"> -->
+<!--         <td th:text="${list.name}">row 1</td> -->
+<!--         <td><button onclick="upNdown('up');">&ShortUpArrow;</button></td> -->
+<!--         <td><button onclick="upNdown('down');">&ShortDownArrow;</button></td> -->
+<!--     </tr> -->
+<!-- </table> -->
+
+
+<table id="mytable">
+    <tr>
+        <td>row 1</td>
+        <td><input type="button" value="move up" class="move up" /></td>
+        <td><input type="button" value="move down" class="move down" /></td>
+    </tr>
+    <tr>
+        <td>row 2</td>
+        <td><input type="button" value="move up" class="move up" /></td>
+        <td><input type="button" value="move down" class="move down" /></td>
+    </tr>
+    <tr>
+        <td>row 3</td>
+        <td><input type="button" value="move up" class="move up" /></td>
+        <td><input type="button" value="move down" class="move down" /></td>
+    </tr>
+</table>
+
+
+
+<div th:unless="${companies}">
+
+<form method="post" action="/daylistCreate">
+<select name="empid">
+
+<option th:each="list:${employes}" th:text="${list.name}" th:value="${list.id}"></option>
+
+</select>
+
+<select name="nap">
+
+<option  value="H">Hétfő</option>
+<option  value="K">Kedd</option>
+<option  value="S">Szerda</option>
+<option  value="C">Csütörtök</option>
+<option  value="P">Péntek</option>
+
+</select>
+<button type="submit">LISTA</button>
+</div>
+
+
+
+</form>
+</body>
+</html>

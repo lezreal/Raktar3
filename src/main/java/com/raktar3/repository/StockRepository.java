@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
-
+import com.raktar3.entities.Employe;
+import com.raktar3.entities.Product;
 import com.raktar3.entities.Stock;
 
 public interface StockRepository extends CrudRepository<Stock, Integer> {
@@ -33,7 +33,13 @@ public interface StockRepository extends CrudRepository<Stock, Integer> {
 	public void deleteAllByPid(int id);
 	
 	
+	Stock findFirstByEmploye(Employe e);
 	
 	
+	@Query(value="delete from stock where product_id=?1",nativeQuery=true)
+	public void deleteByProduct(Integer id);
 	
+	List<Stock> findByProduct(Product p);
+	
+	public void delete(Stock s);
 }
