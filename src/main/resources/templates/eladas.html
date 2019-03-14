@@ -29,7 +29,10 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ki adta el?</span>
   </div>
-  <select th:field="*{employe}"><option  th:each="emp:${emps}" th:text="${emp.name}" th:value="${emp.id}"></option></select>
+  <select th:field="*{employe}">
+   	<option  th:if="${utolsoemploye}" th:text="${utolsoemploye.name}" th:value="${utolsoemploye.id}"></option>   <!--utoljára rögzítet EMPLOYE -->
+  	<option  th:each="emp:${emps}" th:text="${emp.name}" th:value="${emp.id}"></option>
+  </select>
 </div>
 
 

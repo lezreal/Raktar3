@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="UTF-8">
@@ -26,6 +26,7 @@ $(document).ready( function () {
       <tr>
         <th>Megnevezés</th>
         <th>Raktáron</th>
+        <th></th>
         
       </tr>
     </thead>
@@ -33,7 +34,13 @@ $(document).ready( function () {
       <tr th:each="list:${productlist}">
         <td th:text="${list.name}">John</td>
         <td th:text="${list.amount}">Doe</td>
+        <td th:if="${list.id==1 && list.amount<300}">RENDELJ!</td>
         
+        <td th:if="${list.id==3 && list.amount<50}">RENDELJ!</td>
+        <td th:if="${list.id==4 && list.amount<20}">RENDELJ!</td>
+        <td th:if="${list.id==8 && list.amount<20}">RENDELJ!</td>
+        <td th:if="${list.id==5 && list.amount<3}">RENDELJ!</td>
+        <td th:if="${list.id==6 && list.amount<20}">RENDELJ!</td>
       </tr>
       
     </tbody>

@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="www.thymeleaf.org" layout:decorate="layouts/main">
+
+
 <head>
 
-</script>
 
+<style>
+.info{
+
+display:flex;
+justify-content: space-around;
+flex-direction: row;
+align-items: center;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+h3{
+color:red;
+}
+
+</style>
 
 
 
@@ -12,9 +29,15 @@
 </head>
 <body>
 
+
 <div layout:fragment="infoBar">
-  <h1>Az adott termék minden eddigi készletmozgás adata törlődik!</h1>
-  </div>
+	<div class="info">
+  		<div><h3>Az adott termék minden eddigi készletmozgás adata törlődik!</h3></div>
+ 		 <div><img src="images/warehouse.jpg" width="300" height="200"></img></div>
+ 	 </div>
+ </div>
+ 
+ 
 <div layout:fragment="workBar">
 
 <p>Miből akarsz alapkészletet megadni?</p>

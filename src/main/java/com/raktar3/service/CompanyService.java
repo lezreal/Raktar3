@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import com.raktar3.repository.CompanyRepository;
 @Service
 public class CompanyService {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	CompanyRepository companyRepo;
 	
@@ -42,8 +46,23 @@ public class CompanyService {
 	}
 	
 	
-	public List<Company> finddelday(String mit, int id){
-		return companyRepo.findDelDay(mit, id);
+	public List<Company> finddelday(int id){
+		
+		List<Company> sorszamNelkuli = companyRepo.findDelDay(id);
+		
+		for (int i=0;i<sorszamNelkuli.size();i++) {
+			
+			if (sorszamNelkuli.get(i).getTablasorszam()==0) {
+//				companyRepo.addTableSorszam(sorszamNelkuli.get(i).getId(), i+1);
+				sorszamNelkuli.get(i).setTablasorszam(i+1);
+				
+				
+			}
+			
+		}
+		
+		//return companyRepo.findDelDay(mit, id);
+		return sorszamNelkuli;
 	}
 
 	

@@ -2,24 +2,42 @@
 <html xmlns:th="www.thymeleaf.org" layout:decorator="layouts/main">
 <head>
 <meta charset="UTF-8">
+<style>
+.info{
+
+display:flex;
+justify-content: space-around;
+flex-direction: row;
+align-items: center;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+</style>
 
 </head>
 <body>
 
 
 <div layout:fragment="infoBar">
-  <h1>Kamionos fuvar rögzítése</h1>
-  
+
+<div class="info">
+  <div><h1>Kamionos fuvar rögzítése</h1></div>
+<div><img src="images/kamion.png" width="150" height="90"></img></div>
+</div>  
 </div>
 
 
 <div layout:fragment="workBar">
 
-<form th:object="${stock}" method="post" action="/kamionToDb">
+
+
+<form th:object="${stock}" method="post" action="/kamionToDb" onSubmit="if (!confirm('Rögzíthetem?')) return false;">
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Hozott vagy vitt?</span>
+    
   </div>
  </div>  
   <p class="radio">&nbsp;&nbsp;
@@ -57,7 +75,7 @@
   </div>
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
 </div>
-<input type="hidden" value="1" name="employe">
+<input type="hidden" value="2" name="employe">
 <button type="submit" class="btn btn-outline-success" >Rögzítés</button>
 </form>
 </div>

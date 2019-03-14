@@ -1,7 +1,21 @@
 <!DOCTYPE html>
-<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+
+<script type="text/javascript">
+
+
+function atir(){
+	
+	
+	if (document.getElementById("chk").checked==true){
+		document.getElementById("address").value=document.getElementById("name").value;
+	} else document.getElementById("address").value="";
+	
+}
+</script>
+
 
 </head>
 <body>
@@ -21,12 +35,13 @@
 
 <div layout:fragment="workBar">
 
-<form method="post"  th:action="@{/newCompany}" th:object="${company}"  onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
+<form method="post"  th:action="@{/newCompanyToDb}" th:object="${company}"  onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required th:field="*{name}">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required th:field="*{name}" id="name">
+  <br />&nbsp;&nbsp;<input type="checkbox" onclick="atir()" id="chk" />
 </div>
 
 
@@ -41,18 +56,16 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Cím</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required  th:field="*{address}">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required  th:field="*{address}" id="address">
 </div>
+
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási napok</span>
-  </div>&nbsp&nbsp
-  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}" value="H" >Hétfő</input>
-  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}" value="K"  >Kedd</input>
-  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}"  value="S" >Szerda</input>
-  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}"  value="C" >Csütörtök</input>
-  &nbsp&nbsp<input type="checkbox" th:field="*{deliverydays}"  value="P" >Péntek</input>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási nap</span>&nbsp&nbsp
+  </div>
+
+<select name="days"><option  th:each="days:${daylist}" th:text="${days.name}" th:value="${days.id}"></option></select>
 </div>
 
 <div class="input-group input-group-sm mb-3">

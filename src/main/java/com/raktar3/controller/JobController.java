@@ -17,12 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.raktar3.entities.Company;
+import com.raktar3.entities.Daylist;
+import com.raktar3.entities.Days;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.MachHistory;
 import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
+import com.raktar3.service.DaylistService;
+import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
@@ -35,6 +39,9 @@ public class JobController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	FileOutputStream fos=null;
 
+	@Autowired
+	DaylistService daylistService;
+	
 	@Autowired
 	MachHistoryService machHistoryService;
 	
@@ -52,6 +59,9 @@ public class JobController {
 	
 	@Autowired
 	EmployeService employeService;
+	
+	@Autowired
+	DaysService daysService;
 	
 	@RequestMapping("/regProductToDb")
 	public String regProductToDb(@ModelAttribute("product") Product p, Model model) {
@@ -75,22 +85,39 @@ public class JobController {
 		return "newEmp";
 	}
 	
-	@RequestMapping("/newCompany")
-	public String newCompany(@ModelAttribute("company") Company company, Model model) {
+	@RequestMapping("/newCompanyToDb")
+	public String newCompany(@ModelAttribute("company") Company company, Model model, @RequestParam("days") String days) {
+		Days d = daysService.findById(Integer.parseInt(days));
+		company.setDays(d);
 		productService.addCompany(company);
-		model.addAttribute("futar", employeService.findAllHumanEmploye());
+		
+		
+		
+		List<Employe> emplist = employeService.findAllHumanEmploye();
+		List<Days> daylist = daysService.findAll();
+		
+ 		Collections.swap(emplist, 0, emplist.indexOf(company.getEmploye()));
+		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(Integer.parseInt(days)).getDays()));
+		
+		model.addAttribute("futar", emplist);
 		model.addAttribute("company", new Company());
 		model.addAttribute("clientregok","");
+		model.addAttribute("daylist", daylist);
 		return "newCompany";
 		
 	}
 	
 	@RequestMapping("/beerkezesToDb")
-	public String beerkToDb(@ModelAttribute("stock") Stock stock) {
+	public String beerkToDb(@ModelAttribute("stock") Stock stock, Model model) {
 		stock.setIncoming(0);
 		stockService.addIncoming(stock);
 		
-		return "index";
+		
+		model.addAttribute("utolsoemploye", stock.getEmploye());   // utoljára rögzített EMP
+		model.addAttribute("products", productService.findAll());
+		model.addAttribute("emps", employeService.findAllHumanEmploye());
+		model.addAttribute("stock", new Stock());
+		return "beerkezes";
 	}
 	
 	
@@ -101,6 +128,8 @@ public class JobController {
 		stock.setIncoming(1);
 		
 		stockService.saleStock(stock);
+		model.addAttribute("utolsoemploye", stock.getEmploye());   // utoljára rögzített EMP
+		
 		model.addAttribute("stock", new Stock());
 		model.addAttribute("emps", employeService.findAllHumanEmploye());
 		model.addAttribute("products", productService.findAll());
@@ -269,11 +298,14 @@ public class JobController {
 	public String editCompany(@PathVariable("id") int id, Model model) {
 		model.addAttribute("company", companyService.findById(id));
 		List<Employe> emplist = employeService.findAllHumanEmploye();
+		List<Days> daylist = daysService.findAll();
 		
-		log.info("Index: "+emplist.indexOf(companyService.findById(id).getEmploye()));
+		
 		Collections.swap(emplist, 0, emplist.indexOf(companyService.findById(id).getEmploye()));
+		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(id).getDays()));
 		
 		model.addAttribute("employes", emplist);
+		model.addAttribute("days", daylist);
 		return "editCompany";
 	}
 	
@@ -289,20 +321,22 @@ public class JobController {
 	
 	
 	@RequestMapping("/editCompanyToDb")
-	public String editCompany(@ModelAttribute("company") Company c,@RequestParam("empid") int empid, @RequestParam("deldays") String deldays, @RequestParam("compid") int compid, Model model) {
-		Company oldcomp = companyService.findById(compid);
-		oldcomp.setName(c.getName());
-		oldcomp.setCity(c.getCity());
-		oldcomp.setAddress(c.getAddress());
-		oldcomp.setComment(c.getComment());
-		oldcomp.setEmploye(employeService.findById(empid));
-		if (deldays!=null && !deldays.isEmpty()) oldcomp.setDeliverydays(deldays);
-		companyService.addNewCompany(oldcomp);
+	public String editCompany(@ModelAttribute("company") Company c,@RequestParam("empid") int empid,@RequestParam("dayid") int daysid, Model model) {
+		Days days = daysService.findById(daysid);
+
+		c.setEmploye(employeService.findById(empid));
+		c.setDays(daysService.findById(daysid));
+		companyService.addNewCompany(c);
+		
+		
 		model.addAttribute("compok", "");
-		model.addAttribute("company", oldcomp);
+		model.addAttribute("company", c);
 		List<Employe> emplist = employeService.findAllHumanEmploye();
-		Collections.swap(emplist, 0, emplist.indexOf(oldcomp.getEmploye()));
+		List<Days> daylist = daysService.findAll();
+		Collections.swap(emplist, 0, emplist.indexOf(c.getEmploye()));
+		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(daysid).getDays()));
 		model.addAttribute("editsuccess", "");
+		model.addAttribute("days", daylist);
 		model.addAttribute("employes", emplist);
 		return "editCompany";
 	}
@@ -370,12 +404,7 @@ public class JobController {
 		return "productListSimple";
 	}
 	
-	@RequestMapping("/daylistCreate")
-	public String daylistcreate(@RequestParam("empid") int id,@RequestParam("nap") String nap, Model model) {
-		model.addAttribute("companies", companyService.finddelday(nap,id));
-		
-		return "daylist";
-	}
+	
 }
 
 

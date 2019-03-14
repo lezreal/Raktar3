@@ -13,15 +13,15 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Company {
 	
-	public Company(String name, String city, String address, String delday, Employe e) {
+	public Company(String name, String city, String address, Employe e) {
 		this.name=name;
 		this.address=address;
 		this.city=city;
-		this.deliverydays=delday;
 		this.employe=e;
 		
 	}
@@ -31,17 +31,40 @@ public class Company {
 	@Id
 	int id;
 	
+	@OneToOne
+	Days days;
+	
+	public Days getDays() {
+		return days;
+	}
+
+
+	public void setDays(Days days) {
+		this.days = days;
+	}
+
+
 	@Column(nullable=false,length=50)
 	String name;
 	
 	@Column(nullable=false,length=50)
 	String city;
 	
-	@Column(nullable=true,length=6)
-	String deliverydays;
 	@Column(nullable=true)
 	String comment;
 	
+	int tablasorszam;
+	
+	public int getTablasorszam() {
+		return tablasorszam;
+	}
+
+
+	public void setTablasorszam(int tablasorszam) {
+		this.tablasorszam = tablasorszam;
+	}
+
+
 	public String getComment() {
 		return comment;
 	}
@@ -65,14 +88,6 @@ public class Company {
 	}
 
 
-	public String getDeliverydays() {
-		return deliverydays;
-	}
-
-
-	public void setDeliverydays(String deliverydays) {
-		this.deliverydays = deliverydays;
-	}
 
 
 	public Employe getEmploye() {

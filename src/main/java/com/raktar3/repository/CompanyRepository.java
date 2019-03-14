@@ -25,8 +25,13 @@ public interface CompanyRepository extends CrudRepository<Company, Integer> {
 	Company findFirstByEmploye(Employe e); 
 	
 	
-	@Query(value="select * from company c where c.deliverydays like %:minta% and c.employe_id=:id",nativeQuery=true)
-	List<Company> findDelDay(@Param("minta") String minta,@Param("id") int id);
+//	@Query(value="select * from company c where c.deliverydays like %:minta% and c.employe_id=:id",nativeQuery=true)
+	@Query(value="select * from company where days_id=?1",nativeQuery=true)
+	List<Company> findDelDay(@Param("id") int id);
 	
 	
+	
+	
+	@Query(value="update company set tablasorszam='?2' where id=?1",nativeQuery=true)
+	public void addTableSorszam(Integer id, int sorszam);
 }

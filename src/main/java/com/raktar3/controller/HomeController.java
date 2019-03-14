@@ -15,6 +15,7 @@ import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
+import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachineService;
 import com.raktar3.service.ProductService;
@@ -41,6 +42,9 @@ public class HomeController {
 	
 	@Autowired
 	CompanyService companyService;
+
+	@Autowired
+	DaysService daysService;
 	
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -53,7 +57,7 @@ public class HomeController {
 			lista.add(p);
 		}
 		model.addAttribute("productlist", lista);
-		
+		model.addAttribute("proba", "picsa");
 		return "productList";
 	}
 	
@@ -138,7 +142,12 @@ public class HomeController {
 			model.addAttribute("noemploye","");
 			return "index";
 		}
+		if (daysService.findAll().isEmpty()) {
+			model.addAttribute("nodays","");
+			return "index";
+		}
 		
+		model.addAttribute("daylist", daysService.findAll());
 		model.addAttribute("futar", employeService.findAllHumanEmploye());
 		model.addAttribute("company", new Company());
 		return "newCompany";
@@ -221,12 +230,12 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping("/daylist")
-	public String daylist(Model model) {
-		model.addAttribute("employes", employeService.findAllHumanEmploye());
-		
-		return "daylist";
-	}
+//	@RequestMapping("/daylist")
+//	public String daylist(Model model) {
+////		model.addAttribute("employes", employeService.findAllHumanEmploye());
+//		model.addAttribute("days", daysService.findAll());
+//		return "daylist";
+//	}
 	
 	@RequestMapping("/proba")
 	public String proba() {

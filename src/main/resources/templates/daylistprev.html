@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+<style>
+
+table{
+
+padding: 0px;
+margin: 0px;
+}
+
+td{
+padding: 0px;
+margin: 0px;
+border: solid;
+border-width: 1px;
+}
+
+tr{
+height: 40px;
+}
+
+.vizek{
+
+width: 80px;
+}
+
+.megj{
+width: 250px;
+}
+
+.ures{
+background-color: #D8D4D4;
+
+}
+
+</style>
+
+    <script type="text/javascript">
+    function load_content ( id, content ) {
+      var node = document.getElementById( id );
+      node.innerHTML = content;
+    }
+    </script>
+</head>
+<body>
+
+
+
+<table id="table">
+<tr>	
+		<td align="center" width="20px">#</td>
+		<td width="200px" align="center">Vizek</td>
+		<td   class="megj"  align="center">Város</td>
+        <td     align="center" width="50px">FENTEBB</td>
+        <td     align="center" width="50px">LENTEBB</td>
+        <td  align="center" width="50px">KIVESZ</td>
+        <td     align="center">BESZÚR</td>
+        
+    </tr>
+    <tr th:each="list:${daylist}">
+    <td  align="center" width="20px" th:text="${list.sorszam}"></td>
+    <td align="right" width="200px" ><font  th:text="${list.company.name}" style="margin-right: 5px; font-family:sans-serif;"></font></td>
+	
+	<td class="tele" th:text="${list.company.city}"></td>
+	<td align="center"><div th:if="${list.sorszam<maxsorszam}"  width="50px"><form method="post" th:action="@{/daylistle}" ><input type="image" src="images/down_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
+	<td align="center" class="vizek" ><div th:if="${list.sorszam>1}"  width="50px"><form method="post" th:action="@{/daylistfel}" ><input type="image" src="images/up_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
+	<td align="center" class="vizek" ><form method="post" th:action="@{/daylistkivesz}" ><input type="hidden" name="kivesz" th:value="${list.id}"><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input><input type="image" src="images/delete.png" width="30px" /></form></td>
+    <td class="tele" ><form method="post" th:action="@{/daylistbeszur}" ><input type="hidden" name="elozo" th:value="${list.sorszam}"></input>
+    
+    <select name="ujcomp">
+    	<option th:each="list:${allcompany}" th:value="${list.id}" th:text="${list.name}+' - '+${list.city}">
+    	</option>
+    </select>
+    
+    <button  type="submit" >BESZÚR</button></form>
+    <div id="beszur"></div>
+   
+    </td>
+    
+    </tr>
+        
+    <tr>
+    
+    </tr>
+</table>
+
+<form th:action="@{/keszdaylist}" method="post">
+
+<button type="submit">NYOMTATHATÓ VERZIÓ</button>
+</form>
+
+<form th:action="@{/daylistsave}" method="post" onSubmit="if (!confirm('Menthetem?')) return false;">
+<input name="newlistname" required placeholder="az új fixlista neve"></input>
+<button type="submit">FIX LISTA MENTÉSE</button>
+</form>
+
+
+<br>
+<a href="/">FŐOLDAL</a>
+
+
+
+
+
+</body>
+</html>

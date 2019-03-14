@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+
+<div layout:fragment="workBar">
+
+<form method="post" th:action="@{/selectedfixlist}">
+<select name="name">
+<option th:each="list:${napok}" th:text="${list}" th:value="${list}"></option>
+</select>
+
+
+<button type="submit" name="action" value="load">BETÖLT</button>
+<button type="submit" name="action" value="delete" onclick="if (!confirm('Biztosan töröljem?')) return false;">TÖRLÉS</button>
+</form>
+</div>
+</body>
+</html>

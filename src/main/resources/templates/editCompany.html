@@ -20,7 +20,7 @@
 
 <form method="post" th:action="@{/editCompanyToDb}" th:object="${company}">
 
-   <input type="hidden" name="compid" th:value="${company.id}"></input>
+   <input type="hidden" th:value="${company.id}" th:field="*{id}"></input>
   
 
 
@@ -61,24 +61,18 @@
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" th:text="'Szállítási napok: ('+${company.deliverydays}+')'" id="inputGroup-sizing-sm"></span>
+    <span class="input-group-text" th:text="'Szállítási nap: ('+${company.days.name}+')'" id="inputGroup-sizing-sm"></span>
   </div>
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  id="deldays" readonly name="deldays">
-</div>
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási napok</span>
-  </div>&nbsp&nbsp
-  &nbsp&nbsp<input type="checkbox" value="H" id="hetfo" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'H'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('H','')">Hétfő</input>
-  &nbsp&nbsp<input type="checkbox" value="K" id="kedd" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'K'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('K','')">Kedd</input>
-  &nbsp&nbsp<input type="checkbox"  value="S" id="szerda" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'S'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('S','')">Szerda</input>
-  &nbsp&nbsp<input type="checkbox"  value="C" id="csutortok" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'C'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('C','')">Csütörtök</input>
-  &nbsp&nbsp<input type="checkbox"  value="P" id="pentek" onclick="if (this.checked==true) document.getElementById('deldays').value=document.getElementById('deldays').value+'P'; else document.getElementById('deldays').value=document.getElementById('deldays').value.replace('P','')">Péntek</input>
 </div>
 
 
 <select name="empid">
 <option th:each="emps:${employes}" th:text="${emps.name}" th:value="${emps.id}"></option>
+</select>
+
+<select name="dayid" >
+<option th:each="days:${days}" th:text="${days.name}" th:value="${days.id}"></option>
 </select>
 
 <button type="submit">Módosítás mentése</button>

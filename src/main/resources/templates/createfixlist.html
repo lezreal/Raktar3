@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="UTF-8">
@@ -41,12 +41,18 @@ function calc(id)
 	  document.getElementById('rogzit').disabled = true;
   }
 }
+
+
+
 </script>
 
 </head>
 <body>
 
+
+
 <div layout:fragment="infoBar">
+
 <h1>Ügyfelek listája</h1>
   <p>A törléssel csak óvatosan</p>
 <div th:if="${compok}" class="alert alert-success">
@@ -55,10 +61,11 @@ function calc(id)
 </div>
 
 <div layout:fragment="workBar">
-
+<form action="/selectedcomps" method="post">
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
+      	<th>Kijelölés</th>
         <th>Megnevezés</th>
         <th>Helység</th>
         <th>Cím</th>
@@ -71,6 +78,8 @@ function calc(id)
     </thead>
     <tbody >
       <tr th:each="list:${companies}">
+      
+      	<td ><input type="checkbox" name="compid" th:value="${list.id}" th:id="${list.id}" onclick="if (this.checked==true) document.getElementById('osszes').value=document.getElementById('osszes').value+this.value+','; else document.getElementById('osszes').value=document.getElementById('osszes').value.replace(this.value+',','')"/></td>
         <td th:text="${list.name}">John</td>
         <td th:text="${list.city}">Doe</td>
         <td th:text="${list.address}">Doe</td>
@@ -85,6 +94,8 @@ function calc(id)
   </table>
 
 
+<input type="text" id="osszes" name="osszes" readonly></input>
+<button type="submit">Szerkesztő mód a kijelöltekkel</button></form>
 </div>
 
 </body>
