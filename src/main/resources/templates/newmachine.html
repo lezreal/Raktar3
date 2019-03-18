@@ -39,7 +39,7 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Sorszám:</span>
   </div>
-  <input type="text" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{sorszam}">
+  <input type="text" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  th:value="${ujsorszam}" name="sorszam">
 </div>
 
 
@@ -56,8 +56,10 @@
   </div>
   <select th:field="*{type}">
   	<option value="1">Hideg-Meleg vizes</option>
-  	<option value="2">CO2 - szódás</option>
-  	<option value="3">Hálózati gép</option>
+  	<option value="2">CO2 - poharas</option>
+  	<option value="3">CO2 - szivattyús</option>
+  	<option value="4">Hálózati sima</option>
+  	<option value="5">Hálózati CO2</option>
   </select>
 </div>
 

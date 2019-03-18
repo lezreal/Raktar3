@@ -27,7 +27,7 @@ public class MachineService {
 	
 		
 		machineRepo.save(m);
-		return m.getId();  // visszatér az utoljára rögzített gép ID-jával
+		return m.getSorszam();  // visszatér az utoljára rögzített gép SORSZÁMÁVAL
 	}
 	
 	public void editMachineSave(Machine m) {
@@ -44,6 +44,11 @@ public class MachineService {
 	
 	public boolean findSorszam(Integer sorszam) {
 		if (machineRepo.findSorszam(sorszam)==null) return true; else return false;
+	}
+
+	public int getNewSorszam() {
+		// TODO Auto-generated method stub
+		return machineRepo.getNewSorszam()+1;
 	}
 	
 	

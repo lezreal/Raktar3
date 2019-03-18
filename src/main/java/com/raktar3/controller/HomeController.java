@@ -208,7 +208,7 @@ public class HomeController {
 	@RequestMapping("/newmachine")
 	public String newMachine(Model model) {
 		model.addAttribute("newmach", new Machine());
-		
+		model.addAttribute("ujsorszam", machineService.getNewSorszam());
 		return "newmachine";
 	}
 	
@@ -230,16 +230,11 @@ public class HomeController {
 	}
 	
 	
-//	@RequestMapping("/daylist")
-//	public String daylist(Model model) {
-////		model.addAttribute("employes", employeService.findAllHumanEmploye());
-//		model.addAttribute("days", daysService.findAll());
-//		return "daylist";
-//	}
-	
-	@RequestMapping("/proba")
-	public String proba() {
-		return "proba";
+	@RequestMapping("/lekerdezes")
+	public String lekerdezes(Model model) {
+		model.addAttribute("employes", employeService.findAllEmploye());
+		model.addAttribute("products", productService.findAll());
+		return "lekerdezes1";
 	}
 	
 }

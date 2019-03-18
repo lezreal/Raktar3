@@ -1,6 +1,5 @@
 package com.raktar3.controller;
 
-import java.io.FileOutputStream;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -72,6 +71,7 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
 	}
 	
@@ -87,6 +87,7 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";
 		
 		
@@ -102,6 +103,7 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";
 	}
 
@@ -121,6 +123,7 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";
 	}
 	
@@ -139,6 +142,7 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";
 	}
 	
@@ -153,20 +157,27 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";
 	}
 	
-	@RequestMapping("/daylistsave")
+	@RequestMapping("/daylistsave")   // EZ AMIKOR ÚJ FIXLISTÁT CSINÁLOK
 	public String daylistsave(@RequestParam("newlistname") String name) {
 		List<Daylist> lista = daylistService.findAll();
 		
 		for (Daylist x:lista) {
 			daycompanyService.addNewDaycompany(new Daycompany(x.getCompany(),x.getSorszam(),name));
-//			Daycompany dc = new Daycompany();
-//			dc.setCompany(x.getCompany());
-//			dc.setSorszam(x.getSorszam());
-//			dc.setName(name);
-
+		}
+		return "index";
+	}
+	
+	@RequestMapping("/daylistupdate")   // EZ AMIKOR ÚJ FIXLISTÁT CSINÁLOK
+	public String daylistupdate(@RequestParam("name") String name) {
+		daycompanyService.deleteSelectedName(name);
+		List<Daylist> lista = daylistService.findAll();
+		
+		for (Daylist x:lista) {
+			daycompanyService.addNewDaycompany(new Daycompany(x.getCompany(),x.getSorszam(),name));
 		}
 		
 		return "index";
@@ -210,6 +221,7 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
 		
 	}
@@ -218,6 +230,7 @@ public class DaylistController {
 	public String loadfixlist(Model model) {
 		
 		model.addAttribute("napok", daycompanyService.findDistinctName());
+		
 		return "loadfixlist";
 	}
 	
@@ -236,11 +249,76 @@ public class DaylistController {
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
 		} else {
 			daycompanyService.deleteSelectedName(name);
 			return "index";
 		}
+	}
+	
+	@RequestMapping("/sorszamcsere")
+	public String sorszamcsere(@RequestParam("ujsorszam") int ujsorszam,@RequestParam("keroid") int kid, Model model) {
+		
+		if (ujsorszam<=0) {   // ha HÜLYESÉGET üt be
+			model.addAttribute("daylist", daylistService.findAll());
+			model.addAttribute("allcompany", companyService.findAll());
+			model.addAttribute("maxsorszam", daylistService.findAll().size());
+			model.addAttribute("csakfix", daycompanyService.findDistinctName());
+			return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		} 
+		int maxi=daylistService.findMaxSorszam();
+		if (ujsorszam>=maxi) {   // ha nagyobbat üt be, mint ahány sorszám van
+			daylistService.sorszamCsokkent(daylistService.findById(kid).getSorszam());
+			daylistService.findById(kid).setSorszam(maxi);
+			daylistService.addToDb(daylistService.findById(kid));
+			model.addAttribute("daylist", daylistService.findAll());
+			model.addAttribute("allcompany", companyService.findAll());
+			model.addAttribute("maxsorszam", daylistService.findAll().size());
+			model.addAttribute("csakfix", daycompanyService.findDistinctName());
+			return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		}
+		
+		if (ujsorszam<maxi) {
+			
+			if (ujsorszam<daylistService.findById(kid).getSorszam()) { // ha az új sorszam kisebb, mint a jelenlegi
+				daylistService.sorszamCsereKisebbre(ujsorszam,daylistService.findById(kid).getSorszam());
+				Daylist dl =daylistService.findById(kid);
+				dl.setSorszam(ujsorszam);
+				daylistService.addToDb(dl);
+				model.addAttribute("daylist", daylistService.findAll());
+				model.addAttribute("allcompany", companyService.findAll());
+				model.addAttribute("maxsorszam", daylistService.findAll().size());
+				model.addAttribute("csakfix", daycompanyService.findDistinctName());
+				return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+			} else {
+				daylistService.sorszamCsereNagyobbra(ujsorszam,daylistService.findById(kid).getSorszam());
+				Daylist dl =daylistService.findById(kid);
+				dl.setSorszam(ujsorszam);
+				daylistService.addToDb(dl);
+				model.addAttribute("daylist", daylistService.findAll());
+				model.addAttribute("allcompany", companyService.findAll());
+				model.addAttribute("maxsorszam", daylistService.findAll().size());
+				model.addAttribute("csakfix", daycompanyService.findDistinctName());
+				return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+			}
+			
+			
+//			daylistService.sorszamCsereKisebbre(ujsorszam,daylistService.findById(kid).getSorszam());
+//			daylistService.findById(kid).setSorszam(ujsorszam);
+//			model.addAttribute("daylist", daylistService.findAll());
+//			model.addAttribute("allcompany", companyService.findAll());
+//			model.addAttribute("maxsorszam", daylistService.findAll().size());
+//			return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		}
+		
+		//
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		
 	}
 	
 }

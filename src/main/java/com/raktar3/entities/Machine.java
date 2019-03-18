@@ -58,7 +58,7 @@ public class Machine {
 	String comment;
 	
 	@Column(nullable=false)
-	byte type;
+	byte type;    // 1: sima ,  2: co2 poharas, 3: co2 szivattyús,  4: hálózati sima, 5: hálózati co2 
 
 
 	int sorszam;

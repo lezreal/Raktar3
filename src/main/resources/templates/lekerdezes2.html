@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/main">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+<div layout:fragment="workBar">
+
+	
+
+		
+		
+		
+		
+		<table>
+		
+		
+		
+		<tr th:each="list:${lekerdezes}">
+		<td th:text="${list.product.name}"></td>
+		<td th:text="${list.employe.name}"></td>
+			<td th:text="${list.amount}"></td>
+			<td th:if="${list.incoming==0}" th:text="BEÉRKEZÉS"></td>
+			<td th:if="${list.incoming==1}" th:text="KIADÁS"></td>
+			<td th:if="${list.incoming==2}" th:text="SELEJT"></td>
+			<td th:text="${list.comment}"></td>
+		</tr>
+		
+		
+		
+		
+		</table>
+		
+	
+	
+</div>
+
+</body>
+</html>

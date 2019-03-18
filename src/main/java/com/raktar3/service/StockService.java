@@ -65,6 +65,13 @@ public class StockService {
 		return stockRepo.findByProduct(p);
 	}
 	
+	
+	public List<Stock> lekerdezes(String date, int empid, int pid){
+		if (pid==0) {
+			return stockRepo.findAllLekerdezes(date, empid);
+		} else return stockRepo.findSelectedLekerdezes(date, empid, pid);
+	}
+	
 	public void deleteAll() {
 	stockRepo.deleteAll();
 	}

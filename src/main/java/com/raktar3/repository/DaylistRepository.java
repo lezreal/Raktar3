@@ -31,8 +31,27 @@ public interface DaylistRepository extends CrudRepository<Daylist, Integer> {
 	public void sorszamCsokkent(int sorszam);
 	
 	
-	public void delete(Daylist d);
-	
-	
 	Daylist findFirstBySorszam(int sorszam);
+	
+	@Query(value="select max(sorszam) as maxi from daylist", nativeQuery=true)
+	int findMaxSorszam();
+	
+	
+	@Transactional
+	@Modifying
+	@Query(value="update daylist set sorszam=sorszam+1 where sorszam>=?1 and sorszam<?2", nativeQuery=true)
+	public void sorszamCsokkentAholKisebb(int mettol, int meddig);
+	
+	
+	@Transactional
+	@Modifying
+	@Query(value="update daylist set sorszam=sorszam-1 where sorszam<=?1 and sorszam>?2", nativeQuery=true)
+	void sorszamCsokkentAholNagyobb(int mettol, int meddig);
+	
+	
+	public void delete(Daylist d);
+
+	
+	
+	
 }

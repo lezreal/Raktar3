@@ -25,5 +25,7 @@ public interface DaycompanyRepository extends CrudRepository<Daycompany, Integer
 	@Modifying
 	@Query(value="delete from daycompany where name=?1",nativeQuery=true)
 	public void deleteSelectedName(String name);
+
 	
+		
 }

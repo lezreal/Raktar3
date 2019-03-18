@@ -15,12 +15,12 @@
 
 <div layout:fragment="workBar">
 
-<center><h2><font th:text="${selected.id}"></font>-s sorszámú gép adatai</h2></center>
+<center><h2><font th:text="${selected.sorszam}"></font>-s sorszámú gép adatai</h2></center>
 <div th:if="${siker}" class="alert alert-success">
   <strong>Változtatások rögzítve</strong> 
 </div>
 <div th:if="${foglalt}" class="alert alert-danger">
-  <strong>Sikertelen módosítás!</strong> Ez a sorszám foglalt!
+  <strong>Sikertelen módosítás!</strong> Ez a sorszám foglalt vagy nem alkalmazható!
 </div>
 
 

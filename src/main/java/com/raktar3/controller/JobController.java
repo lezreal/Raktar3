@@ -202,20 +202,18 @@ public class JobController {
 	}
 	
 	@RequestMapping("/newMachToDb")
-	public String newMachine(@ModelAttribute("newmach") Machine mach, Model model) {
+	public String newMachine(@ModelAttribute("newmach") Machine mach, Model model, @RequestParam("sorszam") int sorszam) {
 		
-		if (machineService.findSorszam(mach.getSorszam())){
-			
+		if (machineService.findSorszam(sorszam)){
+			mach.setSorszam(sorszam);
 			mach.setCompany(companyService.findById(1));
 			model.addAttribute("machregok", "");
 			model.addAttribute("machregid", machineService.addMachineToDb(mach));	
 		} else {
 			model.addAttribute("machregfail", "");
 		}
-//		
-//		mach.setCompany(companyService.findById(1));
-		  
-//		
+		model.addAttribute("newmach", new Machine());
+		model.addAttribute("ujsorszam", machineService.getNewSorszam());
 		return "newmachine";
 	}
 	
@@ -229,22 +227,26 @@ public class JobController {
 	@RequestMapping("/machHistoryToDb")
 	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") String compid, @RequestParam("ujsorszam") String ujsorszam, @RequestParam("regisorszam") String regisorszam) {
 		
+		if (Integer.parseInt(ujsorszam)>0) {
+		
 		if (Integer.parseInt(ujsorszam)==Integer.parseInt(regisorszam)) {
-			log.info("Egyezik");
+			model.addAttribute("siker","");
 			m.setCompany(companyService.findById(Integer.parseInt(compid)));
 			m.setSorszam(Integer.parseInt(regisorszam));
 			machineService.addMachineToDb(m);
 		} else if (machineService.findSorszam(Integer.parseInt(ujsorszam)))
 				{
-			log.info("Új sorszám");
+			model.addAttribute("siker","");
 			m.setCompany(companyService.findById(Integer.parseInt(compid)));
 			m.setSorszam(Integer.parseInt(ujsorszam));
 			machineService.addMachineToDb(m);
 			
 		} else {
-			log.info("RÉGI: "+regisorszam);
-			log.info("Nem jó");
+			
 			model.addAttribute("foglalt",""); 
+		}
+		} else {
+			model.addAttribute("foglalt","");
 		}
 		
 		
@@ -252,9 +254,9 @@ public class JobController {
 				//machineService.addMachineToDb(m);
 //			 machineService.editMachineSave(m);
 			model.addAttribute("selected", m);
-			model.addAttribute("siker","");
+			
 			model.addAttribute("comps", companyService.findAll());
-			model.addAttribute("selected", m);
+			
 //			model.addAttribute("foglalt","");
 //		
 		return "selectedMachine";
@@ -404,6 +406,14 @@ public class JobController {
 		return "productListSimple";
 	}
 	
+	@RequestMapping("/lekerdezes2")
+	public String lekerdez2(@RequestParam("bday") String date,@RequestParam("empid") int empid,@RequestParam("pid") int pid, Model model) {
+		
+		 model.addAttribute("lekerdezes", stockService.lekerdezes(date, empid, pid));
+		
+		return "lekerdezes2";
+	}
+
 	
 }
 

@@ -34,5 +34,8 @@ public class DaycompanyService {
 		daycompanyRepo.deleteSelectedName(name);
 		
 	}
+
+
+	
 	
 }

@@ -2,6 +2,12 @@
 <html xmlns:th="www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="main/bootstrap.min.css">
+<script src="main/jquery.min.js"></script>
+<script src="main/popper.min.js"></script>
+<script src="main/js/bootstrap.min.js"></script>
 <title>Insert title here</title>
 
 
@@ -63,7 +69,7 @@ background-color: #D8D4D4;
         
     </tr>
     <tr th:each="list:${daylist}">
-    <td  align="center" width="20px" th:text="${list.sorszam}"></td>
+    <td  align="center" width="20px"><form method="post" th:action="@{/sorszamcsere}"><input type="hidden" name="keroid" th:value="${list.id}"/><input type="number" name="ujsorszam"  th:value="${list.sorszam}" size="3" style="text-align: center" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"/></form></td>
     <td align="right" width="200px" ><font  th:text="${list.company.name}" style="margin-right: 5px; font-family:sans-serif;"></font></td>
 	
 	<td class="tele" th:text="${list.company.city}"></td>
@@ -96,13 +102,28 @@ background-color: #D8D4D4;
 
 <form th:action="@{/daylistsave}" method="post" onSubmit="if (!confirm('Menthetem?')) return false;">
 <input name="newlistname" required placeholder="az új fixlista neve"></input>
-<button type="submit">FIX LISTA MENTÉSE</button>
+<button type="submit" class="btn btn-success">ÚJ FIX LISTA MENTÉSE</button>
+
+</form>
+
+<br><br>
+
+
+<form th:action="@{/daylistupdate}" method="post" onSubmit="if (!confirm('Felülírhatom?')) return false;">
+
+
+<select name="name">
+<option th:each="list:${csakfix}" th:text="${list}" ></option>
+
+</select>
+<button type="submit" class="btn btn-danger">LÉTEZŐ LISTA FELÜLÍRÁSA</button>
 </form>
 
 
-<br>
-<a href="/">FŐOLDAL</a>
 
+<br>
+
+<a href="/">FŐOLDAL</a>
 
 
 

@@ -41,5 +41,12 @@ public interface StockRepository extends CrudRepository<Stock, Integer> {
 	
 	List<Stock> findByProduct(Product p);
 	
+	@Query(value="select * from stock where date=?1 and employe_id=?2 and product_id=?3",nativeQuery=true)
+	public List<Stock> findSelectedLekerdezes(String date, int empid, int pid);
+	
+	@Query(value="select * from stock where date=?1 and employe_id=?2",nativeQuery=true)
+	public List<Stock> findAllLekerdezes(String date, int empid);
+	
 	public void delete(Stock s);
+	
 }

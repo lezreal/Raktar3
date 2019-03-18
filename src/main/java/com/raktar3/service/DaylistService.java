@@ -48,6 +48,18 @@ public class DaylistService {
 
 	public Daylist findFirstBySorszam(int sorszam) {
 		return daylistRepo.findFirstBySorszam(sorszam);
+	}
+	
+	public int findMaxSorszam() {
+		return daylistRepo.findMaxSorszam();
+	}
+	
+	public void sorszamCsereKisebbre(int mettol, int meddig) {
+		daylistRepo.sorszamCsokkentAholKisebb(mettol, meddig);
+	}
+
+	public void sorszamCsereNagyobbra(int mettol, int meddig) {
+		daylistRepo.sorszamCsokkentAholNagyobb(mettol, meddig);
 		
 	}
 }

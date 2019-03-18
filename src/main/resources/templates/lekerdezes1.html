@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/main">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+
+</head>
+<body>
+
+
+<div layout:fragment="workBar">
+
+<form th:action="@{/lekerdezes2}" method="post">
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
+  </div>
+  <input type="date" name="bday"  required>
+</div>
+
+
+
+
+<select class="selectpicker" data-style="btn-info" name="empid">
+  
+  
+  <option th:each="emps:${employes}" th:text="${emps.name}" th:value="${emps.id}"></option>
+  
+</select>
+
+
+<select class="selectpicker" data-style="btn-warning" name="pid">
+  
+  <option value="0">összes termék</option>
+  <option th:each="prod:${products}" th:text="${prod.name}" th:value="${prod.id}"></option>
+  
+</select>
+
+
+
+<button type="submit" class="btn btn-outline-success">Success</button>
+
+</form>
+
+
+</div>
+
+</body>
+</html>
