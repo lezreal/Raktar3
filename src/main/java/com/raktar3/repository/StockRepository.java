@@ -1,7 +1,11 @@
 package com.raktar3.repository;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import com.raktar3.entities.Employe;
@@ -48,5 +52,11 @@ public interface StockRepository extends CrudRepository<Stock, Integer> {
 	public List<Stock> findAllLekerdezes(String date, int empid);
 	
 	public void delete(Stock s);
+
+	@Query(value="select * from stock where date=?1 and product_id=?2",nativeQuery=true)
+	List<Stock> findAllProductDate(String date, int pid);
+
+
+	
 	
 }

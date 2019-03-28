@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<style>
+td{
+width:150px;
+}
+
+</style>
+
+</head>
+<body>
+
+
+  <table class="table table-striped" id="myTable">
+    <thead>
+      <tr>
+        <td>Dátum</td>
+        <td>Gép</td>
+        <td>Sorszam</td>
+        <td>Megjegyzés</td>
+        
+
+      </tr>
+    </thead>
+    <tbody >
+      <tr th:each="list:${machines}">
+        <td th:text="${list.date}">Doe</td>
+        <td th:text="${list.machine.name}">Doe</td>
+        <td th:text="${list.machine.sorszam}">Doe</td>
+        <td th:text="${list.machine.comment}">Doe</td>
+      </tr>
+      
+    </tbody>
+  </table>
+
+
+
+
+</body>
+</html>

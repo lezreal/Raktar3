@@ -1,9 +1,11 @@
 package com.raktar3.controller;
 
 
-import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.raktar3.entities.Company;
-import com.raktar3.entities.Daylist;
 import com.raktar3.entities.Days;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.MachHistory;
@@ -37,7 +38,6 @@ import com.raktar3.service.StockService;
 public class JobController {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	FileOutputStream fos=null;
 
 	@Autowired
 	DaylistService daylistService;
@@ -66,7 +66,7 @@ public class JobController {
 	@RequestMapping("/regProductToDb")
 	public String regProductToDb(@ModelAttribute("product") Product p, Model model) {
 		if (productService.findProductByName(p.getName())) { 
-			model.addAttribute("regok","");
+			model.addAttribute("siker","");
 			productService.regNewProduct(p);
 			model.addAttribute("product_list", productService.findAll());
 		} else {
@@ -80,8 +80,9 @@ public class JobController {
 	
 	@RequestMapping("/newEmpToDb")
 	public String newEmploye(@ModelAttribute("newemp") Employe emp, Model model) {
-		if (employeService.addUserToDb(emp)==true) model.addAttribute("empregok", ""); else model.addAttribute("vanmar", ""); 
+		if (employeService.addUserToDb(emp)==true) model.addAttribute("siker", ""); else model.addAttribute("vanmar", ""); 
 		model.addAttribute("emplist", productService.findAllEmploye());
+		
 		return "newEmp";
 	}
 	
@@ -101,7 +102,7 @@ public class JobController {
 		
 		model.addAttribute("futar", emplist);
 		model.addAttribute("company", new Company());
-		model.addAttribute("clientregok","");
+		model.addAttribute("siker","");
 		model.addAttribute("daylist", daylist);
 		return "newCompany";
 		
@@ -117,6 +118,7 @@ public class JobController {
 		model.addAttribute("products", productService.findAll());
 		model.addAttribute("emps", employeService.findAllHumanEmploye());
 		model.addAttribute("stock", new Stock());
+		model.addAttribute("siker", "");
 		return "beerkezes";
 	}
 	
@@ -133,7 +135,7 @@ public class JobController {
 		model.addAttribute("stock", new Stock());
 		model.addAttribute("emps", employeService.findAllHumanEmploye());
 		model.addAttribute("products", productService.findAll());
-		model.addAttribute("eladasok", "");
+		model.addAttribute("siker", "");
 		return "eladas";
 	}
 
@@ -207,7 +209,7 @@ public class JobController {
 		if (machineService.findSorszam(sorszam)){
 			mach.setSorszam(sorszam);
 			mach.setCompany(companyService.findById(1));
-			model.addAttribute("machregok", "");
+			model.addAttribute("siker", "");
 			model.addAttribute("machregid", machineService.addMachineToDb(mach));	
 		} else {
 			model.addAttribute("machregfail", "");
@@ -221,44 +223,70 @@ public class JobController {
 	public String machine(@PathVariable("search") Integer id, Model model) {
 		model.addAttribute("selected", machineService.findById(id));
 		model.addAttribute("comps", companyService.findAll());
+		model.addAttribute("history", machHistoryService.findMachine(machineService.findById(id)));
+		
 		return "selectedMachine";
 	}
 	
 	@RequestMapping("/machHistoryToDb")
-	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") String compid, @RequestParam("ujsorszam") String ujsorszam, @RequestParam("regisorszam") String regisorszam) {
+	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") Integer compid, @RequestParam("ujsorszam") String ujsorszam, @RequestParam("regisorszam") String regisorszam, @RequestParam("oldcompid") Integer oldcompid) {
+		
+		
+		
 		
 		if (Integer.parseInt(ujsorszam)>0) {
 		
 		if (Integer.parseInt(ujsorszam)==Integer.parseInt(regisorszam)) {
+			
+			
+			if (compid==null) m.setCompany(companyService.findById(m.getId()));
+			
 			model.addAttribute("siker","");
-			m.setCompany(companyService.findById(Integer.parseInt(compid)));
+			if (oldcompid!=compid) {
+				MachHistory mh = new MachHistory();
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				Date date = new Date();
+				mh.setDate(dateFormat.format(date));
+				mh.setCompany(companyService.findById(compid));
+				mh.setMachine(m);
+				machHistoryService.addNewHistory(mh);
+			}
+			m.setCompany(companyService.findById(compid));
 			m.setSorszam(Integer.parseInt(regisorszam));
 			machineService.addMachineToDb(m);
-		} else if (machineService.findSorszam(Integer.parseInt(ujsorszam)))
-				{
+		} else if (machineService.findSorszam(Integer.parseInt(ujsorszam))){   // HA MÁS SORSZÁMOT ADOTT MEG ÉS SZABAD
+			if (oldcompid!=compid) {
+				MachHistory mh = new MachHistory();
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				Date date = new Date();
+				mh.setDate(dateFormat.format(date));
+				mh.setCompany(companyService.findById(compid));
+				mh.setMachine(m);
+				machHistoryService.addNewHistory(mh);
+			}
 			model.addAttribute("siker","");
-			m.setCompany(companyService.findById(Integer.parseInt(compid)));
+			m.setCompany(companyService.findById(compid));
 			m.setSorszam(Integer.parseInt(ujsorszam));
 			machineService.addMachineToDb(m);
 			
 		} else {
-			
+		
 			model.addAttribute("foglalt",""); 
-		}
-		} else {
-			model.addAttribute("foglalt","");
-		}
-		
-		
-		
-				//machineService.addMachineToDb(m);
-//			 machineService.editMachineSave(m);
-			model.addAttribute("selected", m);
-			
+			model.addAttribute("selected", machineService.findById(m.getId()));
 			model.addAttribute("comps", companyService.findAll());
-			
-//			model.addAttribute("foglalt","");
-//		
+			model.addAttribute("history", machHistoryService.findMachine(m));
+		return "selectedMachine";
+		}
+		} else { // HA ROSSZ SORSZÁMOT ADOTT MEG (<0)
+			model.addAttribute("foglalt","");
+			model.addAttribute("selected", machineService.findById(m.getId()));
+			model.addAttribute("comps", companyService.findAll());
+			model.addAttribute("history", machHistoryService.findMachine(m));
+		return "selectedMachine";
+		}
+			model.addAttribute("selected", m);
+			model.addAttribute("comps", companyService.findAll());
+			model.addAttribute("history", machHistoryService.findMachine(m));
 		return "selectedMachine";
 	}
 
@@ -408,13 +436,41 @@ public class JobController {
 	
 	@RequestMapping("/lekerdezes2")
 	public String lekerdez2(@RequestParam("bday") String date,@RequestParam("empid") int empid,@RequestParam("pid") int pid, Model model) {
+		int eladva=0, bejott=0;
+		if (stockService.lekerdezes(date, empid, pid)==null) return "index";
+		List<Stock> stocklista=stockService.lekerdezes(date, empid, pid);
+		for (int i=0;i<stocklista.size();i++) {
+			if (stocklista.get(i).getIncoming()==0) bejott=bejott+stocklista.get(i).getAmount(); else eladva=eladva+stocklista.get(i).getAmount(); 
+		}
 		
-		 model.addAttribute("lekerdezes", stockService.lekerdezes(date, empid, pid));
+		model.addAttribute("lekerdezes", stocklista);
+		model.addAttribute("eladott", eladva);
+		model.addAttribute("bejott", bejott);
 		
+		
+		
+		 
+		 model.addAttribute("datum", date);
+		 if (empid!=0) model.addAttribute("employe", employeService.findById(empid).getName());
+		 
 		return "lekerdezes2";
 	}
 
-	
+	@RequestMapping("/companymachine/{id}")
+	public String companymachine(@PathVariable("id") int compid, Model model) {
+		;
+		model.addAttribute("machines", machHistoryService.findCompany(companyService.findById(compid)));
+		return "companymachinelist";
+	}
+
+	@RequestMapping("/historydelete")
+	public String historydelete(@RequestParam("hid") int hid, Model model) {
+		
+		machHistoryService.deleteSelected(hid);
+		model.addAttribute("historylist", machHistoryService.findAll());
+		model.addAttribute("siker", "");
+		return "machhistory";
+	}
 }
 
 

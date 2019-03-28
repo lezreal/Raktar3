@@ -1,6 +1,10 @@
 package com.raktar3.service;
 
+import java.util.LinkedList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,8 @@ import com.raktar3.repository.StockRepository;
 @Service
 public class StockService {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	ProductService productService;
 	
@@ -67,6 +73,10 @@ public class StockService {
 	
 	
 	public List<Stock> lekerdezes(String date, int empid, int pid){
+		if (empid==0) {
+			
+			return stockRepo.findAllProductDate(date,pid);
+		} else 
 		if (pid==0) {
 			return stockRepo.findAllLekerdezes(date, empid);
 		} else return stockRepo.findSelectedLekerdezes(date, empid, pid);
@@ -92,4 +102,6 @@ public class StockService {
 	public void deleteById(int id) {
 		stockRepo.deleteById(id);
 		}
+
+	
 }

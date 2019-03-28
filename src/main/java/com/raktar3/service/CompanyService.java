@@ -46,6 +46,7 @@ public class CompanyService {
 	}
 	
 	
+	
 	public List<Company> finddelday(int id){
 		
 		List<Company> sorszamNelkuli = companyRepo.findDelDay(id);

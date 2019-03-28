@@ -9,13 +9,22 @@
 <script src="../main/jquery.min.js"></script>
 <script src="../main/popper.min.js"></script>
 <script src="../main/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="../chosen/chosen.min.css">
+
+    <script src="../chosen/jquery.js"></script>
+
+    <script src="../chosen/chosen.jquery.min.js"></script>
+
+
+
 
 </head>
 <body>
 
 <div layout:fragment="workBar">
 
-<center><h2><font th:text="${selected.sorszam}"></font>-s sorszámú gép adatai</h2></center>
+<h2><font th:text="${selected.sorszam}"></font>-s sorszámú gép adatai</h2>
+
 <div th:if="${siker}" class="alert alert-success">
   <strong>Változtatások rögzítve</strong> 
 </div>
@@ -34,6 +43,7 @@
   <input type="hidden"  class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="regisorszam" th:value="${selected.sorszam}" >
   <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{id}">
   <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{type}">
+  <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="oldcompid" th:value="${selected.company.id}">
   
 </div>
 
@@ -64,17 +74,39 @@
 </div>
 
 
-<select name="compid">
-<option th:text="${selected.company.name}" th:value="${selected.company.id}"  selected></option>
-<option th:each="list:${comps}" th:text="${list.name}" th:value="${list.id}"></option>
+    
+    
 
-</select>
 
+  <select class="chosen" name="compid">
+<option th:text="${selected.company.name}" th:value="${selected.company.id}" selected></option>
+<option th:each="list:${comps}" th:text="${list.name}+' '+${list.city}" th:value="${list.id}"></option>
+
+ </select>
+    
+    <script type="text/javascript">
+
+      $(".chosen").chosen();
+
+</script>
+    
 <button type="submit" >Rögzít</button>
 
 </form>
+
+
+<div th:if="${hiba}" class="alert alert-danger">
+  <strong>Helytelen kitöltés!</strong>
 </div>
- 
+
+<br/><br/>
+<div th:each="list:${history}" style="background-color: yellow">
+<p th:text="${list.company.name}+' - '+${list.date}"></p>
+
+</div>
+<a href="/machinelist">Gép lista</a> 
+</div>
+
 
 
 

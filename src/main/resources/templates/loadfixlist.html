@@ -2,7 +2,7 @@
 <html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+
 </head>
 <body>
 
@@ -17,7 +17,7 @@
 
 
 <button type="submit" name="action" value="load">BETÖLT</button>
-<button type="submit" name="action" value="delete" onclick="if (!confirm('Biztosan töröljem?')) return false;">TÖRLÉS</button>
+<button type="submit" name="action" value="delete" style="background-color: red" onclick="if (!confirm('Biztosan töröljem?')) return false;">TÖRLÉS</button>
 </form>
 </div>
 </body>

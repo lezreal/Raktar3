@@ -47,7 +47,7 @@ public class MachineService {
 	}
 
 	public int getNewSorszam() {
-		// TODO Auto-generated method stub
+		if (machineRepo.getNewSorszam()==null) return 1; else 
 		return machineRepo.getNewSorszam()+1;
 	}
 	

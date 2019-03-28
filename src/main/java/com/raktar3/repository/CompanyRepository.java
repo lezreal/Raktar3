@@ -34,4 +34,7 @@ public interface CompanyRepository extends CrudRepository<Company, Integer> {
 	
 	@Query(value="update company set tablasorszam='?2' where id=?1",nativeQuery=true)
 	public void addTableSorszam(Integer id, int sorszam);
+
+
+
 }

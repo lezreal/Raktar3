@@ -17,6 +17,7 @@ import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
+import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
 import com.raktar3.service.ProductService;
 import com.raktar3.service.StockService;
@@ -28,6 +29,10 @@ public class HomeController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	MachHistoryService machHistoryService;
+	
+	
 	@Autowired
 	MachineService machineService;
 	
@@ -156,6 +161,7 @@ public class HomeController {
 	@RequestMapping("/companylist")
 	public String companylist(Model model) {
 		model.addAttribute("companies", companyService.findAllReal());
+		model.addAttribute("vanegepe", machineService.findAll());
 		return "companyList";
 	}
 	
@@ -235,6 +241,12 @@ public class HomeController {
 		model.addAttribute("employes", employeService.findAllEmploye());
 		model.addAttribute("products", productService.findAll());
 		return "lekerdezes1";
+	}
+	
+	@RequestMapping("/history")
+	public String history(Model model) {
+		model.addAttribute("historylist", machHistoryService.findAll());
+		return "machhistory";
 	}
 	
 }

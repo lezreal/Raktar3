@@ -14,9 +14,7 @@
 <p>Ide írod az eladott <strong>teli vizeket, gépeket, pumpát, szörpöt</strong></p>
   
   
-  <div th:if="${eladasok}" class="alert alert-success">
-  <strong>Eladás rögzítve</strong> Ha keletkezett üres, akkor ne felejtsd el rögzíteni.
-</div>
+  
 
   
 </div>
@@ -69,11 +67,17 @@
 
 <button type="submit" class="btn btn-outline-success" >Rögzítés</button>
 
-
-
+</form>
+<div th:if="${siker}">
+<script type="text/javascript">
+   jQuery(document).ready(function($){
+	   alert("Eladás regisztrálva!");
+	   });
+   </script>
+</div>
 </div>
 
-</form>
+
 
 </body>
 </html>

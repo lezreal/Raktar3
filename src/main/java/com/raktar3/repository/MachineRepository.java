@@ -25,5 +25,5 @@ public interface MachineRepository extends CrudRepository<Machine, Integer> {
 	Integer findSorszam(int sorszam);
 
 	@Query(value="select max(sorszam) as maxi from machine", nativeQuery=true)
-	int getNewSorszam();
+	Integer getNewSorszam();
 }

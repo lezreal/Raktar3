@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html layout:decorator="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/list.css">
+
+
+
 <script src="js/list.js"></script>
 
 
@@ -32,17 +35,15 @@ $(document).ready( function () {
 } );
 
 
-function calc(id)
-{
-  if (document.getElementById(id).checked) 
-  {
-      document.getElementById('rogzit').disabled = false;
-  } else {
-	  document.getElementById('rogzit').disabled = true;
-  }
-}
 </script>
-
+<style type="text/css">
+.unstyled{
+ border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
 
@@ -71,7 +72,12 @@ function calc(id)
     </thead>
     <tbody >
       <tr th:each="list:${companies}">
-        <td th:text="${list.name}">John</td>
+        <td>  <button class="unstyled" th:text="${list.name}" th:value="'http://localhost:8080/companymachine/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');"></button>
+        
+       
+        
+        </td>  
+        
         <td th:text="${list.city}">Doe</td>
         <td th:text="${list.address}">Doe</td>
         <td th:if="${list.employe==null}" >nincs megadva</td>

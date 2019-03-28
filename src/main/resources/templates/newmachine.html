@@ -13,9 +13,7 @@
   <strong>Siker!</strong> Van már ilyen sorszám
 </div>
   
-  <div th:if="${machregok}" class="alert alert-success">
-  <strong>Siker!</strong> Az új gép sikeresen regisztrálva
-</div>
+  
 
 <div th:if="${machregid}" class="alert alert-danger">
   Az új gép sorszáma: <h2><strong th:text="${machregid}">Valami gond van!</strong></h2>
@@ -31,7 +29,7 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="" placeholder="gép típusa" required th:field="*{name}">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="" placeholder="gép típusa" required th:field="*{name}" autofocus>
   
 </div>
 
@@ -64,10 +62,18 @@
 </div>
 
 <button type="submit" class="btn btn-outline-success" id="subbutton">Rögzítés</button>
+</form>
 
+<div th:if="${siker}">
+<script type="text/javascript">
+   jQuery(document).ready(function($){
+	   alert("Az új gép regisztrálva");
+	   });
+   </script>
+</div>
 </div>
 
-</form>
+
 
 </body>
 </html>

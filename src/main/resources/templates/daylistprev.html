@@ -8,6 +8,13 @@
 <script src="main/jquery.min.js"></script>
 <script src="main/popper.min.js"></script>
 <script src="main/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="../chosen/chosen.min.css">
+
+    <script src="../chosen/jquery.js"></script>
+
+    <script src="../chosen/chosen.jquery.min.js"></script>
+
 <title>Insert title here</title>
 
 
@@ -55,7 +62,9 @@ background-color: #D8D4D4;
 </head>
 <body>
 
+<div th:if="${listanev}" th:text="${listanev}">
 
+</div>
 
 <table id="table">
 <tr>	
@@ -69,20 +78,24 @@ background-color: #D8D4D4;
         
     </tr>
     <tr th:each="list:${daylist}">
-    <td  align="center" width="20px"><form method="post" th:action="@{/sorszamcsere}"><input type="hidden" name="keroid" th:value="${list.id}"/><input type="number" name="ujsorszam"  th:value="${list.sorszam}" size="3" style="text-align: center" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"/></form></td>
+    <td  align="center" width="20px"><form method="post" th:action="@{/sorszamcsere}"><input type="hidden" name="keroid" th:value="${list.id}"/><input type="hidden" name="napnev" th:value="${listanev}"><input type="number" name="ujsorszam"  th:value="${list.sorszam}" size="3" style="text-align: center" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"/></form></td>
     <td align="right" width="200px" ><font  th:text="${list.company.name}" style="margin-right: 5px; font-family:sans-serif;"></font></td>
 	
 	<td class="tele" th:text="${list.company.city}"></td>
-	<td align="center"><div th:if="${list.sorszam<maxsorszam}"  width="50px"><form method="post" th:action="@{/daylistle}" ><input type="image" src="images/down_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
-	<td align="center" class="vizek" ><div th:if="${list.sorszam>1}"  width="50px"><form method="post" th:action="@{/daylistfel}" ><input type="image" src="images/up_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
-	<td align="center" class="vizek" ><form method="post" th:action="@{/daylistkivesz}" ><input type="hidden" name="kivesz" th:value="${list.id}"><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input><input type="image" src="images/delete.png" width="30px" /></form></td>
-    <td class="tele" ><form method="post" th:action="@{/daylistbeszur}" ><input type="hidden" name="elozo" th:value="${list.sorszam}"></input>
+	<td align="center"><div th:if="${list.sorszam<maxsorszam}"  width="50px"><form method="post" th:action="@{/daylistle}" ><input type="hidden" name="napnev" th:value="${listanev}"></input><input type="image" src="images/down_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
+	<td align="center" class="vizek" ><div th:if="${list.sorszam>1}"  width="50px"><form method="post" th:action="@{/daylistfel}" ><input type="hidden" name="napnev" th:value="${listanev}"><input type="image" src="images/up_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
+	<td align="center" class="vizek" ><form method="post" th:action="@{/daylistkivesz}" ><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="kivesz" th:value="${list.id}"><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input><input type="image" src="images/delete.png" width="30px" /></form></td>
+    <td class="tele" ><form method="post" th:action="@{/daylistbeszur}" ><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="elozo" th:value="${list.sorszam}"></input>
     
-    <select name="ujcomp">
-    	<option th:each="list:${allcompany}" th:value="${list.id}" th:text="${list.name}+' - '+${list.city}">
+    <select name="ujcomp"  class="chosen">
+    	<option th:each="list:${allcompany}" th:value="${list.id}" th:text="${list.city}+' - '+${list.name}">
     	</option>
     </select>
-    
+       <script type="text/javascript">
+
+      $(".chosen").chosen();
+
+</script>
     <button  type="submit" >BESZÚR</button></form>
     <div id="beszur"></div>
    
@@ -96,7 +109,7 @@ background-color: #D8D4D4;
 </table>
 
 <form th:action="@{/keszdaylist}" method="post">
-
+<input type="hidden" name="napnev" th:value="${listanev}">
 <button type="submit">NYOMTATHATÓ VERZIÓ</button>
 </form>
 

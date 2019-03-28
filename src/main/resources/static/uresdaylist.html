@@ -2,6 +2,8 @@
 <html xmlns:th="www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<title>Insert title here</title>
+
 
 <style>
 
@@ -54,7 +56,7 @@ opacity: 0.1;
 }
 
 .penz{
-width: 140px;
+width: 70px;
 }
 </style>
 
@@ -63,15 +65,14 @@ width: 140px;
 <body>
 
 
-<div th:if="${companies}">
-Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................. &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Váltópénz: ...........&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
-&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-<font size="6"><label th:if="${listanev}" th:text="${listanev}"></label></font>
- <br><br>
+
+Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................. &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Váltópénz: ........... <br><br>
 <table id="table" >
 
 <tr >	<td width="200px" align="center">Címek</td>
-	<td  width="100px"   align="center">Leírás</td>
+	
+		
+		<td colspan="2"  class="megj"  align="center">Megjegyzés</td>
 		<td class="penz"  style="width:80px" align="center">pénz</td>
         <td colspan="2" class="vizek"  align="center">VIA</td>
         <td colspan="2" class="vizek"  align="center">Pannónia</td>
@@ -80,40 +81,17 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
         <td colspan="2" class="vizek"   align="center">AVE</td>
         <td colspan="2" class="vizek"  align="center">PÍ</td>
         <td colspan="2" class="vizek"  align="center">SZentK.</td>
-        <td colspan="2"  class="megj"  align="center">Megjegyzés</td>
+        
         
     
         
     </tr>
 
 
-    <tr th:each="list:${companies}" >
-    <td align="right" width="200px" ><font  th:text="${list.company.name}+' - '+${list.company.city}" style="margin-right: 2px; font-family:sans-serif; font-size: 13px;"></font></td>
-	<td align="center" width="100px" ><font th:text="${list.company.comment}" style="margin-right: 2px; font-family:sans-serif; font-size: 10px;"></font></td>
-  	<td class="penz">&nbsp;</td>
-    <td class="tele" ><font class="halvany">V</font></td>
-    <td class="ures" >&nbsp;</td>
-    <td class="tele" ><font class="halvany">P</font></td>
-    <td class="ures" >&nbsp;</td>
-    <td class="tele" ><font class="halvany">M</font></td>
-    <td class="ures" >&nbsp;</td>
-    <td class="tele" ><font class="halvany">B</font></td>
-    <td class="ures" >&nbsp;</td>
-    <td class="tele" ><font class="halvany">Ave</font></td>
-    <td class="ures" >&nbsp;</td>
-    <td class="tele" ><font class="halvany">PÍ</font></td>
-    <td class="ures" >&nbsp;</td>
-    <td class="tele" ><font class="halvany">SzK</font></td>
-    <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-    
-    
-    
-    </tr>
         
   <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -129,11 +107,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -149,11 +126,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -169,11 +145,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -189,11 +164,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -209,11 +183,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -229,11 +202,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -249,11 +221,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -269,11 +240,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -289,11 +259,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -309,11 +278,10 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  <tr >
-    <td align="right" width="200px" ></td>
-    <td  align="center" width="100px" ></td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
 	<td  class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>
     <td class="ures" >&nbsp;</td>
@@ -329,31 +297,90 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
     <td class="ures" >&nbsp;</td>
     <td class="tele" ><font class="halvany">SzK</font></td>
     <td class="ures" >&nbsp;</td>
-    <td class="tele" colspan="2">&nbsp;</td>
-  </tr>
-  
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
+	<td  class="penz">&nbsp;</td>
+    <td class="tele" ><font class="halvany">V</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">P</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">M</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">B</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">Ave</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">PÍ</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">SzK</font></td>
+    <td class="ures" >&nbsp;</td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
+	<td  class="penz">&nbsp;</td>
+    <td class="tele" ><font class="halvany">V</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">P</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">M</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">B</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">Ave</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">PÍ</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">SzK</font></td>
+    <td class="ures" >&nbsp;</td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
+	<td  class="penz">&nbsp;</td>
+    <td class="tele" ><font class="halvany">V</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">P</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">M</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">B</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">Ave</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">PÍ</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">SzK</font></td>
+    <td class="ures" >&nbsp;</td>
+    </tr>
+    <tr >
+        <td align="right" width="200px" ></td>
+        <td class="tele" colspan="2">&nbsp;</td>
+	<td  class="penz">&nbsp;</td>
+    <td class="tele" ><font class="halvany">V</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">P</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">M</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">B</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">Ave</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">PÍ</font></td>
+    <td class="ures" >&nbsp;</td>
+    <td class="tele" ><font class="halvany">SzK</font></td>
+    <td class="ures" >&nbsp;</td>
+    </tr>
+    
 </table>
 
-<form th:action="@{/daylistszerkesztomod}" method="post">
-
-<button type="submit">SZERKESZTŐ MÓD</button>
-</form>
 
 <a href="/">FŐOLDAL</a>
-</div>
 
-<div th:unless="${companies}">
 
-<form method="post" action="/daylistCreate">
-<select name="dayid">
-
-<option th:each="list:${days}" th:text="${list.name}" th:value="${list.id}"></option>
-
-</select>
-
-<button type="submit">LISTA</button>
-</form>
-</div>
 
 
 

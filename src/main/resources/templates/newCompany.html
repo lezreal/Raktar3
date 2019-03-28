@@ -24,9 +24,6 @@ function atir(){
 <h1>Új ügyfél rögzítése</h1>
   
   
-  <div th:if="${clientregok}" class="alert alert-success">
-  <strong>Siker!</strong> Az új ügyfél sikeresen regisztrálva
-</div>
 
 
   
@@ -40,7 +37,7 @@ function atir(){
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required th:field="*{name}" id="name">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required th:field="*{name}" id="name" autofocus>
   <br />&nbsp;&nbsp;<input type="checkbox" onclick="atir()" id="chk" />
 </div>
 
@@ -84,10 +81,20 @@ function atir(){
 </div>
 
 <p><button type="submit" class="btn btn-outline-success">Rögzítés</button></p>
+</form>
+
+<div th:if="${siker}">
+<script type="text/javascript">
+   jQuery(document).ready(function($){
+	   alert("Az új kolléga sikeresen regisztrálva");
+	   });
+   </script>
+</div>
+
 
 </div>
 
-</form>
+
 
 </body>
 </html>

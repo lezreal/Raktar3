@@ -77,13 +77,14 @@ public class DaylistController {
 	
 	@RequestMapping("/daylistbeszur")
 	
-	public String daylistbeszur(@RequestParam("ujcomp") String ujcomp,@RequestParam("elozo") String elozo, Model model) {
+	public String daylistbeszur(@RequestParam("ujcomp") String ujcomp,@RequestParam("elozo") String elozo, Model model, @RequestParam("napnev") String name) {
 		Daylist beszurando = new Daylist();
 		daylistService.sorszamNovel(Integer.parseInt(elozo));
 		beszurando.setCompany(companyService.findById(Integer.parseInt(ujcomp)));
 		beszurando.setSorszam(Integer.parseInt(elozo)+1);
 		daylistService.addToDb(beszurando);
 		
+		model.addAttribute("listanev", name);
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -95,11 +96,12 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/daylistkivesz")
-	public String daylistkivesz(@RequestParam("kivesz") String kivesz, Model model, @RequestParam("sorszam") String sorszam) {
+	public String daylistkivesz(@RequestParam("kivesz") String kivesz, Model model, @RequestParam("sorszam") String sorszam, @RequestParam("napnev") String name) {
 		
 		daylistService.sorszamCsokkent(Integer.parseInt(sorszam));
 		daylistService.deleteSelected(daylistService.findById(Integer.parseInt(kivesz)));
 		
+		model.addAttribute("listanev", name);
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -109,7 +111,7 @@ public class DaylistController {
 
 	
 	@RequestMapping("/daylistfel")
-	public String daylistfel(Model model, @RequestParam("sorszam") String sorszam) {
+	public String daylistfel(Model model, @RequestParam("sorszam") String sorszam, @RequestParam("napnev") String name) {
 		
 		Daylist regiday = daylistService.findFirstBySorszam(Integer.parseInt(sorszam)-1);
 		Daylist ujday = daylistService.findFirstBySorszam(Integer.parseInt(sorszam));
@@ -120,6 +122,7 @@ public class DaylistController {
 		daylistService.addToDb(regiday);
 		daylistService.addToDb(ujday);
 		
+		model.addAttribute("listanev", name);
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -128,7 +131,7 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/daylistle")
-	public String daylistle(Model model, @RequestParam("sorszam") String sorszam) {
+	public String daylistle(Model model, @RequestParam("sorszam") String sorszam, @RequestParam("napnev") String name) {
 		
 		Daylist regiday = daylistService.findFirstBySorszam(Integer.parseInt(sorszam)+1);
 		Daylist ujday = daylistService.findFirstBySorszam(Integer.parseInt(sorszam));
@@ -139,6 +142,7 @@ public class DaylistController {
 		daylistService.addToDb(regiday);
 		daylistService.addToDb(ujday);
 		
+		model.addAttribute("listanev", name);
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -147,7 +151,8 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/keszdaylist")
-	public String keszdaylist(Model model) {
+	public String keszdaylist(Model model, @RequestParam("napnev") String name) {
+		model.addAttribute("listanev", name);
 		model.addAttribute("companies", daylistService.findAll());
 		return "daylist";
 	}
@@ -235,7 +240,7 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/selectedfixlist")
-	public String selectedfixlist(Model model, @RequestParam("name") String name, @RequestParam("action") String gomb) {
+	public String selectedfixlist(Model model, @RequestParam("name") String name, @RequestParam("action") String gomb) {  // a NAME-ben adja át a lista nevét
 		
 		if (gomb.equals("load")) {
 		daylistService.deleteAll();
@@ -245,7 +250,7 @@ public class DaylistController {
 			Daylist dl = new Daylist(x.getCompany(),x.getSorszam());
 			daylistService.addToDb(dl);
 		}
-		
+		model.addAttribute("listanev", name);
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -258,9 +263,10 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/sorszamcsere")
-	public String sorszamcsere(@RequestParam("ujsorszam") int ujsorszam,@RequestParam("keroid") int kid, Model model) {
+	public String sorszamcsere(@RequestParam("ujsorszam") int ujsorszam,@RequestParam("keroid") int kid, Model model, @RequestParam("napnev") String name) {
 		
 		if (ujsorszam<=0) {   // ha HÜLYESÉGET üt be
+			model.addAttribute("listanev", name);
 			model.addAttribute("daylist", daylistService.findAll());
 			model.addAttribute("allcompany", companyService.findAll());
 			model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -272,6 +278,7 @@ public class DaylistController {
 			daylistService.sorszamCsokkent(daylistService.findById(kid).getSorszam());
 			daylistService.findById(kid).setSorszam(maxi);
 			daylistService.addToDb(daylistService.findById(kid));
+			model.addAttribute("listanev", name);
 			model.addAttribute("daylist", daylistService.findAll());
 			model.addAttribute("allcompany", companyService.findAll());
 			model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -286,6 +293,7 @@ public class DaylistController {
 				Daylist dl =daylistService.findById(kid);
 				dl.setSorszam(ujsorszam);
 				daylistService.addToDb(dl);
+				model.addAttribute("listanev", name);
 				model.addAttribute("daylist", daylistService.findAll());
 				model.addAttribute("allcompany", companyService.findAll());
 				model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -296,6 +304,7 @@ public class DaylistController {
 				Daylist dl =daylistService.findById(kid);
 				dl.setSorszam(ujsorszam);
 				daylistService.addToDb(dl);
+				model.addAttribute("listanev", name);
 				model.addAttribute("daylist", daylistService.findAll());
 				model.addAttribute("allcompany", companyService.findAll());
 				model.addAttribute("maxsorszam", daylistService.findAll().size());
@@ -304,15 +313,10 @@ public class DaylistController {
 			}
 			
 			
-//			daylistService.sorszamCsereKisebbre(ujsorszam,daylistService.findById(kid).getSorszam());
-//			daylistService.findById(kid).setSorszam(ujsorszam);
-//			model.addAttribute("daylist", daylistService.findAll());
-//			model.addAttribute("allcompany", companyService.findAll());
-//			model.addAttribute("maxsorszam", daylistService.findAll().size());
-//			return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
 		}
 		
-		//
+
+		model.addAttribute("listanev", name);
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
 		model.addAttribute("maxsorszam", daylistService.findAll().size());

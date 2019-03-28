@@ -10,9 +10,7 @@
 <h1>Új termék rögzítése - <font color="red">Itt gépet ne rögzíts!</font></h1>
   <p>Ellenőrizd, hogy nincs-e már az adatbázisban!</p>
   
-  <div th:if="${regok}" class="alert alert-success">
-  <strong>Siker!</strong> Termék sikeresen regisztrálva
-</div>
+  
 
 <div th:if="${vanmar}" class="alert alert-danger">
   <strong>Van már ilyen!</strong> Mondtam, hogy nézd meg a listát!
@@ -28,7 +26,7 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Termék megnevezése</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required th:field="*{name}">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required th:field="*{name}" autofocus>
 </div>
 
 
@@ -49,24 +47,16 @@
     
   </div>
 </div>
-</div>
-<div layout:fragment="sideBar">
-
-    <ul class="list-inline">
-
-        <li>Vizek</li>
-
-        <li>Üres ballonok</li>
-
-        <li>CO palackok</li>
-
-        <li>Szörpök</li>
-        <li>Pumpa</li>
-
-    </ul>
-
-</div>
 </form>
+<div th:if="${siker}">
+<script type="text/javascript">
+   jQuery(document).ready(function($){
+	   alert("Az új termék sikeresen regisztrálva!");
+	   });
+   </script>
+</div>
+</div>
+
 
 </body>
 </html>

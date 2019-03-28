@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/list.css">
+
+
+
+
+<script src="js/list.js"></script>
+<script>
+
+function PopupCenter(url, title, w, h) {
+    // Fixes dual-screen position                         Most browsers      Firefox
+    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
+    var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY;
+
+    var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    var systemZoom = width / window.screen.availWidth;
+var left = (width - w) / 2 / systemZoom + dualScreenLeft
+var top = (height - h) / 2 / systemZoom + dualScreenTop
+    var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w / systemZoom + ', height=' + h / systemZoom + ', top=' + top + ', left=' + left);
+
+    // Puts focus on the newWindow
+    if (window.focus) newWindow.focus();
+}
+
+
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+function calc(id)
+{
+  if (document.getElementById(id).checked) 
+  {
+      document.getElementById('rogzit').disabled = false;
+  } else {
+	  document.getElementById('rogzit').disabled = true;
+  }
+}
+</script>
+
+<style type="text/css">
+.unstyled{
+ border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div layout:fragment="infoBar">
+<h1>History</h1>
+  
+  <div th:if="${nemtorolheto}" class="alert alert-danger">
+  <strong>Nem törölhető!!</strong> Készlet adat hivatkozik rá!
+</div>
+
+</div>
+
+<div layout:fragment="workBar">
+
+  <table class="table table-striped" id="myTable">
+    <thead>
+      <tr>
+        <th>Sorszám.</th>
+        <th>Megnevezés</th>
+        <th >Leírás</th>
+        <th >Hol van?</th>
+        <th >Törlés</th>
+        
+      </tr>
+    </thead>
+    <tbody >
+      <tr th:each="list:${historylist}">
+        <td align="center" ><a th:text="${list.machine.sorszam}" th:href="@{'/machine/'+${list.machine.id}}"></a>.</td>
+        <td th:text="${list.date}">Doe</td>
+        <td th:text="${list.machine.name}">Doe</td>
+        
+        
+        <td  th:if="${list.company.name=='RAKTÁR'}" >RAKTÁR</td>
+        <td th:unless="${list.company.name=='RAKTÁR'}">  <button class="unstyled" th:text="${list.company.name}" th:value="'http://localhost:8080/company/'+${list.company.id}" onclick="PopupCenter(this.value,'xtf','900','500');"></button></td>  
+       <td><form method="post" action="/historydelete" onSubmit="if(!confirm('Biztosan töröljem?')) return false;"><input type="hidden" name="hid" th:value="${list.id}"/><button type="submit">TÖRLÉS</button></form></td>
+<!--         <td  th:unless="${list.company==null}" th:text="${list.company.name}"></td> -->
+         
+<!-- 		<td th:if="${list.type==1}">Sima</td> -->
+<!-- 		<td th:if="${list.type==2}">CO2 Poharas</td> -->
+<!-- 		<td th:if="${list.type==3}">CO2 Szivattyús</td> -->
+<!-- 		<td th:if="${list.type==4}">Hálózati Sima</td> -->
+<!-- 		<td th:if="${list.type==5}">Hálózati Co2</td> -->
+      </tr>
+      
+    </tbody>
+  </table>
+
+<div th:if="${siker}">
+<script type="text/javascript">
+   jQuery(document).ready(function($){
+	   alert("Sikeresen törölve!");
+	   });
+   </script>
+</div>
+
+</div>
+
+
+</body>
+</html>

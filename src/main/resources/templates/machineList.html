@@ -4,6 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/list.css">
+
+
+
+
 <script src="js/list.js"></script>
 <script>
 $(document).ready( function () {
@@ -54,14 +58,16 @@ function calc(id)
         <td  th:unless="${list.company==null}" th:text="${list.company.name}"></td>
          
 		<td th:if="${list.type==1}">Sima</td>
-		<td th:if="${list.type==2}">CO2</td>
-		<td th:if="${list.type==3}">Hálózati</td>
+		<td th:if="${list.type==2}">CO2 Poharas</td>
+		<td th:if="${list.type==3}">CO2 Szivattyús</td>
+		<td th:if="${list.type==4}">Hálózati Sima</td>
+		<td th:if="${list.type==5}">Hálózati Co2</td>
       </tr>
       
     </tbody>
   </table>
 
-</form>
+
 
 </div>
 
