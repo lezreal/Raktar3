@@ -71,10 +71,11 @@ background-color: #D8D4D4;
 		<td align="center" width="20px">#</td>
 		<td width="200px" align="center">Vizek</td>
 		<td   class="megj"  align="center">Város</td>
-        <td     align="center" width="50px">FENTEBB</td>
+        <td     align="center" width="30px">FENTEBB</td>
         <td     align="center" width="50px">LENTEBB</td>
         <td  align="center" width="50px">KIVESZ</td>
         <td     align="center">BESZÚR</td>
+        <td     align="center"><b>+</b></td>
         
     </tr>
     <tr th:each="list:${daylist}">
@@ -100,7 +101,7 @@ background-color: #D8D4D4;
     <div id="beszur"></div>
    
     </td>
-    
+    <td ><form method="post" action="/daylistujbeszur"><input type="hidden" name="listanev" th:value="${listanev}"><input type="hidden" name="miutan" th:value="${list.sorszam}"><input type="hidden" name="maxelem" th:value="${maxsorszam}"> <button type="submit">Újat beszúr</button></form></td>
     </tr>
         
     <tr>

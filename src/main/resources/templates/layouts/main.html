@@ -9,39 +9,68 @@
 <script src="main/jquery.min.js"></script>
 <script src="main/popper.min.js"></script>
 <script src="main/js/bootstrap.min.js"></script>
-
-
-
-
-
 <title>Aqua Royal</title>
+
+
+
+
+<style type="text/css">
+
+.fejlec{
+display: flex;
+justify-content: space-around;
+}
+
+
+
+</style>
+<script type="text/javascript">
+
+
+// Popup window code
+function newPopup(url) {
+	popupWindow = window.open(
+		url,'popUpWindow','height=500,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=no')
+}
+</script>
 </head>
-<body style="background-color:  #f6f4f8" >
+<body style="background-color:  #f6f4f8">
 
 
 
 
 <div class="container" style="margin-bottom:0">
-<div layout:fragment="infoBar">
+	<div class="fejlec">
+			<div layout:fragment="infoBar">
+			  <h1>Aqua Royal Kft.</h1>
+			  <div th:if="${noemploye}" class="alert alert-danger">
+			  	<strong>Nincs rabszolgád!</strong> Előbb regisztrálj legalább egy kollégát!
+			  </div>
+				<div th:if="${noproduct}" class="alert alert-danger">
+			  	<strong>Nincs terméked!</strong> Előbb regisztrálj legalább egy terméket!
+				</div>
+				<div th:if="${nostock}" class="alert alert-danger">
+			  	<strong>Nincs miből selejtezni!</strong> Vigyél fel készletet!
+				</div>
+				<div th:if="${delsuccess}" class="alert alert-success">
+			  	<strong>Sikeres törlés</strong>
+				</div>
+				<div th:if="${delfail}" class="alert alert-danger">
+			  	<strong>Nem törölhető!</strong> Ügyfelek hivatkoznak rá!
+				</div>
+			 </div>
+	
+	
+		<div th:if="${reminder}"><a href="JavaScript:newPopup('/reminderlist');"><img alt="" src="images/csengo.gif" height="50px"></a></form>
+		
+		<div th:if="${csengo}">
+    
+    <p th:each="list:${csengo}" th:text="${list.comment}"></p>
 
-  <h1>Aqua Royal Kft.</h1>
-  <div th:if="${noemploye}" class="alert alert-danger">
-  <strong>Nincs rabszolgád!</strong> Előbb regisztrálj legalább egy kollégát!
 </div>
-<div th:if="${noproduct}" class="alert alert-danger">
-  <strong>Nincs terméked!</strong> Előbb regisztrálj legalább egy terméket!
-</div>
-<div th:if="${nostock}" class="alert alert-danger">
-  <strong>Nincs miből selejtezni!</strong> Vigyél fel készletet!
-</div>
-<div th:if="${delsuccess}" class="alert alert-success">
-  <strong>Sikeres törlés</strong>
-</div>
-<div th:if="${delfail}" class="alert alert-danger">
-  <strong>Nem törölhető!</strong> Ügyfelek hivatkoznak rá!
-</div>
-
-  </div> 
+		</div>
+		<div th:unless="${reminder}"><img alt="" src="images/dispenser.png" height="100px"></div>
+	</div> 
 </div>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -103,6 +132,8 @@
 		    <a class="dropdown-item" href="/newmachine">Új gép</a>
 		    <a class="dropdown-item" href="/machinelist">Géplista</a>
 		    <a class="dropdown-item" href="/history">History</a>
+		    <a class="dropdown-item" href="/reminder">Emlékeztető</a>
+		    <a class="dropdown-item" href="/reminderAllList">Összes emlékeztető</a>
 		    
 		  </div>
 		</div>
@@ -134,6 +165,7 @@
     	</div>
     </div>
     </div>
+        
   </div>
 
 

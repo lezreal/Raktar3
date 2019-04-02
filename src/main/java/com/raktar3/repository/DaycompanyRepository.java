@@ -26,6 +26,10 @@ public interface DaycompanyRepository extends CrudRepository<Daycompany, Integer
 	@Query(value="delete from daycompany where name=?1",nativeQuery=true)
 	public void deleteSelectedName(String name);
 
-	
+	@Transactional
+	@Modifying
+	@Query(value="update daycompany set sorszam=sorszam+1 where sorszam>?2 and name=?1",nativeQuery=true)
+	public void sorszamNovel(String name, int sorszam);
+
 		
 }

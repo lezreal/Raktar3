@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/list.css">
+
+
+
+
+<script src="js/list.js"></script>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+function calc(id)
+{
+  if (document.getElementById(id).checked) 
+  {
+      document.getElementById('rogzit').disabled = false;
+  } else {
+	  document.getElementById('rogzit').disabled = true;
+  }
+}
+</script>
+
+</head>
+<body>
+
+<div layout:fragment="infoBar">
+<h1>Emlékeztetők listája</h1>
+  
+ 
+
+</div>
+
+<div layout:fragment="workBar">
+
+  <table class="table table-striped" id="myTable">
+    <thead>
+      <tr>
+        <th>Lejárati dátum</th>
+        <th>Helszín</th>
+        <th >Gép</th>
+        <th >Státusz</th>
+        <th >Alert</th>
+        <th >Deaktivál</th>
+        
+      </tr>
+    </thead>
+    <tbody >
+      <tr th:each="list:${reminders}">
+        <td align="center" th:text="${list.date}"></td>
+        <td th:text="${list.comment}">Doe</td>
+        
+        
+        <td  th:if="${list.machine==null}" >Nincs megadva</td>
+        <td  th:unless="${list.machine==null}" th:text="${list.machine.sorszam}+' - '+${list.machine.name}"></td>
+        <td th:text="${list.status}" >Akív</td>
+        <td th:text="${list.alerttime}" >Akív</td> 
+		<td th:if="${list.status==true}"><form method="post" th:action="@{/deaktival}"><input type="hidden" name="rid" th:value="${list.id}"><button type="submit">deaktivál</button></form></td>
+      </tr>
+      
+    </tbody>
+  </table>
+
+
+
+</div>
+
+
+</body>
+</html>

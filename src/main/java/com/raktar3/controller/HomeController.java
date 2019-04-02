@@ -1,6 +1,9 @@
 package com.raktar3.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import com.raktar3.entities.Company;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
+import com.raktar3.entities.Reminder;
 import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaysService;
@@ -20,6 +24,7 @@ import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
 import com.raktar3.service.ProductService;
+import com.raktar3.service.ReminderService;
 import com.raktar3.service.StockService;
 
 
@@ -30,8 +35,10 @@ public class HomeController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
+	ReminderService reminderService;
+		
+	@Autowired
 	MachHistoryService machHistoryService;
-	
 	
 	@Autowired
 	MachineService machineService;
@@ -53,8 +60,31 @@ public class HomeController {
 	
 	@RequestMapping("/")
 	public String home(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
+		
 		List<Integer> id_lista =stockService.findProducts();
-		List<Product> lista = new ArrayList();
+		List<Product> lista = new ArrayList<Product>();
+		for (int i=0;i<id_lista.size();i++) {
+			Product p =productService.findById(id_lista.get(i));
+			int osszes=stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i));
+			p.setAmount(osszes);
+			lista.add(p);
+		}
+		model.addAttribute("productlist", lista);
+		model.addAttribute("proba", "picsa");
+		return "productList";
+	}
+	
+	@RequestMapping("/csengos")
+	public String homeWithCsengo(Model model) {
+		if (reminderService.vizsgal().size()>0) 
+		{
+			model.addAttribute("csengo", reminderService.vizsgal());
+			model.addAttribute("reminder", "");
+			
+		}
+		List<Integer> id_lista =stockService.findProducts();
+		List<Product> lista = new ArrayList<Product>();
 		for (int i=0;i<id_lista.size();i++) {
 			Product p =productService.findById(id_lista.get(i));
 			int osszes=stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i));
@@ -248,5 +278,44 @@ public class HomeController {
 		model.addAttribute("historylist", machHistoryService.findAll());
 		return "machhistory";
 	}
+	
+	@RequestMapping("/reminder")
+	public String reminder(Model model) {
+		model.addAttribute("machines", machineService.findAll());
+		return "reminder";
+	}
+
+	@RequestMapping("/reminderlist")
+	public String reminderlist(Model model) {
+		List<Reminder> lista = reminderService.findAll(); // az összes TRUE reminder-t megkapja
+		List<Reminder> listatemp = new ArrayList<Reminder>();
+		for (int i=0;i<lista.size();i++) {
+			log.info("Hátranapok: "+kelle(lista.get(i).getDate())+" - "+lista.get(i).getDate());
+			if (kelle(lista.get(i).getDate())<=lista.get(i).getAlerttime()) {
+				listatemp.add(lista.get(i));
+			}
+		}
+		
+		model.addAttribute("reminders", listatemp);   
+		
+		return "reminderlist";
+	}
+	
+	public int kelle(String datum) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		Date date = new Date();
+		String mai =dateFormat.format(date);  // mai dátum kinyerve  2019/02/22
+		int ma=0, vizsgalando=0;
+		ma= 365*Integer.parseInt(mai.substring(0, 4))+30*Integer.parseInt(mai.substring(5,7))+Integer.parseInt(mai.substring(8));
+		vizsgalando= 365*Integer.parseInt(datum.substring(0, 4))+30*Integer.parseInt(datum.substring(5,7))+Integer.parseInt(datum.substring(8));
+		return vizsgalando-ma;
+	}
+	
+	@RequestMapping("/reminderAllList")
+	public String reminderAllList(Model model) {
+		model.addAttribute("reminders", reminderService.findVeryAll());
+		return "reminderlist";
+	}
+
 	
 }

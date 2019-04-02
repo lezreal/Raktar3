@@ -21,7 +21,7 @@ function atir(){
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Új ügyfél rögzítése</h1>
+<h1>Új ügyfél rögzítése és fixlistába helyezése</h1>
   
   
 
@@ -32,7 +32,7 @@ function atir(){
 
 <div layout:fragment="workBar">
 
-<form method="post"  th:action="@{/newCompanyToDb}" th:object="${company}"  onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
+<form method="post"  th:action="@{/newCompanyToDbAndBackToList}" th:object="${company}"  onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Név</span>
@@ -80,17 +80,13 @@ function atir(){
   
 </div>
 
-<p th:if="!${miutan}"><button type="submit" name="gomb" value="alap" class="btn btn-outline-success">Rögzítés</button></p>
-<p th:unless="!${miutan}"><button type="submit" name="gomb" value="listas" class="btn btn-outline-warning">Rögzítés a listába is</button></p>
-<input th:if="${maxelem}" type="hidden" name="maxelem" th:value="${maxelem}"></input> <!--  HA A LISTÁ_BA BESZÚRÁSBÓL ÉRKEZIK A KÉRÉS-->
-<input th:if="${miutan}" type="hidden" name="miutan" th:value="${miutan}"></input>  <!--  HA A LISTÁ_BA BESZÚRÁSBÓL ÉRKEZIK A KÉRÉS-->
 
 
+<input type="hidden" name="maxelem" th:value="${maxelem}"></input> <!--  HA A LISTÁ_BA BESZÚRÁSBÓL ÉRKEZIK A KÉRÉS-->
+<input type="hidden" name="miutan" th:value="${miutan}"></input>  <!--  HA A LISTÁ_BA BESZÚRÁSBÓL ÉRKEZIK A KÉRÉS-->
+<input type="hidden" name="listanev" th:value="${listanev}"></input>  <!--  HA A LISTÁ_BA BESZÚRÁSBÓL ÉRKEZIK A KÉRÉS-->
+<p ><button type="submit" class="btn btn-outline-success">Rögzítés</button></p>
 </form>
-
-
-
-
 
 <div th:if="${siker}">
 <script type="text/javascript">
@@ -99,6 +95,7 @@ function atir(){
 	   });
    </script>
 </div>
+
 
 </div>
 

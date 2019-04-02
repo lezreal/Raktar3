@@ -76,7 +76,6 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/daylistbeszur")
-	
 	public String daylistbeszur(@RequestParam("ujcomp") String ujcomp,@RequestParam("elozo") String elozo, Model model, @RequestParam("napnev") String name) {
 		Daylist beszurando = new Daylist();
 		daylistService.sorszamNovel(Integer.parseInt(elozo));
@@ -90,9 +89,19 @@ public class DaylistController {
 		model.addAttribute("maxsorszam", daylistService.findAll().size());
 		model.addAttribute("csakfix", daycompanyService.findDistinctName());
 		return "daylistprev";
+	}
+	
+	@RequestMapping("/daylistujbeszur")
+	public String ujbeszur(Model model, @RequestParam("miutan") int miutan, @RequestParam("maxelem") int maxelem, @RequestParam("listanev") String listanev) {
 		
-		
-		
+		model.addAttribute("company", new Company());
+		model.addAttribute("listanev", listanev);
+		model.addAttribute("miutan", miutan);
+		model.addAttribute("maxelem", maxelem);
+		model.addAttribute("daylist", daysService.findAll());
+		model.addAttribute("futar", employeService.findAllHumanEmploye());
+		model.addAttribute("company", new Company());
+		return "newCompanyToList";
 	}
 	
 	@RequestMapping("/daylistkivesz")
@@ -239,7 +248,7 @@ public class DaylistController {
 		return "loadfixlist";
 	}
 	
-	@RequestMapping("/selectedfixlist")
+	@RequestMapping("/selectedfixlist")   // IDE KELL MAJD JÖJJEK, HA MEGVAN A BESZÚRÁS
 	public String selectedfixlist(Model model, @RequestParam("name") String name, @RequestParam("action") String gomb) {  // a NAME-ben adja át a lista nevét
 		
 		if (gomb.equals("load")) {

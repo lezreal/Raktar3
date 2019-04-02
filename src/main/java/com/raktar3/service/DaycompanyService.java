@@ -34,6 +34,10 @@ public class DaycompanyService {
 		daycompanyRepo.deleteSelectedName(name);
 		
 	}
+	
+	public void sorszamNovel(String name, int sorszam) {
+		daycompanyRepo.sorszamNovel(name, sorszam);
+	}
 
 
 	

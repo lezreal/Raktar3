@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org" layout:decorate="layouts/main">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="../main/bootstrap.min.css">
+<script src="../main/jquery.min.js"></script>
+<script src="../main/popper.min.js"></script>
+<script src="../main/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="../chosen/chosen.min.css">
+
+    <script src="../chosen/jquery.js"></script>
+
+    <script src="../chosen/chosen.jquery.min.js"></script>
+
+</head>
+<body>
+
+<div layout:fragment="infoBar">
+			  <h1>Emlékeztető létrehozása</h1>
+</div>
+<div layout:fragment="workBar">					
+<form method="post" th:action="@{/addreminder}" onSubmit="if (!confirm('Rögzíthetem?')) return false;">
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Emlékeztető szövege: </span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" name="comment" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Vízautomata: </span>
+  </div>&nbsp;
+  <select class="chosen" name="mid">
+  <option value="0" selected>Választhatsz gépet (nem kötelező)....</option>
+  <option value="0" th:each="list:${machines}" th:text="${list.sorszam}+' - '+${list.name}" th:value="${list.id}"></option>
+  </select>
+  <script type="text/javascript">
+
+      $(".chosen").chosen();
+
+</script>
+  
+</div>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Lejárati dátum: </span>
+  </div>
+  <input type="date" name="bday" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ennyi nappal előtte jelezzen: </span>
+  </div>
+  <input type="number" name="alert" min="1" max="30" required>
+</div>
+
+
+<button type="submit" class="btn btn-outline-success" >Rögzítés</button>
+</form>
+
+<div th:if="${siker}">
+<script type="text/javascript">
+   jQuery(document).ready(function($){
+	   alert("Eladás regisztrálva!");
+	   });
+   </script>
+</div>
+</div>
+
+
+
+</body>
+</html>

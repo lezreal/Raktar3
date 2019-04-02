@@ -15,6 +15,54 @@
 
     <script src="../chosen/chosen.jquery.min.js"></script>
 
+<style>
+.form-radio
+{
+     -webkit-appearance: none;
+     -moz-appearance: none;
+     appearance: none;
+     display: inline-block;
+     position: relative;
+     background-color: #f1f1f1;
+     color: #666;
+     height: 30px;
+     width: 30px;
+     border: 0;
+     border-radius: 50px;
+     cursor: pointer;     
+     margin-right: 7px;
+     margin-left: 17px;
+     outline: none;
+}
+.form-radio:checked::before
+{
+     position: absolute;
+     font: 13px/1 'Open Sans', sans-serif;
+     left: 11px;
+     top: 7px;
+     content: '\02143';
+     transform: rotate(40deg);
+}
+.form-radio:hover
+{
+     background-color: #f7f7f7;
+}
+.radio-igen:checked
+{
+     background-color: lightgreen;
+}
+
+.radio-nem:checked
+{
+     background-color: red;
+}
+label
+{
+     font: 300 16px/1.7 'Open Sans', sans-serif;
+     color: #666;
+     cursor: pointer;
+} 
+</style>
 
 
 
@@ -30,6 +78,9 @@
 </div>
 <div th:if="${foglalt}" class="alert alert-danger">
   <strong>Sikertelen módosítás!</strong> Ez a sorszám foglalt vagy nem alkalmazható!
+</div>
+<div th:if="${reminderhiba}" class="alert alert-danger">
+  <strong>Sikertelen emlékeztető beállítás!</strong> A leírás és a dátum kötelező!
 </div>
 
 
@@ -89,6 +140,38 @@
       $(".chosen").chosen();
 
 </script>
+
+<br><br>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Emlékeztető beállítása</span>&nbsp;
+    <input type="radio" name="alertradio" value="no" id="radio-one" class="form-radio radio-nem" checked><label for="radio-one">Nem</label>&nbsp;&nbsp;
+<input type="radio" name="alertradio" value="yes" id="radio-one" class="form-radio radio-igen"><label for="radio-one">Igen</label>
+    
+  </div><br><br>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Lejárati dátum: </span>
+  </div>&nbsp;&nbsp;
+  <input type="date" name="alertdate" >
+  <div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Leírása:</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" name="alertcomment" aria-describedby="inputGroup-sizing-sm">
+</div>
+
+
+<div class="input-group input-group-sm">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Jelzés előtte  ....  nappal:</span>
+  </div>
+  <input type="number" value="7" class="form-control" aria-label="Small" name="alerttime" aria-describedby="inputGroup-sizing-sm">
+</div>
+
+</div>
+  
+</div>
     
 <button type="submit" >Rögzít</button>
 
@@ -106,7 +189,6 @@
 </div>
 <a href="/machinelist">Gép lista</a> 
 </div>
-
 
 
 

@@ -19,19 +19,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.raktar3.entities.Company;
+import com.raktar3.entities.Daycompany;
+import com.raktar3.entities.Daylist;
 import com.raktar3.entities.Days;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.MachHistory;
 import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
+import com.raktar3.entities.Reminder;
 import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
+import com.raktar3.service.DaycompanyService;
 import com.raktar3.service.DaylistService;
 import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
 import com.raktar3.service.ProductService;
+import com.raktar3.service.ReminderService;
 import com.raktar3.service.StockService;
 
 @Controller
@@ -39,6 +44,9 @@ public class JobController {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	ReminderService reminderService;
+	
 	@Autowired
 	DaylistService daylistService;
 	
@@ -62,6 +70,9 @@ public class JobController {
 	
 	@Autowired
 	DaysService daysService;
+	
+	@Autowired
+	DaycompanyService daycompanyService;
 	
 	@RequestMapping("/regProductToDb")
 	public String regProductToDb(@ModelAttribute("product") Product p, Model model) {
@@ -88,25 +99,55 @@ public class JobController {
 	
 	@RequestMapping("/newCompanyToDb")
 	public String newCompany(@ModelAttribute("company") Company company, Model model, @RequestParam("days") String days) {
+		
 		Days d = daysService.findById(Integer.parseInt(days));
 		company.setDays(d);
 		productService.addCompany(company);
-		
-		
-		
 		List<Employe> emplist = employeService.findAllHumanEmploye();
 		List<Days> daylist = daysService.findAll();
-		
  		Collections.swap(emplist, 0, emplist.indexOf(company.getEmploye()));
 		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(Integer.parseInt(days)).getDays()));
-		
 		model.addAttribute("futar", emplist);
 		model.addAttribute("company", new Company());
 		model.addAttribute("siker","");
 		model.addAttribute("daylist", daylist);
 		return "newCompany";
 		
+		
 	}
+
+	@RequestMapping("/newCompanyToDbAndBackToList")
+	public String newCompanyBackList (@ModelAttribute("company") Company company, Model model, @RequestParam("days") String days, @RequestParam("miutan") int miutan, @RequestParam("maxelem") int maxelem, @RequestParam("listanev") String listanev) {
+		
+		Days d = daysService.findById(Integer.parseInt(days));
+		company.setDays(d);
+		productService.addCompany(company);
+		
+		Daycompany dc = new Daycompany();
+		dc.setCompany(company);
+		dc.setName(listanev);
+		dc.setSorszam(miutan+1);
+		
+		daycompanyService.sorszamNovel(listanev, miutan);
+		daycompanyService.addNewDaycompany(dc);
+		////////////
+		daylistService.deleteAll();
+		List<Daycompany> selectedlist = daycompanyService.findSelectedNAme(listanev);
+		
+		for (Daycompany x:selectedlist) {
+			Daylist dl = new Daylist(x.getCompany(),x.getSorszam());
+			daylistService.addToDb(dl);
+		}
+		model.addAttribute("listanev", listanev);
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		
+		
+	}
+	
 	
 	@RequestMapping("/beerkezesToDb")
 	public String beerkToDb(@ModelAttribute("stock") Stock stock, Model model) {
@@ -229,9 +270,30 @@ public class JobController {
 	}
 	
 	@RequestMapping("/machHistoryToDb")
-	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") Integer compid, @RequestParam("ujsorszam") String ujsorszam, @RequestParam("regisorszam") String regisorszam, @RequestParam("oldcompid") Integer oldcompid) {
+	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") Integer compid,
+			@RequestParam("ujsorszam") String ujsorszam, @RequestParam("regisorszam") String regisorszam, 
+			@RequestParam("oldcompid") Integer oldcompid, @RequestParam("alertradio") String alertradio,@RequestParam("alertdate") String alertdate,
+			@RequestParam("alertcomment") String alertcomment, @RequestParam("alerttime") Integer alerttime) {
 		
+				////// ide jön az ALERTTIME
+			if (alertradio.equals("yes")) {
+				if (alertdate.isEmpty() || alertdate==null || alertcomment.isEmpty() || alertcomment==null) {  // ha hiányoznak adatok
+					model.addAttribute("reminderhiba", "");
+					model.addAttribute("selected", machineService.findById(m.getId()));
+					model.addAttribute("comps", companyService.findAll());
+					model.addAttribute("history", machHistoryService.findMachine(m));
+				return "selectedMachine";
+				}
+				Reminder rem = new Reminder();
+				rem.setAlerttime(alerttime);
+				rem.setComment(alertcomment);
+				rem.setDate(alertdate);
+				rem.setMachine(m);
+				reminderService.addReminder(rem);
+				
+			}
 		
+				////// ide jön az ALERTTIME
 		
 		
 		if (Integer.parseInt(ujsorszam)>0) {
@@ -264,6 +326,8 @@ public class JobController {
 				mh.setMachine(m);
 				machHistoryService.addNewHistory(mh);
 			}
+			
+			
 			model.addAttribute("siker","");
 			m.setCompany(companyService.findById(compid));
 			m.setSorszam(Integer.parseInt(ujsorszam));
@@ -470,6 +534,27 @@ public class JobController {
 		model.addAttribute("historylist", machHistoryService.findAll());
 		model.addAttribute("siker", "");
 		return "machhistory";
+	}
+	
+	@RequestMapping("/addreminder")
+	public String addreminder(@RequestParam("comment") String comment, @RequestParam("mid") int mid, @RequestParam("bday") String date, Model model, @RequestParam("alert") int alerttime) {
+		Reminder rem = new Reminder();
+		rem.setComment(comment);
+		rem.setDate(date);
+		rem.setAlerttime(alerttime);
+		rem.setMachine(machineService.findById(mid));
+		reminderService.addReminder(rem);
+		model.addAttribute("machines", machineService.findAll());
+		model.addAttribute("siker", "");
+		return "reminder";
+	}
+	
+	@RequestMapping("/deaktival")
+	public String deaktival(Model model, @ RequestParam("rid") int rid) {
+		reminderService.deactival(rid);
+		model.addAttribute("reminders", reminderService.findAll());
+		return "reminderlist";
+
 	}
 }
 
