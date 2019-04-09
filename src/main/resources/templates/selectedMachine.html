@@ -93,7 +93,7 @@ label
     <input type="text"  class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="ujsorszam" th:value="${selected.sorszam}" >
   <input type="hidden"  class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="regisorszam" th:value="${selected.sorszam}" >
   <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{id}">
-  <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{type}">
+  <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="type" th:field="*{type}">
   <input type="hidden" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="oldcompid" th:value="${selected.company.id}">
   
 </div>
@@ -118,13 +118,46 @@ label
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Típusa:</span>
+  </div>
+  
+  <th:block th:switch="${selected.type}">
+  
+  <p th:case="5"  class="form-control">Hálózati - Co2</p>
+  <p th:case="1"  class="form-control">Hideg-Meleg Vizes</p>
+  <p th:case="2"  class="form-control">Co2 Poharas</p>
+  <p th:case="3"  class="form-control">Co2 Szivattyús</p>
+  <p th:case="4"  class="form-control">Hálózati Hideg-Meleg vizes</p>
+  </th:block>
+    
+</div>
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Jelenlegi hely:</span>
   </div>
   <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled th:field="*{company.name}" >
   
 </div>
 
-
+<select name="newtype">
+<th:block th:switch="${selected.type}">
+  
+  <option th:case="5"  value="5" selected>Hálózati - Co2</option>
+  <option th:case="1"  value="1" selected>Hideg-Meleg Vizes</option>
+  <option th:case="2"  value="2" selected>Co2 Poharas</option>
+  <option th:case="3"  value="3" selected>Co2 Szivattyús</option>
+  <option th:case="4"  value="4" selected>Hálózati Hideg-Meleg vizes</option>
+  </th:block>
+  
+  <option value="1">Hideg-Meleg vizes</option>
+  <option value="2">Co2 Poharas</option>
+  <option value="3">Co2 Szivattyús</option>
+  <option value="4">Hálózati - Hideg-Meleg vizes</option>
+  <option value="5">Hálózati - Co2</option>
+  
+</select>
     
     
 
@@ -133,7 +166,7 @@ label
 <option th:text="${selected.company.name}" th:value="${selected.company.id}" selected></option>
 <option th:each="list:${comps}" th:text="${list.name}+' '+${list.city}" th:value="${list.id}"></option>
 
- </select>
+ </select><button type="submit" style="margin-left: 30px">Rögzít</button>
     
     <script type="text/javascript">
 
@@ -141,14 +174,15 @@ label
 
 </script>
 
-<br><br>
+<div style="border:solid; border-radius: 10px; padding: 10px;border-color: lightgrey; margin:15px">
+<fieldset>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Emlékeztető beállítása</span>&nbsp;
     <input type="radio" name="alertradio" value="no" id="radio-one" class="form-radio radio-nem" checked><label for="radio-one">Nem</label>&nbsp;&nbsp;
 <input type="radio" name="alertradio" value="yes" id="radio-one" class="form-radio radio-igen"><label for="radio-one">Igen</label>
     
-  </div><br><br>
+  </div></div>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Lejárati dátum: </span>
@@ -170,25 +204,28 @@ label
 </div>
 
 </div>
-  
-</div>
-    
-<button type="submit" >Rögzít</button>
+</fieldset></div>  
+
 
 </form>
-
-
-<div th:if="${hiba}" class="alert alert-danger">
-  <strong>Helytelen kitöltés!</strong>
-</div>
-
 <br/><br/>
 <div th:each="list:${history}" style="background-color: yellow">
 <p th:text="${list.company.name}+' - '+${list.date}"></p>
 
 </div>
 <a href="/machinelist">Gép lista</a> 
+
+<div th:if="${hiba}" class="alert alert-danger">
+  <strong>Helytelen kitöltés!</strong>
 </div>
+
+</div>
+    
+
+
+
+
+
 
 
 

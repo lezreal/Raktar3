@@ -18,7 +18,7 @@ width:150px;
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
-        <td>Dátum</td>
+        
         <td>Gép</td>
         <td>Sorszam</td>
         <td>Megjegyzés</td>
@@ -28,10 +28,9 @@ width:150px;
     </thead>
     <tbody >
       <tr th:each="list:${machines}">
-        <td th:text="${list.date}">Doe</td>
-        <td th:text="${list.machine.name}">Doe</td>
-        <td th:text="${list.machine.sorszam}">Doe</td>
-        <td th:text="${list.machine.comment}">Doe</td>
+        <td th:text="${list.name}">Doe</td>
+        <td th:text="${list.sorszam}">Doe</td>
+        <td th:text="${list.comment}">Doe</td>
       </tr>
       
     </tbody>

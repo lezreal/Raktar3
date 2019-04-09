@@ -37,43 +37,47 @@ function newPopup(url) {
 <body style="background-color:  #f6f4f8">
 
 
-
+	
+		
+		
+			
+			
 
 <div class="container" style="margin-bottom:0">
 	<div class="fejlec">
 			<div layout:fragment="infoBar">
+			
 			  <h1>Aqua Royal Kft.</h1>
-			  <div th:if="${noemploye}" class="alert alert-danger">
+			
+			    <div th:if="${noemploye}" class="alert alert-danger">
 			  	<strong>Nincs rabszolgád!</strong> Előbb regisztrálj legalább egy kollégát!
-			  </div>
+			    </div>
+				
 				<div th:if="${noproduct}" class="alert alert-danger">
 			  	<strong>Nincs terméked!</strong> Előbb regisztrálj legalább egy terméket!
 				</div>
+				
 				<div th:if="${nostock}" class="alert alert-danger">
 			  	<strong>Nincs miből selejtezni!</strong> Vigyél fel készletet!
 				</div>
+				
 				<div th:if="${delsuccess}" class="alert alert-success">
 			  	<strong>Sikeres törlés</strong>
 				</div>
+				
 				<div th:if="${delfail}" class="alert alert-danger">
 			  	<strong>Nem törölhető!</strong> Ügyfelek hivatkoznak rá!
 				</div>
+				
 			 </div>
 	
-	
-		<div th:if="${reminder}"><a href="JavaScript:newPopup('/reminderlist');"><img alt="" src="images/csengo.gif" height="50px"></a></form>
+	</div>
+	</div>
 		
-		<div th:if="${csengo}">
-    
-    <p th:each="list:${csengo}" th:text="${list.comment}"></p>
+		
+	
 
-</div>
-		</div>
-		<div th:unless="${reminder}"><img alt="" src="images/dispenser.png" height="100px"></div>
-	</div> 
-</div>
-
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm navbar-dark" style="background-color: black">
   <a class="navbar-brand" href="/">Aqua Royal</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
@@ -139,6 +143,14 @@ function newPopup(url) {
 		</div>
     
     </div>
+    	<div th:if="${reminder}"><a href="JavaScript:newPopup('/reminderlist');" style="margin-right: 30px"><img alt="" src="images/csengo.gif" height="30px"></a></div>
+			<div th:if="${csengo}">
+    
+    <p th:each="list:${csengo}" th:text="${list.comment}"></p>
+
+			</div>
+		
+		<div th:unless="${reminder}" style="margin-right: 30px"><img alt="" src="images/dispenser.png" height="50px"></div>
     
    <a href="uresdaylist.html">Üres lista</a>
  

@@ -76,6 +76,7 @@ public class JobController {
 	
 	@RequestMapping("/regProductToDb")
 	public String regProductToDb(@ModelAttribute("product") Product p, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (productService.findProductByName(p.getName())) { 
 			model.addAttribute("siker","");
 			productService.regNewProduct(p);
@@ -91,6 +92,7 @@ public class JobController {
 	
 	@RequestMapping("/newEmpToDb")
 	public String newEmploye(@ModelAttribute("newemp") Employe emp, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (employeService.addUserToDb(emp)==true) model.addAttribute("siker", ""); else model.addAttribute("vanmar", ""); 
 		model.addAttribute("emplist", productService.findAllEmploye());
 		
@@ -99,7 +101,7 @@ public class JobController {
 	
 	@RequestMapping("/newCompanyToDb")
 	public String newCompany(@ModelAttribute("company") Company company, Model model, @RequestParam("days") String days) {
-		
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		Days d = daysService.findById(Integer.parseInt(days));
 		company.setDays(d);
 		productService.addCompany(company);
@@ -118,26 +120,22 @@ public class JobController {
 
 	@RequestMapping("/newCompanyToDbAndBackToList")
 	public String newCompanyBackList (@ModelAttribute("company") Company company, Model model, @RequestParam("days") String days, @RequestParam("miutan") int miutan, @RequestParam("maxelem") int maxelem, @RequestParam("listanev") String listanev) {
-		
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		Days d = daysService.findById(Integer.parseInt(days));
 		company.setDays(d);
 		productService.addCompany(company);
 		
-		Daycompany dc = new Daycompany();
-		dc.setCompany(company);
-		dc.setName(listanev);
-		dc.setSorszam(miutan+1);
+		Daylist dl = new Daylist();
+		dl.setCompany(company);
+		dl.setSorszam(miutan+1);
 		
-		daycompanyService.sorszamNovel(listanev, miutan);
-		daycompanyService.addNewDaycompany(dc);
-		////////////
-		daylistService.deleteAll();
-		List<Daycompany> selectedlist = daycompanyService.findSelectedNAme(listanev);
+//		daycompanyService.sorszamNovel(listanev, miutan);
+//		daycompanyService.addNewDaycompany(dc);
+//		////////////
 		
-		for (Daycompany x:selectedlist) {
-			Daylist dl = new Daylist(x.getCompany(),x.getSorszam());
-			daylistService.addToDb(dl);
-		}
+		daylistService.sorszamNovel(miutan);
+		daylistService.addToDb(dl);
+	
 		model.addAttribute("listanev", listanev);
 		model.addAttribute("daylist", daylistService.findAll());
 		model.addAttribute("allcompany", companyService.findAll());
@@ -151,6 +149,7 @@ public class JobController {
 	
 	@RequestMapping("/beerkezesToDb")
 	public String beerkToDb(@ModelAttribute("stock") Stock stock, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		stock.setIncoming(0);
 		stockService.addIncoming(stock);
 		
@@ -167,7 +166,7 @@ public class JobController {
 	@RequestMapping("/keszletrolLevetel")
 	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, @RequestParam("amount") int mennyiseg, Model model) {
 		
-		
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		stock.setIncoming(1);
 		
 		stockService.saleStock(stock);
@@ -182,6 +181,7 @@ public class JobController {
 
 	@RequestMapping("/keszletlista")
 	public String keszletlista(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		List<Integer> id_lista =stockService.findProducts();
 		List<Product> lista = new ArrayList();
 		for (int i=0;i<id_lista.size();i++) {
@@ -198,9 +198,9 @@ public class JobController {
 	
 	
 	@RequestMapping("/kamionToDb")
-	public String kamiontodb(@ModelAttribute("stock") Stock s,@RequestParam("hozott") int hozott,@RequestParam("employe") int emp) {
+	public String kamiontodb(@ModelAttribute("stock") Stock s,@RequestParam("hozott") int hozott,@RequestParam("employe") int emp, Model model) {
 		
-		
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		s.setEmploye( employeService.findById(emp));
 		
 		if (hozott==1) {
@@ -220,6 +220,7 @@ public class JobController {
 	
 	@RequestMapping("/selejtToDb")
 	public String selejtToDb(@ModelAttribute("stock") Stock stock, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		stock.setIncoming(2);
 		stockService.addIncoming(stock);
 		model.addAttribute("selejt", "");
@@ -246,7 +247,7 @@ public class JobController {
 	
 	@RequestMapping("/newMachToDb")
 	public String newMachine(@ModelAttribute("newmach") Machine mach, Model model, @RequestParam("sorszam") int sorszam) {
-		
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (machineService.findSorszam(sorszam)){
 			mach.setSorszam(sorszam);
 			mach.setCompany(companyService.findById(1));
@@ -262,6 +263,7 @@ public class JobController {
 	
 	@RequestMapping("/machine/{search}")
 	public String machine(@PathVariable("search") Integer id, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("selected", machineService.findById(id));
 		model.addAttribute("comps", companyService.findAll());
 		model.addAttribute("history", machHistoryService.findMachine(machineService.findById(id)));
@@ -270,11 +272,11 @@ public class JobController {
 	}
 	
 	@RequestMapping("/machHistoryToDb")
-	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") Integer compid,
+	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") int compid,
 			@RequestParam("ujsorszam") String ujsorszam, @RequestParam("regisorszam") String regisorszam, 
-			@RequestParam("oldcompid") Integer oldcompid, @RequestParam("alertradio") String alertradio,@RequestParam("alertdate") String alertdate,
-			@RequestParam("alertcomment") String alertcomment, @RequestParam("alerttime") Integer alerttime) {
-		
+			@RequestParam("oldcompid") int oldcompid, @RequestParam("alertradio") String alertradio,@RequestParam("alertdate") String alertdate,
+			@RequestParam("alertcomment") String alertcomment, @RequestParam("alerttime") Integer alerttime, @RequestParam("newtype") Integer newtype) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 				////// ide jön az ALERTTIME
 			if (alertradio.equals("yes")) {
 				if (alertdate.isEmpty() || alertdate==null || alertcomment.isEmpty() || alertcomment==null) {  // ha hiányoznak adatok
@@ -294,6 +296,25 @@ public class JobController {
 			}
 		
 				////// ide jön az ALERTTIME
+			
+			if (oldcompid!=compid) {
+				MachHistory mh = new MachHistory();
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				Date date = new Date();
+				mh.setDate(dateFormat.format(date));
+				mh.setCompany(companyService.findById(compid));
+				mh.setMachine(m);
+				machHistoryService.addNewHistory(mh);
+			}
+		
+//			log.info("Régi type: "+m.getType());
+//			log.info("Új type: "+newtype);
+//			m.setCompany(companyService.findById(compid));
+//			log.info("Régi comp: "+m.getCompany().getId());
+//			log.info("Új comp: "+compid);
+//			
+			
+			
 		
 		
 		if (Integer.parseInt(ujsorszam)>0) {
@@ -301,31 +322,15 @@ public class JobController {
 		if (Integer.parseInt(ujsorszam)==Integer.parseInt(regisorszam)) {
 			
 			
-			if (compid==null) m.setCompany(companyService.findById(m.getId()));
+			if (compid==0) m.setCompany(companyService.findById(m.getId()));
 			
 			model.addAttribute("siker","");
-			if (oldcompid!=compid) {
-				MachHistory mh = new MachHistory();
-				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-				Date date = new Date();
-				mh.setDate(dateFormat.format(date));
-				mh.setCompany(companyService.findById(compid));
-				mh.setMachine(m);
-				machHistoryService.addNewHistory(mh);
-			}
+			
 			m.setCompany(companyService.findById(compid));
 			m.setSorszam(Integer.parseInt(regisorszam));
 			machineService.addMachineToDb(m);
 		} else if (machineService.findSorszam(Integer.parseInt(ujsorszam))){   // HA MÁS SORSZÁMOT ADOTT MEG ÉS SZABAD
-			if (oldcompid!=compid) {
-				MachHistory mh = new MachHistory();
-				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-				Date date = new Date();
-				mh.setDate(dateFormat.format(date));
-				mh.setCompany(companyService.findById(compid));
-				mh.setMachine(m);
-				machHistoryService.addNewHistory(mh);
-			}
+			
 			
 			
 			model.addAttribute("siker","");
@@ -357,6 +362,7 @@ public class JobController {
 
 	@RequestMapping("/alapkeszletToDb")
 	public String alapkeszlet(@RequestParam("pid") int pid, @RequestParam("darab") String darab, Model model, @RequestParam("bday") String datum, @RequestParam("comment") String comment) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (darab==null || darab.isEmpty()) {
 			model.addAttribute("fos","");
 			model.addAttribute("products", productService.findAll());
@@ -385,11 +391,13 @@ public class JobController {
 	
 	@RequestMapping("/probafeldolgoz")
 	public String probafeldolgoz( ) {
+		
 		return "index";
 	}
 	
 	@RequestMapping("/company/{id}")
 	public String editCompany(@PathVariable("id") int id, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("company", companyService.findById(id));
 		List<Employe> emplist = employeService.findAllHumanEmploye();
 		List<Days> daylist = daysService.findAll();
@@ -406,6 +414,7 @@ public class JobController {
 	
 	@RequestMapping("/product/{id}")
 	public String editProduct(@PathVariable("id") int id, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("product", productService.findById(id));
 		List<Employe> emplist = employeService.findAllHumanEmploye();
 		
@@ -416,6 +425,7 @@ public class JobController {
 	
 	@RequestMapping("/editCompanyToDb")
 	public String editCompany(@ModelAttribute("company") Company c,@RequestParam("empid") int empid,@RequestParam("dayid") int daysid, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		Days days = daysService.findById(daysid);
 
 		c.setEmploye(employeService.findById(empid));
@@ -437,6 +447,7 @@ public class JobController {
 	
 	@RequestMapping("/editProductToDb")
 	public String editProduct(@RequestParam("productid") int id,@RequestParam("productname") String name,@RequestParam("productcomment") String comment, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		Product p = productService.findById(id);
 		p.setName(name);
 		p.setDescription(comment);
@@ -448,6 +459,7 @@ public class JobController {
 	
 	@RequestMapping("/delstock")
 	public String delstock(Model model, @RequestParam("gomb") int gomb) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		log.info(""+gomb);
 		stockService.deleteById(gomb);
 		model.addAttribute("stocklist", stockService.stockList());
@@ -456,7 +468,7 @@ public class JobController {
 	
 	@RequestMapping("/employe/{id}")
 	public String editEmploye(@PathVariable("id") int id, Model model) {
-		
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 			model.addAttribute("employe",employeService.findById(id) );
 			model.addAttribute("employeok","" );
 			
@@ -466,6 +478,7 @@ public class JobController {
 	
 	@RequestMapping("editEmployeToDb")
 	public String editemployetodb(@ModelAttribute("employe") Employe emp, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		log.info(emp.getName());
 		log.info(emp.getDescription());
 		employeService.addUserToDb(emp);
@@ -475,7 +488,7 @@ public class JobController {
 	
 	@RequestMapping("delEmploye")
 	public String delemploye(@RequestParam("delempid") int id, Model model) {
-		
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (companyService.findByEmploye(employeService.findById(id)) && stockService.findEmploye(employeService.findById(id))) {
 			employeService.delEmploye(employeService.findById(id));
 			model.addAttribute("employes", employeService.findAllHumanEmploye());
@@ -491,6 +504,7 @@ public class JobController {
 	
 	@RequestMapping("/delproduct")
 	public String delProduct(Model model, @RequestParam("gomb") int id) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (productService.deleteProduct(productService.findById(id))) {
 			model.addAttribute("delok","");
 		} else model.addAttribute("delfail", "");
@@ -500,6 +514,7 @@ public class JobController {
 	
 	@RequestMapping("/lekerdezes2")
 	public String lekerdez2(@RequestParam("bday") String date,@RequestParam("empid") int empid,@RequestParam("pid") int pid, Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		int eladva=0, bejott=0;
 		if (stockService.lekerdezes(date, empid, pid)==null) return "index";
 		List<Stock> stocklista=stockService.lekerdezes(date, empid, pid);
@@ -522,8 +537,8 @@ public class JobController {
 
 	@RequestMapping("/companymachine/{id}")
 	public String companymachine(@PathVariable("id") int compid, Model model) {
-		;
-		model.addAttribute("machines", machHistoryService.findCompany(companyService.findById(compid)));
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
+		model.addAttribute("machines", machineService.findCompanyMachine(compid));
 		return "companymachinelist";
 	}
 
@@ -538,6 +553,7 @@ public class JobController {
 	
 	@RequestMapping("/addreminder")
 	public String addreminder(@RequestParam("comment") String comment, @RequestParam("mid") int mid, @RequestParam("bday") String date, Model model, @RequestParam("alert") int alerttime) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		Reminder rem = new Reminder();
 		rem.setComment(comment);
 		rem.setDate(date);
@@ -551,6 +567,7 @@ public class JobController {
 	
 	@RequestMapping("/deaktival")
 	public String deaktival(Model model, @ RequestParam("rid") int rid) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		reminderService.deactival(rid);
 		model.addAttribute("reminders", reminderService.findAll());
 		return "reminderlist";

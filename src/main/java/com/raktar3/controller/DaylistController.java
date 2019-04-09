@@ -176,13 +176,31 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/daylistsave")   // EZ AMIKOR ÚJ FIXLISTÁT CSINÁLOK
-	public String daylistsave(@RequestParam("newlistname") String name) {
+	public String daylistsave(@RequestParam("newlistname") String name, Model model) {
+		if (!daycompanyService.vaneilyennev(name) || name==null || name.isEmpty()) {
+			model.addAttribute("savefail", "");
+			model.addAttribute("listanev", name);
+			model.addAttribute("daylist", daylistService.findAll());
+			model.addAttribute("allcompany", companyService.findAll());
+			model.addAttribute("maxsorszam", daylistService.findAll().size());
+			model.addAttribute("csakfix", daycompanyService.findDistinctName());
+			return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		
+		}
+		
+		/// IDE JÖN A LISTANÉV ELLENÖRTZSŐá
 		List<Daylist> lista = daylistService.findAll();
 		
 		for (Daylist x:lista) {
 			daycompanyService.addNewDaycompany(new Daycompany(x.getCompany(),x.getSorszam(),name));
 		}
-		return "index";
+		model.addAttribute("saveok", "");
+		model.addAttribute("listanev", name);
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
 	}
 	
 	@RequestMapping("/daylistupdate")   // EZ AMIKOR ÚJ FIXLISTÁT CSINÁLOK

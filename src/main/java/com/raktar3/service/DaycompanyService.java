@@ -39,6 +39,12 @@ public class DaycompanyService {
 		daycompanyRepo.sorszamNovel(name, sorszam);
 	}
 
+	public boolean vaneilyennev(String name) {
+		
+		if (daycompanyRepo.vanemarnilyennev(name)>0)  return false;
+		
+		return true;
+	}
 
 	
 	

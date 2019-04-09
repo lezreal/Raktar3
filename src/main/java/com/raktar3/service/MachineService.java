@@ -51,6 +51,10 @@ public class MachineService {
 		return machineRepo.getNewSorszam()+1;
 	}
 	
+	public List<Machine> findCompanyMachine(int id){
+		return machineRepo.findCompanyId(id);
+	}
+	
 	
 //	@PostConstruct
 //	public void init() {

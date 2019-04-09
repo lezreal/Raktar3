@@ -61,6 +61,13 @@ background-color: #D8D4D4;
     </script>
 </head>
 <body>
+<div th:if="${savefail}" class="alert alert-danger">
+			  	<strong>Sikertelen mentés!</strong> Van már lista ilyen névvel!
+				</div>
+<div th:if="${saveok}" class="alert alert-success">
+			  	<strong>Sikeres mentés!</strong>
+				</div>
+
 
 <div th:if="${listanev}" th:text="${listanev}">
 
@@ -121,7 +128,6 @@ background-color: #D8D4D4;
 </form>
 
 <br><br>
-
 
 <form th:action="@{/daylistupdate}" method="post" onSubmit="if (!confirm('Felülírhatom?')) return false;">
 

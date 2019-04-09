@@ -114,6 +114,7 @@ public class HomeController {
 	
 	@RequestMapping("/productlist")
 	public String productList(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		List<Integer> id_lista =stockService.findProducts();
 		List<Product> lista = new ArrayList();
 		for (int i=0;i<id_lista.size();i++) {
@@ -129,6 +130,7 @@ public class HomeController {
 	
 	@RequestMapping("/newemp")
 	public String newEmp(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("newemp", new Employe());
 		model.addAttribute("emplist", employeService.findAllHumanEmploye());
 		return "newEmp";
@@ -136,6 +138,7 @@ public class HomeController {
 	
 	@RequestMapping("/beerkezes")
 	public String beerkezes(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (employeService.findAllHumanEmploye().isEmpty()) {
 			model.addAttribute("noemploye","");
 			return "index";
@@ -154,6 +157,7 @@ public class HomeController {
 	
 	@RequestMapping("/eladas")
 	public String eladas(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (employeService.findAllHumanEmploye().isEmpty()) {
 			model.addAttribute("noemploye","");
 			return "index";
@@ -173,6 +177,7 @@ public class HomeController {
 	
 	@RequestMapping("/newcompany")
 	public String newcompany(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (employeService.findAllHumanEmploye().isEmpty()) {
 			model.addAttribute("noemploye","");
 			return "index";
@@ -190,6 +195,7 @@ public class HomeController {
 	
 	@RequestMapping("/companylist")
 	public String companylist(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("companies", companyService.findAllReal());
 		model.addAttribute("vanegepe", machineService.findAll());
 		return "companyList";
@@ -197,18 +203,21 @@ public class HomeController {
 	
 	@RequestMapping("/employelist")
 	public String employelist(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("employes", employeService.findAllHumanEmploye());
 		return "employeList";
 	}
 	
 	@RequestMapping("/keszletmozgaslista")
 	public String keszletmozgaslista(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("stocklist", stockService.stockList());
 		return "stockList";
 	}
 	
 	@RequestMapping("/kamion")
 	public String kamion(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (productService.findAll().isEmpty()) {
 			model.addAttribute("noproduct","");
 			return "index";
@@ -220,6 +229,7 @@ public class HomeController {
 	
 	@RequestMapping("/selejt")
 	public String selejt(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (employeService.findAllEmploye().isEmpty()) {
 			model.addAttribute("noemploye","");
 			return "index";
@@ -243,6 +253,7 @@ public class HomeController {
 
 	@RequestMapping("/newmachine")
 	public String newMachine(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("newmach", new Machine());
 		model.addAttribute("ujsorszam", machineService.getNewSorszam());
 		return "newmachine";
@@ -250,6 +261,7 @@ public class HomeController {
 	
 	@RequestMapping("/machinelist")
 	public String machineList(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("machinelist", machineService.findAll());
 
 		return "machineList";
@@ -257,6 +269,7 @@ public class HomeController {
 	
 	@RequestMapping("/alapkeszlet")
 	public String alapkeszlet(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		if (productService.findAll().isEmpty()) {
 			model.addAttribute("noproduct","");
 			return "index";
@@ -268,6 +281,7 @@ public class HomeController {
 	
 	@RequestMapping("/lekerdezes")
 	public String lekerdezes(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("employes", employeService.findAllEmploye());
 		model.addAttribute("products", productService.findAll());
 		return "lekerdezes1";
@@ -275,18 +289,21 @@ public class HomeController {
 	
 	@RequestMapping("/history")
 	public String history(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("historylist", machHistoryService.findAll());
 		return "machhistory";
 	}
 	
 	@RequestMapping("/reminder")
 	public String reminder(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("machines", machineService.findAll());
 		return "reminder";
 	}
 
 	@RequestMapping("/reminderlist")
 	public String reminderlist(Model model) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		List<Reminder> lista = reminderService.findAll(); // az összes TRUE reminder-t megkapja
 		List<Reminder> listatemp = new ArrayList<Reminder>();
 		for (int i=0;i<lista.size();i++) {
