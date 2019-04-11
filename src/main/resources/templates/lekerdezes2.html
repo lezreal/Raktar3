@@ -1,20 +1,52 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/main">
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 <meta charset="UTF-8">
-<title>Lekérdezés</title>
-<style type="text/css">
+<link rel="stylesheet" type="text/css" href="css/list.css">
 
-td{
-width:50px;
-align: center;
+
+
+<script src="js/list.js"></script>
+
+
+<script>
+function PopupCenter(url, title, w, h) {
+    // Fixes dual-screen position                         Most browsers      Firefox
+    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
+    var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY;
+
+    var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    var systemZoom = width / window.screen.availWidth;
+var left = (width - w) / 2 / systemZoom + dualScreenLeft
+var top = (height - h) / 2 / systemZoom + dualScreenTop
+    var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w / systemZoom + ', height=' + h / systemZoom + ', top=' + top + ', left=' + left);
+
+    // Puts focus on the newWindow
+    if (window.focus) newWindow.focus();
 }
 
 
-</style>
 
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+
+
+</script>
+<style type="text/css">
+.unstyled{
+ border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
+
 <div layout:fragment="infoBar">
 
 <h2 th:if="${employe}" th:text="${employe}+' - '+${datum}"></h2>
@@ -24,13 +56,25 @@ Eladott: <h2 th:if="${eladott}" th:text="${eladott}"></h2>
 Bejött: <h2 th:if="${bejott}" th:text="${bejott}"></h2>
 
 </div>
-		 
 
 <div layout:fragment="workBar">
 
-		<table width="80%">
-		
+  <table class="table table-striped" id="myTable">
+    <thead>
+      <tr>
+      	<th>Dátum</th>
+        <th>Kolléga</th>
+        <th>Termék</th>
+        <th>Állapot</th>
+        <th>Mennyiség</th>
+        <th>Megjegyzés</th>
+        
+      </tr>
+    </thead>
+    <tbody >
 		<tr th:each="list:${lekerdezes}">
+			<td th:text="${list.date}"></td>
+			<td th:text="${list.employe.name}"></td>
 			<td th:text="${list.product.name}"></td>
 			<td th:if="${list.incoming==0}" th:text="VISSZAHOZOTT"></td>
 			<td th:if="${list.incoming==1}" th:text="ELADOTT"></td>
@@ -39,15 +83,13 @@ Bejött: <h2 th:if="${bejott}" th:text="${bejott}"></h2>
 			
 			<td th:text="${list.comment}"></td>
 		</tr>
-		
-		
-		
-		
-		</table>
-		
-	
-	
+      
+    </tbody>
+  </table>
+
+
 </div>
 
 </body>
 </html>
+

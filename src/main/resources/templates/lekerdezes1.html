@@ -44,11 +44,13 @@
 
 
 
-<button type="submit" class="btn btn-outline-success">Success</button>
+<button type="submit" class="btn btn-outline-success" value="napi" name="gomb">Success</button>
 
 </form>
 </fieldset>
 </div>
+
+
 
 
 <div style="border:solid; border-radius: 10px; padding: 10px;border-color: lightgrey; margin-top:20px">
@@ -60,7 +62,7 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
   </div>
-  <input type="date" name="bday"  required>
+  <select name="bday"><option th:each="list:${dates}" th:text="${list}" th:value="${list}"></option></select>
 </div>
 
 
@@ -83,7 +85,7 @@
 
 
 
-<button type="submit" class="btn btn-outline-success">Success</button>
+<button type="submit" class="btn btn-outline-success" value="havi" name="gomb">Success</button>
 
 </form>
 </fieldset>

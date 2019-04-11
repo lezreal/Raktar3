@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.raktar3.entities.Company;
-import com.raktar3.entities.Daycompany;
 import com.raktar3.entities.Daylist;
 import com.raktar3.entities.Days;
 import com.raktar3.entities.Employe;
@@ -27,6 +26,7 @@ import com.raktar3.entities.MachHistory;
 import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Reminder;
+import com.raktar3.entities.Repair;
 import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaycompanyService;
@@ -37,6 +37,7 @@ import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
 import com.raktar3.service.ProductService;
 import com.raktar3.service.ReminderService;
+import com.raktar3.service.RepairService;
 import com.raktar3.service.StockService;
 
 @Controller
@@ -46,6 +47,9 @@ public class JobController {
 
 	@Autowired
 	ReminderService reminderService;
+
+	@Autowired
+	RepairService repairService;
 	
 	@Autowired
 	DaylistService daylistService;
@@ -513,9 +517,12 @@ public class JobController {
 	}
 	
 	@RequestMapping("/lekerdezes2")
-	public String lekerdez2(@RequestParam("bday") String date,@RequestParam("empid") int empid,@RequestParam("pid") int pid, Model model) {
+	public String lekerdez2(@RequestParam("bday") String date,@RequestParam("empid") int empid,@RequestParam("pid") int pid, Model model,@RequestParam("gomb") String gomb) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
+		
 		int eladva=0, bejott=0;
+		
+		if (gomb.equals("napi")) {
 		if (stockService.lekerdezes(date, empid, pid)==null) return "index";
 		List<Stock> stocklista=stockService.lekerdezes(date, empid, pid);
 		for (int i=0;i<stocklista.size();i++) {
@@ -525,14 +532,22 @@ public class JobController {
 		model.addAttribute("lekerdezes", stocklista);
 		model.addAttribute("eladott", eladva);
 		model.addAttribute("bejott", bejott);
-		
-		
-		
-		 
 		 model.addAttribute("datum", date);
 		 if (empid!=0) model.addAttribute("employe", employeService.findById(empid).getName());
 		 
 		return "lekerdezes2";
+		} else {
+			List<Stock> stocklista=stockService.havilekerdezes(date, empid, pid);
+			for (int i=0;i<stocklista.size();i++) {
+				if (stocklista.get(i).getIncoming()==0) bejott=bejott+stocklista.get(i).getAmount(); else eladva=eladva+stocklista.get(i).getAmount(); 
+			}
+			model.addAttribute("lekerdezes", stocklista);
+			model.addAttribute("eladott", eladva);
+			model.addAttribute("bejott", bejott);
+			model.addAttribute("datum", date);
+			return "lekerdezes2";
+			
+		}
 	}
 
 	@RequestMapping("/companymachine/{id}")
@@ -572,6 +587,43 @@ public class JobController {
 		model.addAttribute("reminders", reminderService.findAll());
 		return "reminderlist";
 
+	}
+	
+	@RequestMapping("/probacompany")
+	public String probacompany(@RequestParam("keres") String keres, Model model) {
+		Company comp = new Company();
+		comp.setName(keres);
+		
+		model.addAttribute("daylist", daysService.findAll());
+		model.addAttribute("futar", employeService.findAllHumanEmploye());
+		model.addAttribute("company",comp);
+		return "newCompany";
+	}
+	@RequestMapping("newservice")
+	public String newservice(Model model) {
+		model.addAttribute("service", new Repair());
+		model.addAttribute("machines", machineService.findAll());
+		return "newservice";
+	}
+	
+	@RequestMapping("newServiceToDb")
+	public String newservicetodb(Model model, @ModelAttribute("service") Repair s,@RequestParam("mid") int mid) {
+		
+		s.setMachine(machineService.findById(mid));
+		//s.setDate(date);
+		
+		repairService.addNewService(s);
+		model.addAttribute("service", new Repair());
+		model.addAttribute("machines", machineService.findAll());
+		model.addAttribute("siker", "");
+		return "newservice";
+	}
+	
+	@RequestMapping("repairlist")
+	public String repairlist(Model model) {
+		
+		model.addAttribute("repairlist", repairService.findAll());
+		return "repairList";
 	}
 }
 

@@ -141,6 +141,15 @@ function newPopup(url) {
 		    
 		  </div>
 		</div>
+		<div class="btn-group" style="padding-right:20px">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Szervíz</button>
+		  <div class="dropdown-menu">
+		    <a class="dropdown-item" href="/newservice">Új bejegyzés</a>
+		    <a class="dropdown-item" href="/repairlist">Lekérdezés</a>
+		    
+		    
+		  </div>
+		</div>
     
     </div>
     	<div th:if="${reminder}"><a href="JavaScript:newPopup('/reminderlist');" style="margin-right: 30px"><img alt="" src="images/csengo.gif" height="30px"></a></div>

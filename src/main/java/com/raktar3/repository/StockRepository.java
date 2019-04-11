@@ -56,7 +56,23 @@ public interface StockRepository extends CrudRepository<Stock, Integer> {
 	@Query(value="select * from stock where date=?1 and product_id=?2",nativeQuery=true)
 	List<Stock> findAllProductDate(String date, int pid);
 
+	
+	@Query(value="select distinct date from stock", nativeQuery=true)
+	List<String> findDistinctDate();
+	
+	@Query(value="select * from stock where date like ?1%", nativeQuery=true)
+	List<Stock> haviOsszes(String date);
 
+	@Query(value="select * from stock where employe_id=?2 and date like ?1%", nativeQuery=true)
+	List<Stock> haviOsszesEmploye(String date, int empid);
+	
+	@Query(value="select * from stock where product_id=?2 and date like ?1%", nativeQuery=true)
+	List<Stock> haviOsszesProduct(String date, int pid);
+
+	@Query(value="select * from stock where product_id=?2 and employe_id=?3 and date like ?1%", nativeQuery=true)
+	List<Stock> haviOsszesProductEmploye(String date, int pid, int empid);
+	
+	
 	
 	
 }

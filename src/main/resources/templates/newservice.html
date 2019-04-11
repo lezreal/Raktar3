@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<title>Új szervíz bejegyzés</title>
+</head>
+<body>
+
+<div layout:fragment="workBar">
+
+<form method="post"  th:action="@{/newServiceToDb}" th:object="${service}"  onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
+
+
+
+<select name="mid">
+<option th:each="list:${machines}" th:value="${list.id}" th:text="${list.sorszam}+' - '+${list.name}"></option>
+
+</select>
+
+
+<br><br>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Állapot</span>
+  </div>
+  <textarea type="text" class="form-control rounded-0" rows="2"  th:field="*{comment}"></textarea>
+  
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
+  </div>
+  <input type="date"  th:field="*{date}" required>
+</div>
+
+
+<button type="submit">Bejegyzés rögzítése</button>
+
+
+</form>
+
+
+
+
+
+<div th:if="${siker}">
+<script type="text/javascript">
+   jQuery(document).ready(function($){
+	   alert("Szervízbejegyzés regisztrálva");
+	   });
+   </script>
+</div>
+
+</div>
+
+
+
+
+
+
+
+</body>
+</html>

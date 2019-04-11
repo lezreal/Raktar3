@@ -82,6 +82,14 @@ public class StockService {
 		} else return stockRepo.findSelectedLekerdezes(date, empid, pid);
 	}
 	
+	public List<Stock> havilekerdezes(String date, int empid, int pid){
+		if (pid==0 && empid!=0) return stockRepo.haviOsszesEmploye(date, empid); else 
+		if (pid!=0 && empid==0) return stockRepo.haviOsszesProduct(date, pid); else
+		if (pid!=0 && empid!=0) return stockRepo.haviOsszesProductEmploye(date, pid, empid); else
+		return stockRepo.haviOsszes(date);
+	}
+	
+	
 	public void deleteAll() {
 	stockRepo.deleteAll();
 	}
@@ -102,6 +110,14 @@ public class StockService {
 	public void deleteById(int id) {
 		stockRepo.deleteById(id);
 		}
+	
+	public List<String> distinctDate(){
+		return stockRepo.findDistinctDate();
+	}
 
+	public List<Stock> haviOsszes(String date){
+		return stockRepo.haviOsszes(date);
+	}
+	
 	
 }

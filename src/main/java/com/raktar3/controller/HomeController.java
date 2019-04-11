@@ -284,6 +284,19 @@ public class HomeController {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("employes", employeService.findAllEmploye());
 		model.addAttribute("products", productService.findAll());
+		List<String> lista=new ArrayList<String>();
+		for (int i=0; i<stockService.distinctDate().size();i++) {
+			if (i==0) lista.add(stockService.distinctDate().get(i).substring(0,7)); else
+				
+				if (!stockService.distinctDate().get(i).substring(0,7).equals(stockService.distinctDate().get(i-1).substring(0,7))) lista.add(stockService.distinctDate().get(i).substring(0,7));
+			
+		}
+		
+			
+//			for (String x:stockService.distinctDate()) {
+//			lista.add(x.substring(0,7));
+//		}
+		model.addAttribute("dates", lista);
 		return "lekerdezes1";
 	}
 	
