@@ -168,7 +168,7 @@ public class JobController {
 	
 	
 	@RequestMapping("/keszletrolLevetel")
-	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, @RequestParam("amount") int mennyiseg, Model model) {
+	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, Model model) {
 		
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		stock.setIncoming(1);
@@ -227,6 +227,13 @@ public class JobController {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		stock.setIncoming(2);
 		stockService.addIncoming(stock);
+		Stock selejt = new Stock();
+		selejt.setAmount(stock.getAmount());
+		selejt.setDate(stock.getDate());
+		selejt.setEmploye(stock.getEmploye());
+		selejt.setIncoming(0);
+		selejt.setProduct(productService.findById(18));
+		stockService.addIncoming(selejt);
 		model.addAttribute("selejt", "");
 		if (employeService.findAllEmploye().isEmpty()) {
 			model.addAttribute("noemploye","");

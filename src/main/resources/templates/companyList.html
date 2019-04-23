@@ -56,16 +56,15 @@ $(document).ready( function () {
 </div>
 
 <div layout:fragment="workBar">
-<form method="post" action="/probacompany">
-<button type="submit"> BARMI</button>
 
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
         <th>Megnevezés</th>
+        <th>Gép</th>
         <th>Helység</th>
         <th>Cím</th>
-        <th>Futár</th>
+        
         <th>Száll. nap</th>
         <th>Megjegyzés</th>
         <th>Szerkesztés</th>
@@ -74,25 +73,31 @@ $(document).ready( function () {
     </thead>
     <tbody >
       <tr th:each="list:${companies}">
-        <td>  <button class="unstyled" th:text="${list.name}" th:value="'http://localhost:8080/companymachine/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');"></button>
+      	
+        <td th:text="${list.company.name}">
         
-       
         
+        
+         
         </td>  
+        <td ><button class="unstyled"  th:value="'http://localhost:8080/companymachine/'+${list.company.id}" onclick="PopupCenter(this.value,'xtf','900','500');"><img th:if="${list.vangepe}"  src="images/dispenser.png" width=90px></img></button></td>
+        <td th:text="${list.company.city}">Doe</td>
+        <td th:text="${list.company.address}">Doe</td>
+        <td th:if="${list.company.employe==null}" >nincs megadva</td>
         
-        <td th:text="${list.city}">Doe</td>
-        <td th:text="${list.address}">Doe</td>
-        <td th:if="${list.employe==null}" >nincs megadva</td>
-        <td th:unless="${list.employe==null}" th:text="${list.employe.name}"></td>
-        <td th:text="${list.days.name}"></td>
-        <td th:text="${list.comment}"></td>
-        <td><button class="btn btn-primary" th:value="'http://localhost:8080/company/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkesztés</button></td>
+        <td>
+        <font size="0.2">
+        	<label th:if="${list.fixdays.size()>0}" th:text="${list.fixdays}"  ></label>
+        </font>
+        </td>
+        <td th:text="${list.company.comment}"></td>
+        <td><button class="btn btn-primary" th:value="'http://localhost:8080/company/'+${list.company.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkesztés</button></td>
       </tr>
       
     </tbody>
   </table>
 
-</form>
+
 </div>
 
 

@@ -13,12 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.raktar3.entities.Company;
+import com.raktar3.entities.Daycompany;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Reminder;
 import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
+import com.raktar3.service.DaycompanyService;
 import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachHistoryService;
@@ -26,6 +28,7 @@ import com.raktar3.service.MachineService;
 import com.raktar3.service.ProductService;
 import com.raktar3.service.ReminderService;
 import com.raktar3.service.StockService;
+import com.raktar3.temp.Companyfixdays;
 
 
 
@@ -57,6 +60,9 @@ public class HomeController {
 
 	@Autowired
 	DaysService daysService;
+	
+	@Autowired
+	DaycompanyService daycompanyService;
 	
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -196,8 +202,33 @@ public class HomeController {
 	@RequestMapping("/companylist")
 	public String companylist(Model model) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		model.addAttribute("companies", companyService.findAllReal());
-		model.addAttribute("vanegepe", machineService.findAll());
+		
+		List<Companyfixdays> cfdlist = new ArrayList<Companyfixdays>();  // 
+		List<Company> complist = companyService.findAllReal();  // tömbben a cégek
+		List<Daycompany> daycomplist = daycompanyService.findAll();  // tömbben a daycompany-k
+		
+		for (int i=0;i<complist.size();i++) {
+			Companyfixdays cfix = new Companyfixdays();
+			cfix.setCompany(complist.get(i));
+			List<String> fixdayslist = new ArrayList();
+			for (int k=0;k<daycomplist.size();k++) {
+				if (complist.get(i)==daycomplist.get(k).getCompany()) {
+					fixdayslist.add(daycomplist.get(k).getName());
+				}
+			}
+			
+			cfix.setFixdays(fixdayslist);
+			
+					
+					if (machineService.vanegepe(complist.get(i).getId())>0){
+						cfix.setVangepe(true);
+					}
+			cfdlist.add(cfix);
+		}
+		
+		model.addAttribute("companies", cfdlist);
+//		model.addAttribute("vanegepe", machineService.findAll());
+		model.addAttribute("daycompanies", daycompanyService.findAll());
 		return "companyList";
 	}
 	
@@ -320,7 +351,7 @@ public class HomeController {
 		List<Reminder> lista = reminderService.findAll(); // az összes TRUE reminder-t megkapja
 		List<Reminder> listatemp = new ArrayList<Reminder>();
 		for (int i=0;i<lista.size();i++) {
-			log.info("Hátranapok: "+kelle(lista.get(i).getDate())+" - "+lista.get(i).getDate());
+			
 			if (kelle(lista.get(i).getDate())<=lista.get(i).getAlerttime()) {
 				listatemp.add(lista.get(i));
 			}

@@ -55,6 +55,9 @@ public class MachineService {
 		return machineRepo.findCompanyId(id);
 	}
 	
+	public int vanegepe(int id) {
+		if (machineRepo.vanegepe(id)>0) return 1; else return 0;
+	}
 	
 //	@PostConstruct
 //	public void init() {

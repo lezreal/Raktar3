@@ -20,6 +20,10 @@ public class DaycompanyService {
 		daycompanyRepo.save(d);
 	}
 	
+	public List<Daycompany> findAll() {
+		return daycompanyRepo.findAll();
+	}
+	
 	
 	public List<String> findDistinctName(){
 		return daycompanyRepo.findDistinctName();

@@ -33,6 +33,8 @@ public interface DaycompanyRepository extends CrudRepository<Daycompany, Integer
 	
 	@Query(value="select count(id) from daycompany where name=?1",nativeQuery=true)
 	int vanemarnilyennev(String name);
+	
+	List<Daycompany> findAll();
 
 		
 }
