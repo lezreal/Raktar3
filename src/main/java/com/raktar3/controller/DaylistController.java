@@ -352,4 +352,51 @@ public class DaylistController {
 		
 	}
 	
+	@RequestMapping("/changeAddress")
+	public String changeaddress(@RequestParam("compid") int compid, Model model,@RequestParam("address") String address,@RequestParam("napnev") String listanev) {
+		
+		
+		
+		if (address!=null && !address.isEmpty()) companyService.updateAddress(compid,address);
+		
+		model.addAttribute("listanev", listanev);
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		
+	}
+	@RequestMapping("/changeComment")
+	public String changecomment(@RequestParam("compid") int compid, Model model,@RequestParam("comment") String comment,@RequestParam("napnev") String listanev) {
+		
+		
+		
+		if (comment!=null && !comment.isEmpty()) companyService.updateComment(compid,comment);
+		
+		model.addAttribute("listanev", listanev);
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		
+	}
+	
+	@RequestMapping("/changeName")
+	public String changename(@RequestParam("compid") int compid, Model model,@RequestParam("name") String name,@RequestParam("napnev") String listanev) {
+		
+		
+		
+		if (name!=null && !name.isEmpty()) companyService.updateName(compid,name);
+		
+		model.addAttribute("listanev", listanev);
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		
+	}
+	
 }

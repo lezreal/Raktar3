@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="www.thymeleaf.org" layout:decorate="layouts/main">
 <head>
-<meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
 
@@ -164,7 +164,7 @@ label
 
   <select class="chosen" name="compid">
 <option th:text="${selected.company.name}" th:value="${selected.company.id}" selected></option>
-<option th:each="list:${comps}" th:text="${list.name}+' '+${list.city}" th:value="${list.id}"></option>
+<option th:each="list:${comps}" th:text="${list.name}+' '+${list.city}+' '+${list.address}" th:value="${list.id}"></option>
 
  </select><button type="submit" style="margin-left: 30px">Rögzít</button>
     

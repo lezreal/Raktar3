@@ -88,7 +88,19 @@ Dátum: ...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Név: ................
 
 
     <tr th:each="list:${companies}" >
-    <td align="right" width="200px" ><font  th:text="${list.company.name}+' - '+${list.company.city}" style="margin-right: 2px; font-family:sans-serif; font-size: 13px;"></font></td>
+    <td align="right" width="200px" th:if="${list.company.name==list.company.address}">
+    <font  th:text="${list.company.name}+' - '+${list.company.city}" style="margin-right: 2px; font-family:sans-serif; font-size: 13px;"></font>
+	
+    
+    
+    </td>
+	
+	<td align="right" width="200px" th:unless="${list.company.name==list.company.address}">
+    <font th:unless="${list.company.name==list.company.address}"  th:text="${list.company.name}+' - '+${list.company.address}+' - '+${list.company.city}" style="margin-right: 2px; font-family:sans-serif; font-size: 13px;"></font>
+	</td>
+	
+	
+	
 	<td align="center" width="100px" ><font th:text="${list.company.comment}" style="margin-right: 2px; font-family:sans-serif; font-size: 10px;"></font></td>
   	<td class="penz">&nbsp;</td>
     <td class="tele" ><font class="halvany">V</font></td>

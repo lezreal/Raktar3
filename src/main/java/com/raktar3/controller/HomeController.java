@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.raktar3.entities.Company;
 import com.raktar3.entities.Daycompany;
 import com.raktar3.entities.Employe;
@@ -19,6 +20,7 @@ import com.raktar3.entities.Machine;
 import com.raktar3.entities.Product;
 import com.raktar3.entities.Reminder;
 import com.raktar3.entities.Stock;
+
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaycompanyService;
 import com.raktar3.service.DaysService;
@@ -63,6 +65,8 @@ public class HomeController {
 	
 	@Autowired
 	DaycompanyService daycompanyService;
+	
+	
 	
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -377,6 +381,7 @@ public class HomeController {
 		model.addAttribute("reminders", reminderService.findVeryAll());
 		return "reminderlist";
 	}
+
 
 	
 }

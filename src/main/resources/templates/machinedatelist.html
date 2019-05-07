@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org" layout:decorate="layouts/main">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css" href="css/list.css">
+
+<script src="js/list.js"></script>
+<script type="text/javascript">
+
+
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+
+</head>
+<body>
+
+
+<div layout:fragment="workBar">
+
+
+<table class="table table-striped" id="myTable">
+    <thead>
+      <tr>
+        <th>Dátum</th>
+        <th>Sorszám</th>
+        <th>Megnevezés</th>
+        <th>Hova</th>
+        
+        <th>Megjegyzés</th>
+        
+      </tr>
+    </thead>
+	
+	<tr th:each="list:${machhistory}">
+	
+	<td th:text="${list.date}"></td>
+	<td th:text="${list.machine.sorszam}"></td>
+	<td th:text="${list.machine.name}"></td>
+	<td th:text="${list.company.name}"></td>
+	<td th:text="${list.machine.comment}"></td>
+	</tr>
+
+</table>
+</div>
+
+</body>
+</html>

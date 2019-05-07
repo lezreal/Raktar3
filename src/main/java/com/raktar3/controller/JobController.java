@@ -632,6 +632,31 @@ public class JobController {
 		model.addAttribute("repairlist", repairService.findAll());
 		return "repairList";
 	}
+	
+	@RequestMapping("/beszurcompany/{id}/{lista}/{sorszam}")
+	public String beszurCompany(@PathVariable("id") int ujcompid, Model model,@PathVariable("lista") String listanev,@PathVariable("sorszam") int sorszam) {
+		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
+		
+		log.info("ID: "+ujcompid);
+		log.info("Lista: "+listanev);
+		log.info("Sorszám: "+sorszam);
+		
+//		model.addAttribute("company", companyService.findById(ujcompid));
+//		List<Employe> emplist = employeService.findAllHumanEmploye();
+//		List<Days> daylist = daysService.findAll();
+//		
+		
+//		Collections.swap(emplist, 0, emplist.indexOf(companyService.findById(id).getEmploye()));
+//		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(id).getDays()));
+//		
+		model.addAttribute("companies", companyService.findAll());
+		model.addAttribute("lista", listanev);
+		model.addAttribute("sorszam", sorszam);
+		return "selectcompany";
+	}
+	
+	
+	
 }
 
 

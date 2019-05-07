@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+
+
+</head>
+<body>
+
+<form th:action="@{/daylistbeszur}" method="post">
+
+<input type="hidden" name="elozo" th:value="${sorszam}">
+<input type="hidden" name="napnev" th:value="${lista}">
+
+
+<select  name="ujcomp">
+
+<option  th:each="list:${companies}" th:text="${list.name}" th:value="${list.id}"></option>
+
+</select>
+
+<button type="submit">RÖGZÍT</button>
+
+
+
+</form>
+
+
+</body>
+</html>

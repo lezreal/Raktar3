@@ -66,6 +66,21 @@ public class CompanyService {
 		return sorszamNelkuli;
 	}
 
+	public void updateAddress(int compid, String address) {
+		companyRepo.updateAddress(compid,address);
+		
+	}
+
+	public void updateComment(int compid, String comment) {
+		companyRepo.updateComment(compid,comment);
+		
+	}
+
+	public void updateName(int compid, String name) {
+		companyRepo.updateName(compid, name);
+		
+	}
+
 	
 	
 	

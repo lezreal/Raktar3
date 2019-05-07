@@ -4,24 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/list.css">
-
-
-
-
 <script src="js/list.js"></script>
 <script>
 $(document).ready( function () {
     $('#myTable').DataTable();
 } );
-function calc(id)
-{
-  if (document.getElementById(id).checked) 
-  {
-      document.getElementById('rogzit').disabled = false;
-  } else {
-	  document.getElementById('rogzit').disabled = true;
-  }
-}
 </script>
 
 </head>
@@ -44,7 +31,7 @@ function calc(id)
         <th >Gép</th>
         <th >Státusz</th>
         <th >Alert</th>
-        <th >Deaktivál</th>
+         <th >Deaktivál</th>
         
       </tr>
     </thead>
@@ -58,7 +45,8 @@ function calc(id)
         <td  th:unless="${list.machine==null}" th:text="${list.machine.sorszam}+' - '+${list.machine.name}"></td>
         <td th:text="${list.status}" >Akív</td>
         <td th:text="${list.alerttime}" >Akív</td> 
-		<td th:if="${list.status==true}"><form method="post" th:action="@{/deaktival}"><input type="hidden" name="rid" th:value="${list.id}"><button type="submit">deaktivál</button></form></td>
+ 		<td th:if="${list.status==true}"><form method="post" th:action="@{/deaktival}"><input type="hidden" name="rid" th:value="${list.id}"><button type="submit">deaktivál</button></form></td>
+ 		<td th:unless="${list.status==true}">INAKTÍV</td>
       </tr>
       
     </tbody>
