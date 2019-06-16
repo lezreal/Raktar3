@@ -54,26 +54,18 @@
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Kiszállító:</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Tartozás:</span>
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${company.employe.name}"  readonly>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" th:text="'Szállítási nap: ('+${company.days.name}+')'" id="inputGroup-sizing-sm"></span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  id="deldays" readonly name="deldays">
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:value="${company.tartozik}" th:field="*{tartozik}">
 </div>
 
 
-<select name="empid">
-<option th:each="emps:${employes}" th:text="${emps.name}" th:value="${emps.id}"></option>
-</select>
 
-<select name="dayid" >
-<option th:each="days:${days}" th:text="${days.name}" th:value="${days.id}"></option>
-</select>
+
+
+
+
+
 
 <button type="submit">Módosítás mentése</button>
 

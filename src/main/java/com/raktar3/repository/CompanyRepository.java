@@ -25,7 +25,7 @@ public interface CompanyRepository extends CrudRepository<Company, Integer> {
 	
 	Company findById(int id);
 	
-	Company findFirstByEmploye(Employe e); 
+	 
 	
 	
 //	@Query(value="select * from company c where c.deliverydays like %:minta% and c.employe_id=:id",nativeQuery=true)
@@ -53,6 +53,17 @@ public interface CompanyRepository extends CrudRepository<Company, Integer> {
 	@Query(value="update company set name=?2 where id=?1",nativeQuery=true)
 	void updateName(int compid, String name);
 
+	@Transactional
+	@Modifying
+	@Query(value="update company set tartozik=?2 where id=?1",nativeQuery=true)
+	void updateTartozas(int compid, String tartozas);
+
+	@Query(value="select * from company where tartozik!=null or tartozik!=''",nativeQuery=true)
+	List<Company> tartozok();
+
+	
+	List<Company> findByNameContainingIgnoreCase(String s);
+	List<Company> findByAddressContainingIgnoreCase(String s);
 
 
 }

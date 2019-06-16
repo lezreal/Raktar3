@@ -32,4 +32,7 @@ public interface MachineRepository extends CrudRepository<Machine, Integer> {
 	
 	@Query(value="select count(id) from machine where company_id=?1 ", nativeQuery=true)
 	int vanegepe(int id);
+
+	
+	Machine findBySorszam(int sorszam);
 }

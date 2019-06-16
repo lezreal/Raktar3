@@ -58,6 +58,11 @@ public class MachineService {
 	public int vanegepe(int id) {
 		if (machineRepo.vanegepe(id)>0) return 1; else return 0;
 	}
+
+	public Machine findBySorszam(int sorszam) {
+		
+		return machineRepo.findBySorszam(sorszam);
+	}
 	
 //	@PostConstruct
 //	public void init() {

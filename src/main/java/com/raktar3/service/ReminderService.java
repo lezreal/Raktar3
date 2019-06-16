@@ -70,5 +70,10 @@ public class ReminderService {
 		reminderRepo.deactival(rid);
 		
 	}
+
+	public Reminder findById(int rid) {
+
+		return reminderRepo.findById(rid);
+	}
 	
 }

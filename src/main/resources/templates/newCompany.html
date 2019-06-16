@@ -58,26 +58,22 @@ function atir(){
 </div>
 
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Szállítási nap</span>&nbsp&nbsp
-  </div>
 
-<select name="days"><option  th:each="days:${daylist}" th:text="${days.name}" th:value="${days.id}"></option></select>
-</div>
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Futár</span>&nbsp&nbsp
-  </div>
 
-<select th:field="*{employe}"><option  th:each="emp:${futar}" th:text="${emp.name}" th:value="${emp.id}"></option></select><br/><br/>
-</div>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Megjegyzés</span>
   </div>
   <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" th:field="*{comment}"></textarea>
+  
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Tartozás</span>
+  </div>
+  <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" th:field="*{tartozik}"></textarea>
   
 </div>
 
@@ -96,7 +92,7 @@ function atir(){
 <div th:if="${siker}">
 <script type="text/javascript">
    jQuery(document).ready(function($){
-	   alert("Az új kolléga sikeresen regisztrálva");
+	   alert("Az új ügyfél sikeresen regisztrálva");
 	   });
    </script>
 </div>

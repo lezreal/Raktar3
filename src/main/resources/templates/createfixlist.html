@@ -69,8 +69,7 @@ function calc(id)
         <th>Megnevezés</th>
         <th>Helység</th>
         <th>Cím</th>
-        <th>Futár</th>
-        <th>Száll. nap</th>
+        
         <th>Megjegyzés</th>
         <th>Szerkesztés</th>
 
@@ -83,9 +82,6 @@ function calc(id)
         <td th:text="${list.name}">John</td>
         <td th:text="${list.city}">Doe</td>
         <td th:text="${list.address}">Doe</td>
-        <td th:if="${list.employe==null}" >nincs megadva</td>
-        <td th:unless="${list.employe==null}" th:text="${list.employe.name}"></td>
-        <td th:text="${list.days.name}"></td>
         <td th:text="${list.comment}"></td>
         <td><button class="btn btn-primary" th:value="'http://localhost:8080/company/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkesztés</button></td>
       </tr>

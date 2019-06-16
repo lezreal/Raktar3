@@ -15,11 +15,11 @@ import javax.persistence.OneToOne;
 @Entity
 public class Company {
 	
-	public Company(String name, String city, String address, Employe e) {
+	public Company(String name, String city, String address) {
 		this.name=name;
 		this.address=address;
 		this.city=city;
-		this.employe=e;
+		
 		
 	}
 	
@@ -28,17 +28,7 @@ public class Company {
 	@Id
 	int id;
 	
-	@OneToOne
-	Days days;
 	
-	public Days getDays() {
-		return days;
-	}
-
-
-	public void setDays(Days days) {
-		this.days = days;
-	}
 
 
 	@Column(nullable=false,length=50)
@@ -50,6 +40,20 @@ public class Company {
 	@Column(nullable=true)
 	String comment;
 	
+	@Column(nullable=true)
+	String tartozik;
+	
+	
+	public String getTartozik() {
+		return tartozik;
+	}
+
+
+	public void setTartozik(String tartozik) {
+		this.tartozik = tartozik;
+	}
+
+
 	int tablasorszam;
 	
 	public int getTablasorszam() {
@@ -72,8 +76,6 @@ public class Company {
 	}
 
 
-	@ManyToOne
-	Employe employe;
 	
 	public String getCity() {
 		return city;
@@ -87,14 +89,6 @@ public class Company {
 
 
 
-	public Employe getEmploye() {
-		return employe;
-	}
-
-
-	public void setEmploye(Employe employe) {
-		this.employe = employe;
-	}
 
 
 	public Company() {}

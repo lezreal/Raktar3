@@ -1,8 +1,9 @@
 package com.raktar3.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.raktar3.entities.Company;
-import com.raktar3.entities.Employe;
+
 import com.raktar3.repository.CompanyRepository;
 
 @Service
@@ -21,6 +22,21 @@ public class CompanyService {
 	@Autowired
 	CompanyRepository companyRepo;
 	
+	public Set<Company> findByName(String s){
+		
+		Set<Company> templist = new HashSet<Company>();
+		
+		for (Company x:companyRepo.findByAddressContainingIgnoreCase(s)) {
+			templist.add(x);
+		}
+		
+		for (Company x:companyRepo.findByNameContainingIgnoreCase(s)) {
+			templist.add(x);
+		}
+		
+		
+		return templist;
+	}
 	
 	public List<Company> findAll(){
 		return companyRepo.findAll();
@@ -38,12 +54,7 @@ public class CompanyService {
 		companyRepo.save(c);
 	}
 
-	public boolean findByEmploye(Employe e) {
-		Company tmp =companyRepo.findFirstByEmploye(e);
-		
-		if (tmp!=null) return false; else return true;
-		
-	}
+	
 	
 	
 	
@@ -79,6 +90,15 @@ public class CompanyService {
 	public void updateName(int compid, String name) {
 		companyRepo.updateName(compid, name);
 		
+	}
+
+	public void updateTartozas(int compid, String tartozas) {
+		companyRepo.updateTartozas(compid, tartozas);
+		
+	}
+
+	public List<Company> tartozok() {
+		return companyRepo.tartozok();
 	}
 
 	

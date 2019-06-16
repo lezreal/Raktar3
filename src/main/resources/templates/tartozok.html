@@ -4,9 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/list.css">
-<script src="js/list.js"></script>
-<script>
 
+
+
+<script src="js/list.js"></script>
+
+
+<script>
 function PopupCenter(url, title, w, h) {
     // Fixes dual-screen position                         Most browsers      Firefox
     var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
@@ -25,19 +29,30 @@ var top = (height - h) / 2 / systemZoom + dualScreenTop
 }
 
 
+
 $(document).ready( function () {
     $('#myTable').DataTable();
 } );
-</script>
 
+
+</script>
+<style type="text/css">
+.unstyled{
+ border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Emlékeztetők listája</h1>
-  
- 
+<h1>Tartozók listája</h1>
 
+<div th:if="${compok}" class="alert alert-success">
+  <strong>Sikeres módosítás</strong>
+</div>
 </div>
 
 <div layout:fragment="workBar">
@@ -45,34 +60,32 @@ $(document).ready( function () {
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
-        <th>Lejárati dátum</th>
-        <th>Helyszín</th>
-        <th >Gép</th>
-        <th >Státusz</th>
-        <th >Alert</th>
-         <th >Deaktivál</th>
-         <th >Szerkeszt</th>
+        <th>Megnevezés</th>
+        <th>Helység</th>
+        <th>Cím</th>
         
+        
+        <th>Megjegyzés</th>
+        <th>Szerkesztés</th>
+
       </tr>
     </thead>
     <tbody >
-      <tr th:each="list:${reminders}">
-        <td align="center" th:text="${list.date}"></td>
-        <td th:text="${list.comment}">Doe</td>
+      <tr th:each="list:${companies}">
+      	
+        <td th:text="${list.name}"></td>  
+        
+        <td th:text="${list.city}">Doe</td>
+        <td th:text="${list.address}">Doe</td>
         
         
-        <td  th:if="${list.machine==null}" >Nincs megadva</td>
-        <td  th:unless="${list.machine==null}" th:text="${list.machine.sorszam}+' - '+${list.machine.name}"></td>
-        <td th:text="${list.status}" ></td>
-        <td th:text="${list.alerttime}" ></td> 
- 		<td th:if="${list.status==true}"><form method="post" th:action="@{/deaktival}"><input type="hidden" name="rid" th:value="${list.id}"><button type="submit">deaktivál</button></form></td>
- 		<td th:unless="${list.status==true}">INAKTÍV</td>
- 		<td ><button type="submit"  th:value="'http://localhost:8080/reminder/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkeszt</button></td>
+     
+        <td th:text="${list.tartozik}"></td>
+        <td><button class="btn btn-primary" th:value="'http://localhost:8080/company/'+${list.id}" onclick="PopupCenter(this.value,'xtf','900','500');">Szerkesztés</button></td>
       </tr>
       
     </tbody>
   </table>
-
 
 
 </div>

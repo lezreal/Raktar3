@@ -21,6 +21,7 @@ width:150px;
         
         <td>Gép</td>
         <td>Sorszam</td>
+        <td>Tipus</td>
         <td>Megjegyzés</td>
         
 
@@ -30,6 +31,11 @@ width:150px;
       <tr th:each="list:${machines}">
         <td th:text="${list.name}">Doe</td>
         <td th:text="${list.sorszam}">Doe</td>
+        <td th:if="${list.type==1}">Hideg-Meleg</td>
+        <td th:if="${list.type==2}">Co2 Poharas</td>
+        <td th:if="${list.type==3}">Co2 Szivattyús</td>
+        <td th:if="${list.type==4}">Hálózati Sima</td>
+        <td th:if="${list.type==5}">Hálózati Co2</td>
         <td th:text="${list.comment}">Doe</td>
       </tr>
       

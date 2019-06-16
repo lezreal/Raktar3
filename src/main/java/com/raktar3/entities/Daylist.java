@@ -9,9 +9,13 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Daylist {
 
+	
+	
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	Integer id;
+	
+	
 	
 	public Integer getId() {
 		return id;

@@ -17,7 +17,7 @@ public interface DaycompanyRepository extends CrudRepository<Daycompany, Integer
 	@Query(value="select distinct(name) from daycompany",nativeQuery=true)
 	List<String> findDistinctName();
 	
-	@Query(value="select * from daycompany where name=?1",nativeQuery=true)
+	@Query(value="select * from daycompany where name=?1 order by sorszam",nativeQuery=true)
 	List<Daycompany> findSelectedName(String name);
 	
 	

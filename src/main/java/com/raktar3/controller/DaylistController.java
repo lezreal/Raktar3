@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.raktar3.entities.Company;
 import com.raktar3.entities.Daycompany;
 import com.raktar3.entities.Daylist;
-import com.raktar3.entities.Days;
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaycompanyService;
 import com.raktar3.service.DaylistService;
-import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
@@ -50,9 +48,7 @@ public class DaylistController {
 	
 	@Autowired
 	EmployeService employeService;
-	
-	@Autowired
-	DaysService daysService;
+
 
 	@Autowired
 	DaycompanyService daycompanyService;
@@ -98,8 +94,6 @@ public class DaylistController {
 		model.addAttribute("listanev", listanev);
 		model.addAttribute("miutan", miutan);
 		model.addAttribute("maxelem", maxelem);
-		model.addAttribute("daylist", daysService.findAll());
-		model.addAttribute("futar", employeService.findAllHumanEmploye());
 		model.addAttribute("company", new Company());
 		return "newCompanyToList";
 	}
@@ -161,6 +155,7 @@ public class DaylistController {
 	
 	@RequestMapping("/keszdaylist")
 	public String keszdaylist(Model model, @RequestParam("napnev") String name) {
+		 
 		model.addAttribute("listanev", name);
 		model.addAttribute("companies", daylistService.findAll());
 		return "daylist";
@@ -204,7 +199,7 @@ public class DaylistController {
 	}
 	
 	@RequestMapping("/daylistupdate")   // EZ AMIKOR ÚJ FIXLISTÁT CSINÁLOK
-	public String daylistupdate(@RequestParam("name") String name) {
+	public String daylistupdate(@RequestParam("name") String name, Model model) {
 		daycompanyService.deleteSelectedName(name);
 		List<Daylist> lista = daylistService.findAll();
 		
@@ -212,25 +207,19 @@ public class DaylistController {
 			daycompanyService.addNewDaycompany(new Daycompany(x.getCompany(),x.getSorszam(),name));
 		}
 		
-		return "index";
+		model.addAttribute("updateok", "");
+		model.addAttribute("listanev", name);
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		
+		return "daylistprev";
 	}
 	
 	///////////////////// DAYS //////////////////////////////////////
 	
-	@RequestMapping("/newday")
-	public String newday(Model model) {
-		model.addAttribute("newday", new Days());
-		model.addAttribute("daylist", daysService.findAll());
-		return "newday";
-	}
 	
-	@RequestMapping("/addNewDayToDb")
-	public String addnewday(@ModelAttribute("newday") Days d, Model model) {
-		daysService.addNewDay(d);
-		model.addAttribute("regok", "");
-		model.addAttribute("daylist", daysService.findAll());
-		return "newday";
-	}
 	
 	@RequestMapping("/createfixlist")
 	public String createfixlist(Model model) {
@@ -398,5 +387,39 @@ public class DaylistController {
 		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
 		
 	}
+	
+	@RequestMapping("/changeTartozas")
+	public String changetartozas(@RequestParam("compid") int compid, Model model,@RequestParam("tartozas") String tartozas,@RequestParam("napnev") String listanev) {
+		
+		
+		
+		companyService.updateTartozas(compid,tartozas);
+		
+		model.addAttribute("listanev", listanev);
+		model.addAttribute("daylist", daylistService.findAll());
+		model.addAttribute("allcompany", companyService.findAll());
+		model.addAttribute("maxsorszam", daylistService.findAll().size());
+		model.addAttribute("csakfix", daycompanyService.findDistinctName());
+		return "daylistprev";  // EZ MÉG AZ ELŐKÉSZÜLET
+		
+	}
+	
+	@RequestMapping("/fooldalnyomtatas")
+	public String fixlistafooldalrol(Model model, @RequestParam("napnev") String name) {
+		
+		daylistService.deleteAll();
+		for (Daycompany x:daycompanyService.findSelectedNAme(name)) {
+			Daylist tempdaylist = new Daylist();
+			tempdaylist.setCompany(x.getCompany());
+			tempdaylist.setSorszam(x.getSorszam());
+			daylistService.addToDb(tempdaylist);
+		}
+		
+		
+		model.addAttribute("listanev", name);
+		model.addAttribute("companies", daycompanyService.findSelectedNAme(name));
+		return "daylist";
+	}
+		
 	
 }

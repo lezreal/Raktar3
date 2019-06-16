@@ -3,7 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+
+<style type="text/css">
+
+table td{
+ padding: 3px;
+ align: center;
+ 
+}
+
+.foablak{
+display: flex;
+justify-content: space-around;
+margin: 30px;
+}
+
+.box{
+width: 300px;
+height: 150px;
+padding: 10px;
+-webkit-border-radius: 19px;
+-moz-border-radius: 19px;
+border-radius: 19px;
+-webkit-box-shadow: 0px 10px 13px -7px #000000, inset 9px 5px 11px 2px rgba(0,0,0,0); 
+box-shadow: 0px 10px 13px -7px #000000, inset 9px 5px 11px 2px rgba(0,0,0,0);
+border: 5px solid rgba(118,164,31,0.65);
+}
+
+
+label{
+font-family: Georgia, serif;
+font-size: 25px;
+letter-spacing: 2px;
+word-spacing: 2px;
+color: #000000;
+font-weight: normal;
+text-decoration: none;
+font-style: normal;
+font-variant: normal;
+text-transform: none;
+}
+
+.box:hover{
+border: 5px solid #FDE45D;;
+}
+
+</style>
+
 </head>
 <body>
+
+
+<div layout:fragment="workBar" >
+	<div class="foablak">
+				<div class="box" style="background-color:#36ADCD"> 
+					<table class="tablazat" align="center" width="60%">
+					
+					<tr><td align="center"><label>Gépkereső</label></td></tr>
+					<tr>
+					<td>
+					
+					<form method="post" action="/quickMachine">
+									<input type="number" placeholder="...ide írd a sorszámát" name="machsorszam"
+										onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }">
+								</form>
+					
+					</td>
+					</tr>
+					</table>
+				</div>
+
+				<div class="box">
+					<table class="tablazat" align="center" width="60%">
+					<tr><td align="center"><label>Ügyfélkereső</label></td></tr>
+					<tr>
+					<td>
+					
+					<form method="post" action="/quickCompany">
+									<input type="text" placeholder="...min. 3 karakter" name="cegkereso" pattern=".{3,}"   required title="3 characters minimum"
+										>
+										<input type="submit">
+								</form>
+					
+					</td>
+					</tr>
+					</table>
+				</div>
+
+</div> <!--  első főablak vége -->
+
+
+
+
+<div class="foablak">
+<div class="box" style="background-color:#FFF9A3">
+<form th:action="@{/fooldalnyomtatas}" method="post">
+			<table class="tablazat" align="center" width="60%">
+					<tr><td align="center"><label style="font-size: 15px;">Napi lista nyomtatás</label></td></tr>
+					<tr>
+					<td>
+					
+					<select name="napnev"  onchange="this.form.submit()">
+					<option value="valami" selected="selected">...válassz</option>
+					<option th:if="${fixdays}" th:each="list:${fixdays}" th:text="${list}" th:value="${list}"></option>
+					</select>
+					
+					</td>
+					<tr><td><a href="uresdaylist.html">Üres lista</a><br><a href="elszamolo.html">Elszámoló lap</a></td></tr>
+					</tr>
+					</table>
+					
+</form>
+					
+</div>
+<div class="box">
+
+<font size="1px">
+	<table class="tablazat" align="center" width="60%" cellpadding="1px">
+					<tr th:each=list:${topstock5}>
+					<td align="center" th:text="${list.product.name}"></td>
+					<td align="center" th:text="${list.amount}"></td>
+					<td align="center" th:if="${list.incoming==0}">BE</td>
+					<td align="center" th:if="${list.incoming==1}">EL</td>
+					<td align="center" th:if="${list.incoming==2}">SEL</td>
+					<td align="center" th:text="${list.employe.name}"></td>
+					<td align="center" th:text="${list.date}"></td>
+					
+					</tr>
+					</table>
+					</font>
+</div>
+</div>
+
+
+</div> <!--  workbar vége -->
+
+
 </body>
 </html>

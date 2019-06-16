@@ -1,11 +1,9 @@
 package com.raktar3.repository;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.transaction.Transactional;
 
-import org.springframework.data.jpa.repository.Modifying;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import com.raktar3.entities.Employe;
@@ -16,6 +14,9 @@ public interface StockRepository extends CrudRepository<Stock, Integer> {
 	
 	
 	List<Stock> findAll();
+	
+	@Query(value="SELECT * FROM stock ORDER BY id desc LIMIT 5",nativeQuery=true)
+	List<Stock> findTop5();
 	
 	
 	@Query(value="select sum(amount) from stock where incoming=0", nativeQuery=true)

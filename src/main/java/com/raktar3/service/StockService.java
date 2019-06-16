@@ -79,10 +79,11 @@ public class StockService {
 	}
 	
 	public List<Stock> havilekerdezes(String date, int empid, int pid){
-		if (pid==0 && empid!=0) return stockRepo.haviOsszesEmploye(date, empid); else 
-		if (pid!=0 && empid==0) return stockRepo.haviOsszesProduct(date, pid); else
-		if (pid!=0 && empid!=0) return stockRepo.haviOsszesProductEmploye(date, pid, empid); else
-		return stockRepo.haviOsszes(date);
+		String datum=date.substring(0, 7);
+		if (pid==0 && empid!=0) return stockRepo.haviOsszesEmploye(datum, empid); else 
+		if (pid!=0 && empid==0) return stockRepo.haviOsszesProduct(datum, pid); else
+		if (pid!=0 && empid!=0) return stockRepo.haviOsszesProductEmploye(datum, pid, empid); else
+		return stockRepo.haviOsszes(datum);
 	}
 	
 	
@@ -115,5 +116,7 @@ public class StockService {
 		return stockRepo.haviOsszes(date);
 	}
 	
-	
+	public List<Stock> findTop5(){
+		return stockRepo.findTop5();
+	}
 }

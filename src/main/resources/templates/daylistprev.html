@@ -111,51 +111,57 @@ justify-content: space-between;
 <div th:if="${saveok}" class="alert alert-success">
 			  	<strong>Sikeres mentés!</strong>
 				</div>
+<div th:if="${updateok}" class="alert alert-success">
+			  	<strong>Sikeres felülirás!</strong>
+				</div>
 
 
 <div th:if="${listanev}" th:text="${listanev}">
 
 </div>
 <div class="foablak">
-<div style="width:850px;height:600px; overflow-x: auto; white-space: nowrap;"> 
+<div style="width:90%;height:600px; overflow-x: auto; white-space: nowrap;"> 
 <table id="table">
 <tr>	
 		<td align="center" width="10px">#</td>
 		<td width="200px" align="center">Cím</td>
 		<td   class="megj"  align="center">Utca</td>
 		<td   class="megj"  align="center">Megjegyz.</td>
+		<td   class="megj"  align="center">Tartozás</td>
 		<td   class="megj"  align="center">Város</td>
         <td     align="center" width="30px">FENTEBB</td>
         <td     align="center" width="50px">LENTEBB</td>
         <td  align="center" width="50px">KIVESZ</td>
-        
         <td     align="center"><b>+</b></td>
+        <td width="200px" align="center">Cím</td>
         
     </tr>
     <tr th:each="list:${daylist}">
     <td  align="center" width="20px"><form method="post" th:action="@{/sorszamcsere}"><input type="hidden" name="keroid" th:value="${list.id}"/><input type="hidden" name="napnev" th:value="${listanev}"><input type="number" name="ujsorszam"  th:value="${list.sorszam}" style="text-align: center" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"/></form></td>
-    <td class="tele"><div><form th:action="@{/changeName}"><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="compid" th:value="${list.company.id}"><input type="text" name="name" th:value="${list.company.name}"  onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></form></div></td>
+    <td class="tele" style="background-color:lightblue"><div><form th:action="@{/changeName}"><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="compid" th:value="${list.company.id}"><input type="text" name="name" th:value="${list.company.name}"  onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></form></div></td>
 	<td class="tele"><div><form th:action="@{/changeAddress}"><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="compid" th:value="${list.company.id}"><input type="text" name="address" th:value="${list.company.address}"  onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></form></div></td>
 	<td class="tele"><div><form th:action="@{/changeComment}"><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="compid" th:value="${list.company.id}"><input type="text" name="comment" th:value="${list.company.comment}"  onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></form></div></td>
+	<td class="tele"  style="background-color:red"><div><form th:action="@{/changeTartozas}"><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="compid" th:value="${list.company.id}"><input type="text" name="tartozas" th:value="${list.company.tartozik}"  onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></form></div></td>
 	<td class="tele" th:text="${list.company.city}"></td>
 	<td align="center"><div th:if="${list.sorszam<maxsorszam}"  width="50px"><form method="post" th:action="@{/daylistle}" ><input type="hidden" name="napnev" th:value="${listanev}"></input><input type="image" src="images/down_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
 	<td align="center" class="vizek" ><div th:if="${list.sorszam>1}"  width="50px"><form method="post" th:action="@{/daylistfel}" ><input type="hidden" name="napnev" th:value="${listanev}"><input type="image" src="images/up_arrow.png" width="30px" /><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input></form></div></td>
 	<td align="center" class="vizek" ><form method="post" th:action="@{/daylistkivesz}" ><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="kivesz" th:value="${list.id}"><input type="hidden" name="sorszam" th:value="${list.sorszam}"></input><input type="image" src="images/delete.png" width="30px" /></form></td>
     
     <td ><form method="post" action="/daylistujbeszur"><input type="hidden" name="listanev" th:value="${listanev}"><input type="hidden" name="miutan" th:value="${list.sorszam}"><input type="hidden" name="maxelem" th:value="${maxsorszam}"> <button type="submit">Újat beszúr</button></form></td>
+    <td class="tele"><div><form th:action="@{/changeName}"><input type="hidden" name="napnev" th:value="${listanev}"><input type="hidden" name="compid" th:value="${list.company.id}"><input type="text" name="name" th:value="${list.company.name}"  onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></form></div></td>
     </tr>
         
    
 </table>
 </div>
-<div>
+<div style="margin:10px">
 <form th:action="@{/keszdaylist}" method="post">
 <input type="hidden" name="napnev" th:value="${listanev}">
-<button type="submit">NYOMTATHATÓ VERZIÓ</button>
+<button type="submit">NYOMTATHATÓ VERZIÓ</button><br><br><br><br><br><br><br>
 </form>
 
 <form th:action="@{/daylistsave}" method="post" onSubmit="if (!confirm('Menthetem?')) return false;">
-<input name="newlistname" required placeholder="az új fixlista neve"></input>
+<input name="newlistname" required placeholder="az új fixlista neve"></input><br>
 <button type="submit" class="btn btn-success">ÚJ FIX LISTA MENTÉSE</button>
 
 </form>
@@ -168,7 +174,7 @@ justify-content: space-between;
 <select name="name">
 <option th:each="list:${csakfix}" th:text="${list}" ></option>
 
-</select>
+</select><br>
 <button type="submit" class="btn btn-danger">LÉTEZŐ LISTA FELÜLÍRÁSA</button>
 </form>
 

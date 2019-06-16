@@ -11,6 +11,8 @@ import org.springframework.data.repository.CrudRepository;
 import com.raktar3.entities.Reminder;
 
 public interface ReminderRepository extends CrudRepository<Reminder, Integer> {
+	
+	Reminder findById(int id);
 
 	@Query(value="select * from reminder where status = true",nativeQuery=true)
 	List<Reminder> findAllActive();

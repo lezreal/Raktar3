@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.raktar3.entities.Company;
+import com.raktar3.entities.Daycompany;
 import com.raktar3.entities.Daylist;
-import com.raktar3.entities.Days;
 import com.raktar3.entities.Employe;
 import com.raktar3.entities.MachHistory;
 import com.raktar3.entities.Machine;
@@ -31,7 +33,6 @@ import com.raktar3.entities.Stock;
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaycompanyService;
 import com.raktar3.service.DaylistService;
-import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
@@ -39,6 +40,7 @@ import com.raktar3.service.ProductService;
 import com.raktar3.service.ReminderService;
 import com.raktar3.service.RepairService;
 import com.raktar3.service.StockService;
+import com.raktar3.temp.Companyfixdays;
 
 @Controller
 public class JobController {
@@ -73,9 +75,6 @@ public class JobController {
 	EmployeService employeService;
 	
 	@Autowired
-	DaysService daysService;
-	
-	@Autowired
 	DaycompanyService daycompanyService;
 	
 	@RequestMapping("/regProductToDb")
@@ -104,29 +103,20 @@ public class JobController {
 	}
 	
 	@RequestMapping("/newCompanyToDb")
-	public String newCompany(@ModelAttribute("company") Company company, Model model, @RequestParam("days") String days) {
+	public String newCompany(@ModelAttribute("company") Company company, Model model) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		Days d = daysService.findById(Integer.parseInt(days));
-		company.setDays(d);
 		productService.addCompany(company);
-		List<Employe> emplist = employeService.findAllHumanEmploye();
-		List<Days> daylist = daysService.findAll();
- 		Collections.swap(emplist, 0, emplist.indexOf(company.getEmploye()));
-		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(Integer.parseInt(days)).getDays()));
-		model.addAttribute("futar", emplist);
 		model.addAttribute("company", new Company());
 		model.addAttribute("siker","");
-		model.addAttribute("daylist", daylist);
 		return "newCompany";
 		
 		
 	}
 
 	@RequestMapping("/newCompanyToDbAndBackToList")
-	public String newCompanyBackList (@ModelAttribute("company") Company company, Model model, @RequestParam("days") String days, @RequestParam("miutan") int miutan, @RequestParam("maxelem") int maxelem, @RequestParam("listanev") String listanev) {
+	public String newCompanyBackList (@ModelAttribute("company") Company company, Model model, @RequestParam("miutan") int miutan, @RequestParam("maxelem") int maxelem, @RequestParam("listanev") String listanev) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		Days d = daysService.findById(Integer.parseInt(days));
-		company.setDays(d);
+		
 		productService.addCompany(company);
 		
 		Daylist dl = new Daylist();
@@ -286,7 +276,7 @@ public class JobController {
 	public String historyToDb(Model model,@ModelAttribute("selected") Machine m, @RequestParam("compid") int compid,
 			@RequestParam("ujsorszam") String ujsorszam, @RequestParam("regisorszam") String regisorszam, 
 			@RequestParam("oldcompid") int oldcompid, @RequestParam("alertradio") String alertradio,@RequestParam("alertdate") String alertdate,
-			@RequestParam("alertcomment") String alertcomment, @RequestParam("alerttime") Integer alerttime, @RequestParam("newtype") Integer newtype) {
+			@RequestParam("alertcomment") String alertcomment, @RequestParam("alerttime") Integer alerttime, @RequestParam("newtype") byte newtype) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 				////// ide jön az ALERTTIME
 			if (alertradio.equals("yes")) {
@@ -340,6 +330,7 @@ public class JobController {
 			m.setCompany(companyService.findById(compid));
 			m.setSorszam(Integer.parseInt(regisorszam));
 			machineService.addMachineToDb(m);
+			m.setType(newtype);
 		} else if (machineService.findSorszam(Integer.parseInt(ujsorszam))){   // HA MÁS SORSZÁMOT ADOTT MEG ÉS SZABAD
 			
 			
@@ -347,6 +338,7 @@ public class JobController {
 			model.addAttribute("siker","");
 			m.setCompany(companyService.findById(compid));
 			m.setSorszam(Integer.parseInt(ujsorszam));
+			m.setType(newtype);
 			machineService.addMachineToDb(m);
 			
 		} else {
@@ -411,14 +403,11 @@ public class JobController {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("company", companyService.findById(id));
 		List<Employe> emplist = employeService.findAllHumanEmploye();
-		List<Days> daylist = daysService.findAll();
 		
 		
-		Collections.swap(emplist, 0, emplist.indexOf(companyService.findById(id).getEmploye()));
-		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(id).getDays()));
+		
 		
 		model.addAttribute("employes", emplist);
-		model.addAttribute("days", daylist);
 		return "editCompany";
 	}
 	
@@ -435,24 +424,17 @@ public class JobController {
 	
 	
 	@RequestMapping("/editCompanyToDb")
-	public String editCompany(@ModelAttribute("company") Company c,@RequestParam("empid") int empid,@RequestParam("dayid") int daysid, Model model) {
+	public String editCompany(@ModelAttribute("company") Company c, Model model) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		Days days = daysService.findById(daysid);
-
-		c.setEmploye(employeService.findById(empid));
-		c.setDays(daysService.findById(daysid));
+	
 		companyService.addNewCompany(c);
-		
 		
 		model.addAttribute("compok", "");
 		model.addAttribute("company", c);
-		List<Employe> emplist = employeService.findAllHumanEmploye();
-		List<Days> daylist = daysService.findAll();
-		Collections.swap(emplist, 0, emplist.indexOf(c.getEmploye()));
-		Collections.swap(daylist, 0, daylist.indexOf(companyService.findById(daysid).getDays()));
+		
+		
 		model.addAttribute("editsuccess", "");
-		model.addAttribute("days", daylist);
-		model.addAttribute("employes", emplist);
+		
 		return "editCompany";
 	}
 	
@@ -500,7 +482,7 @@ public class JobController {
 	@RequestMapping("delEmploye")
 	public String delemploye(@RequestParam("delempid") int id, Model model) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		if (companyService.findByEmploye(employeService.findById(id)) && stockService.findEmploye(employeService.findById(id))) {
+		if (stockService.findEmploye(employeService.findById(id))) {
 			employeService.delEmploye(employeService.findById(id));
 			model.addAttribute("employes", employeService.findAllHumanEmploye());
 			model.addAttribute("delsuccess", "");
@@ -601,7 +583,7 @@ public class JobController {
 		Company comp = new Company();
 		comp.setName(keres);
 		
-		model.addAttribute("daylist", daysService.findAll());
+		
 		model.addAttribute("futar", employeService.findAllHumanEmploye());
 		model.addAttribute("company",comp);
 		return "newCompany";
@@ -656,7 +638,106 @@ public class JobController {
 	}
 	
 	
+		@RequestMapping("/quickMachine")
+		public String quickmachine(Model model,@RequestParam("machsorszam") int sorszam) {
+			
+			
+			if (machineService.findBySorszam(sorszam)==null) {
+				model.addAttribute("nomachine", "");
+				return "productList";
+			}
+			
+			
+			
+			model.addAttribute("selected", machineService.findBySorszam(sorszam));
+			model.addAttribute("comps", companyService.findAll());
+			model.addAttribute("history", machHistoryService.findMachine( machineService.findBySorszam(sorszam)));
+			
+			return "selectedMachine";
+		}
+		
+		@RequestMapping("/reminder/{id}")
+		public String editreminder(Model model, @PathVariable("id") int rid) {
+			model.addAttribute("reminder", reminderService.findById(rid));
+			model.addAttribute("selectedmachine", reminderService.findById(rid).getMachine());
+			model.addAttribute("machine", machineService.findAll());
+			return "editreminder";
+		}
 	
+		@RequestMapping("/editReminderToDb")
+		public String editReminderToDb(@ModelAttribute("reminder") Reminder reminder, @RequestParam("mid") int mid) {
+			log.info(reminder.getComment());
+			log.info(""+reminder.getMachine());
+			log.info(""+mid);
+			if (reminder.getMachine()==null && mid!=0) {
+				reminder.setMachine(machineService.findById(mid));
+			} else 
+				
+				if (reminder.getMachine()!=null && mid!=reminder.getMachine().getId()) {
+					reminder.setMachine(machineService.findById(mid));	
+				}
+			reminderService.addReminder(reminder);
+			return "index";
+		}
+		
+		@RequestMapping("/quickCompany")
+		public String quickcompany(Model model,@RequestParam("cegkereso") String ceg) {
+			if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
+			
+			Set<Companyfixdays> cfdlist = new HashSet<Companyfixdays>();  // 
+			Set<Company> complist = companyService.findByName(ceg);  // tömbben a cégek
+			List<Daycompany> daycomplist = daycompanyService.findAll();  // tömbben a daycompany-k
+			
+			
+			for (Company x : complist) {
+				Companyfixdays cfix = new Companyfixdays();
+				cfix.setCompany(x);
+				
+				
+				List<String> fixdayslist = new ArrayList();
+				for (int k=0;k<daycomplist.size();k++) {
+					if (x==daycomplist.get(k).getCompany()) {
+						fixdayslist.add(daycomplist.get(k).getName());
+					}
+				}
+				
+				cfix.setFixdays(fixdayslist);
+					
+				if (machineService.vanegepe(x.getId())>0){
+						cfix.setVangepe(true);
+				}
+				
+					cfdlist.add(cfix);
+			}
+			
+			
+//			for (int i=0;i<complist.size();i++) {
+//				Companyfixdays cfix = new Companyfixdays();
+//				cfix.setCompany(complist.get(i));
+//				List<String> fixdayslist = new ArrayList();
+//				for (int k=0;k<daycomplist.size();k++) {
+//					if (complist.get(i)==daycomplist.get(k).getCompany()) {
+//						fixdayslist.add(daycomplist.get(k).getName());
+//					}
+//				}
+//				
+//				cfix.setFixdays(fixdayslist);
+//				
+//						
+//						if (machineService.vanegepe(complist.get(i).getId())>0){
+//							cfix.setVangepe(true);
+//						}
+//				cfdlist.add(cfix);
+//			}
+			
+			model.addAttribute("companies", cfdlist);
+			model.addAttribute("daycompanies", daycompanyService.findAll());
+			
+			
+			
+			return "torolheto";
+		}
+		
 }
 
 

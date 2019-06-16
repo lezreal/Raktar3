@@ -23,7 +23,6 @@ import com.raktar3.entities.Stock;
 
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaycompanyService;
-import com.raktar3.service.DaysService;
 import com.raktar3.service.EmployeService;
 import com.raktar3.service.MachHistoryService;
 import com.raktar3.service.MachineService;
@@ -60,8 +59,6 @@ public class HomeController {
 	@Autowired
 	CompanyService companyService;
 
-	@Autowired
-	DaysService daysService;
 	
 	@Autowired
 	DaycompanyService daycompanyService;
@@ -72,17 +69,9 @@ public class HomeController {
 	public String home(Model model) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		
-		List<Integer> id_lista =stockService.findProducts();
-		List<Product> lista = new ArrayList<Product>();
-		for (int i=0;i<id_lista.size();i++) {
-			Product p =productService.findById(id_lista.get(i));
-			int osszes=stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i));
-			p.setAmount(osszes);
-			lista.add(p);
-		}
-		model.addAttribute("productlist", lista);
-		model.addAttribute("proba", "picsa");
-		return "productList";
+		model.addAttribute("topstock5", stockService.findTop5());
+		model.addAttribute("fixdays", daycompanyService.findDistinctName());
+		return "index";
 	}
 	
 	@RequestMapping("/csengos")
@@ -192,12 +181,7 @@ public class HomeController {
 			model.addAttribute("noemploye","");
 			return "index";
 		}
-		if (daysService.findAll().isEmpty()) {
-			model.addAttribute("nodays","");
-			return "index";
-		}
 		
-		model.addAttribute("daylist", daysService.findAll());
 		model.addAttribute("futar", employeService.findAllHumanEmploye());
 		model.addAttribute("company", new Company());
 		return "newCompany";
@@ -231,10 +215,18 @@ public class HomeController {
 		}
 		
 		model.addAttribute("companies", cfdlist);
-//		model.addAttribute("vanegepe", machineService.findAll());
 		model.addAttribute("daycompanies", daycompanyService.findAll());
 		return "companyList";
 	}
+	
+	@RequestMapping("/tartozok")
+	public String tartozok(Model model) {
+		
+		model.addAttribute("companies", companyService.tartozok());
+		model.addAttribute("daycompanies", daycompanyService.findAll());
+		return "tartozok";
+	}
+	
 	
 	@RequestMapping("/employelist")
 	public String employelist(Model model) {
@@ -319,19 +311,19 @@ public class HomeController {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		model.addAttribute("employes", employeService.findAllEmploye());
 		model.addAttribute("products", productService.findAll());
-		List<String> lista=new ArrayList<String>();
-		for (int i=0; i<stockService.distinctDate().size();i++) {
-			if (i==0) lista.add(stockService.distinctDate().get(i).substring(0,7)); else
-				
-				if (!stockService.distinctDate().get(i).substring(0,7).equals(stockService.distinctDate().get(i-1).substring(0,7))) lista.add(stockService.distinctDate().get(i).substring(0,7));
-			
-		}
+//		List<String> lista=new ArrayList<String>();
+//		for (int i=0; i<stockService.distinctDate().size();i++) {
+//			if (i==0) lista.add(stockService.distinctDate().get(i).substring(0,7)); else
+//				
+//				if (!stockService.distinctDate().get(i).substring(0,7).equals(stockService.distinctDate().get(i-1).substring(0,7))) lista.add(stockService.distinctDate().get(i).substring(0,7));
+//			
+//		}
 		
 			
 //			for (String x:stockService.distinctDate()) {
 //			lista.add(x.substring(0,7));
 //		}
-		model.addAttribute("dates", lista);
+//		model.addAttribute("dates", lista);
 		return "lekerdezes1";
 	}
 	

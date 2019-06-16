@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<link rel="stylesheet" href="../main/bootstrap.min.css">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+<form method="post" th:action="@{/editReminderToDb}" th:object="${reminder}">
+
+   <input type="hidden" th:field="*{id}"></input>
+  
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Helyszín</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
+</div>
+
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
+  </div>
+  <input type="date" name="bday" th:field="*{date}" required>
+</div>
+
+<select name="mid" >
+<option th:if="${selectedmachine==null}" value="0" selected>Nincs megadva</option>
+<option th:unless="${selectedmachine==null}" th:text="${selectedmachine.sorszam}+' - '+${selectedmachine.name}" th:value="${selectedmachine.id}" selected></option>
+<option th:each="machlist:${machine}" th:text="${machlist.sorszam}+' - '+${machlist.name}" th:value="${machlist.id}"></option>
+</select>
+
+<button type="submit">Módosítás mentése</button>
+
+</form>
+
+</body>
+</html>
