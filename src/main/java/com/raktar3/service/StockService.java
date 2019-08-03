@@ -92,7 +92,7 @@ public class StockService {
 	}
 	
 	public void deleteByProduct(Integer id) {
-		stockRepo.deleteByProduct(id);
+		stockRepo.deleteSelectedRowsProduct(id);
 	}
 	
 	public void deleteStock(Stock s) {

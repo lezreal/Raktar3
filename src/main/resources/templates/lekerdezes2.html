@@ -76,9 +76,9 @@ Bejött: <h2 th:if="${bejott}" th:text="${bejott}"></h2>
 			<td th:text="${list.date}"></td>
 			<td th:text="${list.employe.name}"></td>
 			<td th:text="${list.product.name}"></td>
-			<td th:if="${list.incoming==0}" th:text="VISSZAHOZOTT"></td>
-			<td th:if="${list.incoming==1}" th:text="ELADOTT"></td>
-			<td th:if="${list.incoming==2}" th:text="SELEJT"></td>
+			<td th:if="${list.isBeerkezes()}" th:text="BEÉRKEZÉS"></td>
+			<td th:unless="${list.isBeerkezes()}" th:text="${list.isSelejt()} ? 'SELEJT' : 'ELADOTT'"></td>
+			
 			<td th:text="${list.amount}+' db.'"></td>
 			
 			<td th:text="${list.comment}"></td>

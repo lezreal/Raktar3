@@ -49,6 +49,10 @@ text-transform: none;
 border: 5px solid #FDE45D;;
 }
 
+.quick{
+font-size: 9px;
+}
+
 </style>
 
 </head>
@@ -122,13 +126,12 @@ border: 5px solid #FDE45D;;
 <font size="1px">
 	<table class="tablazat" align="center" width="60%" cellpadding="1px">
 					<tr th:each=list:${topstock5}>
-					<td align="center" th:text="${list.product.name}"></td>
-					<td align="center" th:text="${list.amount}"></td>
-					<td align="center" th:if="${list.incoming==0}">BE</td>
-					<td align="center" th:if="${list.incoming==1}">EL</td>
-					<td align="center" th:if="${list.incoming==2}">SEL</td>
-					<td align="center" th:text="${list.employe.name}"></td>
-					<td align="center" th:text="${list.date}"></td>
+					<td align="center" class="quick" th:text="${list.product.name}"></td>
+					<td align="center" class="quick" th:text="${list.amount}"></td>
+					<td align="center" class="quick" th:if="${list.isBeerkezes()}">BE</td>
+					<td align="center" class="quick" th:if="${list.isEladas()}">EL</td>
+					<td align="center" class="quick" th:text="${list.employe.name}"></td>
+					<td align="center" class="quick" th:text="${list.date}"></td>
 					
 					</tr>
 					</table>

@@ -22,6 +22,7 @@ public class MachHistory {
 		this.id = id;
 	}
 
+	
 	public Machine getMachine() {
 		return machine;
 	}
@@ -30,6 +31,16 @@ public class MachHistory {
 		this.machine = machine;
 	}
 
+	public Company getOldcompany() {
+		return oldcompany;
+	}
+
+	public void setOldcompany(Company oldcompany) {
+		this.oldcompany = oldcompany;
+	}
+
+
+	
 	public Company getCompany() {
 		return company;
 	}
@@ -56,6 +67,10 @@ public class MachHistory {
 	
 	@OneToOne
 	Company company;
+	
+	@OneToOne
+	Company oldcompany;
+	
 	
 	@Column(nullable=false)
 	String date;

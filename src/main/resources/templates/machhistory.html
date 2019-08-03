@@ -72,6 +72,7 @@ function calc(id)
         <th>Sorszám.</th>
         <th>Megnevezés</th>
         <th >Leírás</th>
+        <th >Hol volt?</th>
         <th >Hol van?</th>
         <th >Törlés</th>
         
@@ -83,6 +84,8 @@ function calc(id)
         <td th:text="${list.date}">Doe</td>
         <td th:text="${list.machine.name}">Doe</td>
         
+        <td  th:if="${list.oldcompany!=null}" th:text="${list.oldcompany.name}">RAKTÁR</td>
+        <td  th:unless="${list.oldcompany!=null}">?</td>
         
         <td  th:if="${list.company.name=='RAKTÁR'}" >RAKTÁR</td>
         <td th:unless="${list.company.name=='RAKTÁR'}">  <button class="unstyled" th:text="${list.company.name}" th:value="'http://localhost:8080/company/'+${list.company.id}" onclick="PopupCenter(this.value,'xtf','900','500');"></button></td>  

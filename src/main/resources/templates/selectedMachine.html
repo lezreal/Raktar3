@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
 
-<link rel="stylesheet" href="../main/bootstrap.min.css">
-<script src="../main/jquery.min.js"></script>
-<script src="../main/popper.min.js"></script>
-<script src="../main/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../chosen/chosen.min.css">
 
     <script src="../chosen/jquery.js"></script>
@@ -140,6 +136,8 @@ label
   <label type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:text="${selected.company.name}+' - '+${selected.company.city}" ></label>
   
 </div>
+
+
 
 <select name="newtype">
 <th:block th:switch="${selected.type}">

@@ -4,15 +4,17 @@ package com.raktar3.controller;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.text.TableView;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +32,7 @@ import com.raktar3.entities.Product;
 import com.raktar3.entities.Reminder;
 import com.raktar3.entities.Repair;
 import com.raktar3.entities.Stock;
+import com.raktar3.entities.Traffic;
 import com.raktar3.service.CompanyService;
 import com.raktar3.service.DaycompanyService;
 import com.raktar3.service.DaylistService;
@@ -40,6 +43,7 @@ import com.raktar3.service.ProductService;
 import com.raktar3.service.ReminderService;
 import com.raktar3.service.RepairService;
 import com.raktar3.service.StockService;
+import com.raktar3.service.TrafficService;
 import com.raktar3.temp.Companyfixdays;
 
 @Controller
@@ -47,6 +51,9 @@ public class JobController {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	TrafficService trafficService;
+	
 	@Autowired
 	ReminderService reminderService;
 
@@ -141,27 +148,13 @@ public class JobController {
 	}
 	
 	
-	@RequestMapping("/beerkezesToDb")
-	public String beerkToDb(@ModelAttribute("stock") Stock stock, Model model) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		stock.setIncoming(0);
-		stockService.addIncoming(stock);
-		
-		
-		model.addAttribute("utolsoemploye", stock.getEmploye());   // utoljára rögzített EMP
-		model.addAttribute("products", productService.findAll());
-		model.addAttribute("emps", employeService.findAllHumanEmploye());
-		model.addAttribute("stock", new Stock());
-		model.addAttribute("siker", "");
-		return "beerkezes";
-	}
 	
 	
 	@RequestMapping("/keszletrolLevetel")
 	public String keszletrolLevetel(@ModelAttribute("stock") Stock stock, Model model) {
 		
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		stock.setIncoming(1);
+		stock.setEladas(true);;
 		
 		stockService.saleStock(stock);
 		model.addAttribute("utolsoemploye", stock.getEmploye());   // utoljára rögzített EMP
@@ -177,11 +170,14 @@ public class JobController {
 	public String keszletlista(Model model) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
 		List<Integer> id_lista =stockService.findProducts();
+		
 		List<Product> lista = new ArrayList();
+				
 		for (int i=0;i<id_lista.size();i++) {
-			Product p =productService.findById(id_lista.get(i));
+			Product p =productService.findById(id_lista.get(i));  // KIKERESI AZ ADOTT IP-jü TERMÉKET
 			
 			p.setAmount(stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i)));
+			//stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i))
 			lista.add(p);
 		}
 		model.addAttribute("productlist", lista);
@@ -191,60 +187,9 @@ public class JobController {
 	
 	
 	
-	@RequestMapping("/kamionToDb")
-	public String kamiontodb(@ModelAttribute("stock") Stock s,@RequestParam("hozott") int hozott,@RequestParam("employe") int emp, Model model) {
-		
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		s.setEmploye( employeService.findById(emp));
-		
-		if (hozott==1) {
-			s.setIncoming(1);
-			stockService.addIncoming(s); 
-		} else if (hozott==0) {
-			s.setIncoming(0);
-			stockService.saleStock(s);
-		} else {
-			s.setIncoming(2);
-			stockService.saleStock(s);	
-		}
-		
-		
-		return "index";
-	}
 	
-	@RequestMapping("/selejtToDb")
-	public String selejtToDb(@ModelAttribute("stock") Stock stock, Model model) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		stock.setIncoming(2);
-		stockService.addIncoming(stock);
-		Stock selejt = new Stock();
-		selejt.setAmount(stock.getAmount());
-		selejt.setDate(stock.getDate());
-		selejt.setEmploye(stock.getEmploye());
-		selejt.setIncoming(0);
-		selejt.setProduct(productService.findById(18));
-		stockService.addIncoming(selejt);
-		model.addAttribute("selejt", "");
-		if (employeService.findAllEmploye().isEmpty()) {
-			model.addAttribute("noemploye","");
-			return "index";
-		}
-		
-		if (productService.findAll().isEmpty()) {
-			model.addAttribute("noproduct","");
-			return "index";
-		}
-		
-		if (!stockService.vaneKeszlet()) {
-			model.addAttribute("nostock","");
-			return "index";
-		}
-		
-		model.addAttribute("stock", new Stock());
-		model.addAttribute("emps", employeService.findAllEmploye());
-		model.addAttribute("products", productService.findAll());
-		return "selejt";
-	}
+	
+	
 	
 	@RequestMapping("/newMachToDb")
 	public String newMachine(@ModelAttribute("newmach") Machine mach, Model model, @RequestParam("sorszam") int sorszam) {
@@ -305,17 +250,9 @@ public class JobController {
 				mh.setDate(dateFormat.format(date));
 				mh.setCompany(companyService.findById(compid));
 				mh.setMachine(m);
+				mh.setOldcompany(companyService.findById(oldcompid));
 				machHistoryService.addNewHistory(mh);
 			}
-		
-//			log.info("Régi type: "+m.getType());
-//			log.info("Új type: "+newtype);
-//			m.setCompany(companyService.findById(compid));
-//			log.info("Régi comp: "+m.getCompany().getId());
-//			log.info("Új comp: "+compid);
-//			
-			
-			
 		
 		
 		if (Integer.parseInt(ujsorszam)>0) {
@@ -363,34 +300,7 @@ public class JobController {
 	}
 
 
-	@RequestMapping("/alapkeszletToDb")
-	public String alapkeszlet(@RequestParam("pid") int pid, @RequestParam("darab") String darab, Model model, @RequestParam("bday") String datum, @RequestParam("comment") String comment) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		if (darab==null || darab.isEmpty()) {
-			model.addAttribute("fos","");
-			model.addAttribute("products", productService.findAll());
-			return "alapkeszlet";
-		}
-		log.info("ID: "+pid+" - DB: "+darab);
-		
-		List<Stock> lista = stockService.findByProduct(productService.findById(pid));
-		for (Stock s : lista) {
-			stockService.deleteStock(s);
-			
-		}
-		
-		Stock stock = new Stock();
-		stock.setProduct(productService.findById(pid));
-		stock.setEmploye(employeService.findById(1));
-		stock.setIncoming(0);
-		stock.setAmount(Integer.parseInt(darab));
-		stock.setDate(datum);
-		stock.setComment(comment);
-		stockService.addIncoming(stock);
-		model.addAttribute("success","");
-		model.addAttribute("products", productService.findAll());
-		return "alapkeszlet";
-	}
+	
 	
 	@RequestMapping("/probafeldolgoz")
 	public String probafeldolgoz( ) {
@@ -451,10 +361,13 @@ public class JobController {
 	}
 	
 	@RequestMapping("/delstock")
-	public String delstock(Model model, @RequestParam("gomb") int gomb) {
+	public String delstock(Model model, @RequestParam("torlendok") int[] torlendok) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		log.info(""+gomb);
-		stockService.deleteById(gomb);
+		
+		
+		for (int i=0;i<torlendok.length;i++) {
+			if (torlendok[i]!=0) stockService.deleteById(torlendok[i]);
+		}
 		model.addAttribute("stocklist", stockService.stockList());
 		return "stockList";
 	}
@@ -512,13 +425,16 @@ public class JobController {
 		int eladva=0, bejott=0;
 		
 		if (gomb.equals("napi")) {
-		if (stockService.lekerdezes(date, empid, pid)==null) return "index";
-		List<Stock> stocklista=stockService.lekerdezes(date, empid, pid);
-		for (int i=0;i<stocklista.size();i++) {
-			if (stocklista.get(i).getIncoming()==0) bejott=bejott+stocklista.get(i).getAmount(); else eladva=eladva+stocklista.get(i).getAmount(); 
+		if (trafficService.lekerdezes(date, empid, pid)==null) return "index";
+		List<Traffic> trafficlista=trafficService.lekerdezes(date, empid, pid);
+		for (int i=0;i<trafficlista.size();i++) {
+			if (trafficlista.get(i).isBeerkezes()==true) bejott=bejott+trafficlista.get(i).getAmount(); else {
+				if (trafficlista.get(i).isSelejt()==false)
+				eladva=eladva+trafficlista.get(i).getAmount(); 
+			}
 		}
 		
-		model.addAttribute("lekerdezes", stocklista);
+		model.addAttribute("lekerdezes", trafficlista);
 		model.addAttribute("eladott", eladva);
 		model.addAttribute("bejott", bejott);
 		 model.addAttribute("datum", date);
@@ -526,11 +442,14 @@ public class JobController {
 		 
 		return "lekerdezes2";
 		} else {
-			List<Stock> stocklista=stockService.havilekerdezes(date, empid, pid);
-			for (int i=0;i<stocklista.size();i++) {
-				if (stocklista.get(i).getIncoming()==0) bejott=bejott+stocklista.get(i).getAmount(); else eladva=eladva+stocklista.get(i).getAmount(); 
+			List<Traffic> trafficlista=trafficService.havilekerdezes(date, empid, pid);
+			for (int i=0;i<trafficlista.size();i++) {
+				if (trafficlista.get(i).isBeerkezes()==true) bejott=bejott+trafficlista.get(i).getAmount(); else {
+					if (trafficlista.get(i).isSelejt()==false)
+					eladva=eladva+trafficlista.get(i).getAmount(); 
+				}
 			}
-			model.addAttribute("lekerdezes", stocklista);
+			model.addAttribute("lekerdezes", trafficlista);
 			model.addAttribute("eladott", eladva);
 			model.addAttribute("bejott", bejott);
 			model.addAttribute("datum", date);
@@ -738,6 +657,84 @@ public class JobController {
 			return "torolheto";
 		}
 		
+		@RequestMapping("/elszamolasbe2")
+		public String elszamolasbe(Model model, @RequestParam("darab") ArrayList<Integer> darab, @RequestParam("pid") ArrayList<Integer> pid, @RequestParam("comment") ArrayList<String> comment, @RequestParam("empid") int empid, @RequestParam("bday") String date) {
+			
+			for (int i=0;i<pid.size();i++) {
+				if (darab.get(i)>0 && darab.get(i)!=null) {
+					Stock stocktemp = new Stock();
+					stocktemp.setProduct(productService.findById(pid.get(i)));
+					stocktemp.setAmount(darab.get(i));
+					stocktemp.setDate(date);
+					stocktemp.setEmploye(employeService.findById(empid));
+					stocktemp.setBeerkezes(true);
+					stocktemp.setComment(comment.get(i));
+					stockService.addIncoming(stocktemp);
+					trafficService.addIncomingTraffic(stocktemp);
+					stocktemp=null;
+				}
+			}
+			
+			model.addAttribute("rogzitve",pid);
+			model.addAttribute("beerkezesok","");
+			model.addAttribute("termekek",productService.findAll());
+			model.addAttribute("emps", employeService.findAllHumanEmploye());
+			return "beerkezes";
+		}
+		
+		
+		@RequestMapping("/elszamolaski2")
+		public String elszamolaski(Model model, @RequestParam("darab") ArrayList<Integer> darab, @RequestParam("pid") ArrayList<Integer> pid, @RequestParam("comment") ArrayList<String> comment, 
+				@RequestParam("empid") int empid, @RequestParam("bday") String date, @RequestParam("selejt") ArrayList<Integer> selejt) {
+		
+			for (int i=0;i<pid.size();i++) {
+				if (darab.get(i)>0 && darab.get(i)!=null) {
+					Stock stocktemp = new Stock();
+					stocktemp.setProduct(productService.findById(pid.get(i)));
+					stocktemp.setAmount(darab.get(i));
+					stocktemp.setDate(date);
+					stocktemp.setEmploye(employeService.findById(empid));
+					stocktemp.setEladas(true);
+					stocktemp.setComment(comment.get(i));
+					if (selejt!=null) {
+					if (selejt.contains(pid.get(i))) {
+						stocktemp.setSelejt(true);
+						stocktemp.setEladas(false);
+					}
+					}
+					stockService.addIncoming(stocktemp);
+					trafficService.addIncomingTraffic(stocktemp);
+					stocktemp=null;
+				}
+			}
+		
+			
+			model.addAttribute("eladasok","");
+			model.addAttribute("termekek",productService.findAll());
+			model.addAttribute("emps", employeService.findAllHumanEmploye());
+			
+			return "eladas";
+		}
+		
+		@RequestMapping("/alapkeszletToDb")
+		public String alapkeszletbeallitas(@RequestParam("pid") int pid,@RequestParam("darab") int uj_darabszam,@RequestParam("bday") String date,@RequestParam("comment") String comment, Model model) {
+		
+			stockService.deleteByProduct(pid);
+			Stock s = new Stock();
+			s.setAmount(uj_darabszam);
+			s.setBeerkezes(true);
+			s.setComment(comment);
+			s.setDate(date);
+			s.setEmploye(employeService.findById(1));
+			s.setProduct(productService.findById(pid));
+			s.setEladas(false);
+			s.setSelejt(false);
+			stockService.addIncoming(s);
+			trafficService.addIncomingTraffic(s);
+			model.addAttribute("success", "");
+			model.addAttribute("products", productService.findAll());
+			return "alapkeszlet";
+		}
 }
 
 

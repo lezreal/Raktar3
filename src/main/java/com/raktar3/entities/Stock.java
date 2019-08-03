@@ -1,30 +1,27 @@
 package com.raktar3.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Stock {
 
 	public Stock() {}
 	
-	public Stock(int amount, String date,int is_incoming, Employe e,Product p, String comment) {
-		
-		this.amount=amount;
-		this.date=date;
-		this.incoming=is_incoming;
-		this.employe=e;
-		this.product=p;
-		this.comment=comment;
-	}
 	
+	
+	public boolean isSelejt() {
+		return selejt;
+	}
+
+	public void setSelejt(boolean selejt) {
+		this.selejt = selejt;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -88,22 +85,7 @@ public class Stock {
 		this.employe = employe;
 	}
 
-	@Column(columnDefinition="tinyint(1) default 0") // ha 0 akkor bejövő, ha 1 akkor kimenő, ha 2 akkor selejt
-	int incoming;
-	
-	
-
-	
-
-	public int getIncoming() {
-		return incoming;
-	}
-
-	public void setIncoming(int incoming) {
-		this.incoming = incoming;
-	}
-
-	String date;
+		String date;
 	
 	
 	@Column(nullable=true)
@@ -112,4 +94,28 @@ public class Stock {
 	@Column(nullable=false)
 	int amount;
 	
+	@Column(nullable=false,columnDefinition="tinyint(1) default 0")
+	boolean beerkezes;
+	
+	public boolean isBeerkezes() {
+		return beerkezes;
+	}
+
+	public void setBeerkezes(boolean beerkezes) {
+		this.beerkezes = beerkezes;
+	}
+
+	public boolean isEladas() {
+		return eladas;
+	}
+
+	public void setEladas(boolean eladas) {
+		this.eladas = eladas;
+	}
+
+	@Column(nullable=false,columnDefinition="tinyint(1) default 0")
+	boolean eladas;
+
+	@Column(nullable=false,columnDefinition="tinyint(1) default 0")
+	boolean selejt;
 }

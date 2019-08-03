@@ -1,87 +1,75 @@
 <!DOCTYPE html>
-<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="wwww.thymeleaf.org" layout:decorate="layouts/main">
 <head>
 <meta charset="UTF-8">
+<title>Insert title here</title>
 
 </head>
+
+
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Bevételezés</h1>
-<p>Ide írod a nap végi visszahozott <strong>üres ballonokat, és a kamionos, vagy más fajta teli ballonok, gépek</strong> beérkezését</p>
-  
-  
-  <div th:if="${regok}" class="alert alert-success">
-  <strong>Siker!</strong> Termék sikeresn regisztrálva
+<h1>Elszámolás: BEÉRKEZÉS</h1>
+<p>Ide írod a nap végi visszahozott <strong>általában ÜRES BALLONOKAT vagy kamion, Kaba, Milota, Cegléd, Furta...</strong> </p>
+    
 </div>
 
-<div th:if="${vanmar}" class="alert alert-danger">
-  <strong>Van már ilyen!</strong> Mondtam, hogy nézd meg a listát!
+<div layout:fragment="workBar" class="foablak">
+<div th:if="${beerkezesok}" class="alert alert-success">
+					<strong>Sikeres rögzítés</strong>
+				</div>
+
+<form th:action="@{/elszamolasbe2}" method="post" onSubmit="if (!confirm('Biztos vagy benne?')) return false;">
+<div>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
+  </div>
+  <input type="date" name="bday" required>
 </div>
-  
-</div>
 
-
-<div layout:fragment="workBar">
-
-<form method="post" th:object="${stock}" th:action="@{/beerkezesToDb}" onSubmit="if (!confirm('Biztos vagy benne?')) return false;">
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ki hozta?</span>
   </div>
-  <select th:field="*{employe}">
-  <option  th:if="${utolsoemploye}" th:text="${utolsoemploye.name}" th:value="${utolsoemploye.id}"></option>   <!--utoljára rögzítet EMPLOYE -->
+  <select name="empid">
+  
   	<option  th:each="emp:${emps}" th:text="${emp.name}" th:value="${emp.id}"></option>
   </select>
 </div>
 
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mit hozott?</span>
-  </div>
-  <select th:field="*{product}"><option  th:each="prod:${products}" th:text="${prod.name}" th:value="${prod.id}"></option></select>
-</div>
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
-  </div>
-  <input type="number" min="1" max="2000" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{amount}">
 </div>
+<div>
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
-  </div>
-  <input type="date" name="bday" th:field="*{date}">
-</div>
+<table  align="center">
+<tr class="termek" th:each="list:${termekek}">
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
+
+<td class="baloldal"><input  type="hidden" th:value="${list.id}" name="pid"><label th:text="${list.name}"></label></td>
+
+<td><input class="lista" type="number" th:id="${list.id}" name="darab" value="0"></td>
+<td><input class="lista" type="text" name="comment" placeholder="...megjegyzés"></td>
+<!-- <input  class="gomb" type="submit" th:value="${list.name}" th:onclick="'javascript:document.getElementById('+${list.id}+').disabled=true'"> -->
+
+
+
+
+</tr>
+</table>
+
+
 </div>
 
 
 
 
 
-
-
-<button type="submit" class="btn btn-outline-success">Rögzítés</button>
-
+<input type="submit" value="BEÉRKEZÉS RÖGZÍTÉSE" >
 </form>
-<div th:if="${siker}">
-<script type="text/javascript">
-   jQuery(document).ready(function($){
-	   alert("Eladás regisztrálva!");
-	   });
-   </script>
 </div>
-</div>
-
 
 
 </body>

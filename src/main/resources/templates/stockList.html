@@ -13,9 +13,10 @@ $(document).ready( function () {
 
 </head>
 <body>
-
+        
 <div layout:fragment="infoBar">
 <h1>Termékek listája</h1>
+
   <p>A törléssel csak óvatosan</p>
   <div th:if="${nemtorolheto}" class="alert alert-danger">
   <strong>Nem törölhető!!</strong> Készlet adat hivatkozik rá!
@@ -23,8 +24,9 @@ $(document).ready( function () {
 
 </div>
 
-<div layout:fragment="workBar">
 
+<div layout:fragment="workBar">
+<form method="post" th:action="@{/delstock}" onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
   <table class="table table-striped" id="myTable">
     <thead>
       <tr>
@@ -42,34 +44,40 @@ $(document).ready( function () {
       <tr th:each="list:${stocklist}">
       <td th:text="${list.id}">John</td>
         <td th:text="${list.date}">John</td>
-        <div th:if="${list.incoming==0}">
-        <td ><font color="lightgreen">Beérkezés</font></td>
+        <div th:if="${list.isBeerkezes()}">
+        <td ><font color="green">Beérkezés</font></td>
         </div>
-        <div th:if="${list.incoming==1}">
-        <td ><font color="red">Kiadás</font></td>
+        <div th:if="${list.isEladas()}">
+        <td ><font color="red">Eladás</font></td>
         </div>
-        <div th:if="${list.incoming==2}">
-        <td ><font color="navy">Selejt</font></td>
+        <div th:if="${list.isSelejt()}">
+        <td ><font color="black">SELEJT</font></td>
         </div>
+        
         <td  th:text="${list.amount}">Doe</td>
         <td  th:text="${list.employe.name}">Doe</td>
         <td  th:text="${list.product.name}">Doe</td>
         <td  th:text="${list.comment}">Doe</td>
         
         <td >
-        <form method="post" th:action="@{/delstock}" onSubmit="if(!confirm('Mented a változásokat?')){return false;}">
+		<input type="checkbox" value="0" name="torlendok" style="visibility:hidden" checked>
+         <input type="checkbox" th:value="${list.id}" name="torlendok">
          
-			<button type="submit" th:value="${list.id}" onSubmit="if(!confirm('BIZTOSAN TÖRLÖD?')){return false;}" name="gomb" >TÖRÖL</button>
-			</form>            
-                
+		
+		        
         </td>
       </tr>
-      
+    
     </tbody>
+    
   </table>
-<button type="submit" id="rogzit" disabled="true">RÖGZÍT</button>
-
+        
+<button type="submit"  onSubmit="if(!confirm('BIZTOSAN TÖRLÖD?')){return false;}" name="gomb" >KIJELÖLTEK TÖRLÉSE</button>
+</form>     
 </div>
+  	
+	
 
+         
 </body>
 </html>

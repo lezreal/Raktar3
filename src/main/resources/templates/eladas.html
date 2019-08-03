@@ -1,82 +1,76 @@
 <!DOCTYPE html>
-<html layout:decorate="layouts/main" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="wwww.thymeleaf.org" layout:decorate="layouts/main">
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset="UTF-8">
-
-
+<title>Insert title here</title>
 
 </head>
+
+
 <body>
 
 <div layout:fragment="infoBar">
-<h1>Eladás</h1>
-<p>Ide írod az eladott <strong>teli vizeket, gépeket, pumpát, szörpöt</strong></p>
-  
-  
-  
-
-  
+<h1>Elszámolás: ELADÁS</h1>
+<p>Ide írod a nap végi eladott tele <strong>és töltésre elvitt ÜRES BALLONOKAT ... Cegléd, Kaba, Furta, Milota</strong> </p>
+    
 </div>
 
+<div layout:fragment="workBar" class="foablak">
+<div th:if="${eladasok}" class="alert alert-success">
+					<strong>Sikeres rögzítés</strong>
+				</div>
 
-<div layout:fragment="workBar">
-
-<form method="post" th:object="${stock}" th:action="@{/keszletrolLevetel}" onSubmit="if (!confirm('Biztos vagy benne?')) return false;" >
+<form th:action="@{/elszamolaski2}" method="post" onSubmit="if (!confirm('Biztos vagy benne?')) return false;">
+<div>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Ki adta el?</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
   </div>
-  <select th:field="*{employe}">
-   	<option  th:if="${utolsoemploye}" th:text="${utolsoemploye.name}" th:value="${utolsoemploye.id}"></option>   <!--utoljára rögzítet EMPLOYE -->
+  <input type="date" name="bday" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ki hozta?</span>
+  </div>
+  <select name="empid">
+  
   	<option  th:each="emp:${emps}" th:text="${emp.name}" th:value="${emp.id}"></option>
   </select>
 </div>
 
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mit adott el?</span>
-  </div>
-  <select th:field="*{product}"><option  th:each="prod:${products}" th:text="${prod.name}" th:value="${prod.id}"></option></select>
-</div>
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Mennyiség:</span>
-  </div>
-  <input type="number" name="amount" min="1" max="2000" class="form-control" th:field="*{amount}" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 </div>
+<div>
+<input type="checkbox" name="selejt" value="0" checked style="visibility:hidden">
+<table  align="center">
+<tr class="termek" th:each="list:${termekek}">
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Dátum: </span>
-  </div>
-  <input type="date" name="bday" th:field="*{date}" required>
-</div>
 
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Leírás, információ</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" th:field="*{comment}">
+<td class="baloldal"><input  type="hidden" th:value="${list.id}" name="pid"><label th:text="${list.name}"></label></td>
+
+<td><input class="lista" type="number" th:id="${list.id}" name="darab" value="0"></td>
+<td><input class="lista" type="text" name="comment" placeholder="...megjegyzés"></td>
+<td>Selejt: <input type="checkbox" name="selejt" th:value="${list.id}"></td>
+<!-- <input  class="gomb" type="submit" th:value="${list.name}" th:onclick="'javascript:document.getElementById('+${list.id}+').disabled=true'"> -->
+
+
+
+
+</tr>
+</table>
+
+
 </div>
 
 
 
 
-<button type="submit" class="btn btn-outline-success" >Rögzítés</button>
 
+<input type="submit" value="KIADÁS RÖGZÍTÉSE" >
 </form>
-<div th:if="${siker}">
-<script type="text/javascript">
-   jQuery(document).ready(function($){
-	   alert("Eladás regisztrálva!");
-	   });
-   </script>
 </div>
-</div>
-
 
 
 </body>

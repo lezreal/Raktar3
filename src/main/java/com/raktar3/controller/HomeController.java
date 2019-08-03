@@ -74,26 +74,7 @@ public class HomeController {
 		return "index";
 	}
 	
-	@RequestMapping("/csengos")
-	public String homeWithCsengo(Model model) {
-		if (reminderService.vizsgal().size()>0) 
-		{
-			model.addAttribute("csengo", reminderService.vizsgal());
-			model.addAttribute("reminder", "");
-			
-		}
-		List<Integer> id_lista =stockService.findProducts();
-		List<Product> lista = new ArrayList<Product>();
-		for (int i=0;i<id_lista.size();i++) {
-			Product p =productService.findById(id_lista.get(i));
-			int osszes=stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i));
-			p.setAmount(osszes);
-			lista.add(p);
-		}
-		model.addAttribute("productlist", lista);
-		model.addAttribute("proba", "picsa");
-		return "productList";
-	}
+	
 	
 	@RequestMapping("/newproduct")
 	public String newProduct(Model model) {
@@ -111,21 +92,7 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping("/productlist")
-	public String productList(Model model) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		List<Integer> id_lista =stockService.findProducts();
-		List<Product> lista = new ArrayList();
-		for (int i=0;i<id_lista.size();i++) {
-			Product p =productService.findById(id_lista.get(i));
-			int osszes=stockService.getAmount(id_lista.get(i))-stockService.getAmountSale(id_lista.get(i));
-			p.setAmount(osszes);
-			lista.add(p);
-		}
-		model.addAttribute("productlist", lista);
-		
-		return "productList";
-	}
+
 	
 	@RequestMapping("/newemp")
 	public String newEmp(Model model) {
@@ -135,45 +102,8 @@ public class HomeController {
 		return "newEmp";
 	}
 	
-	@RequestMapping("/beerkezes")
-	public String beerkezes(Model model) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		if (employeService.findAllHumanEmploye().isEmpty()) {
-			model.addAttribute("noemploye","");
-			return "index";
-		}
-		
-		if (productService.findAll().isEmpty()) {
-			model.addAttribute("noproduct","");
-			return "index";
-		}
-		model.addAttribute("products", productService.findAll());
-		model.addAttribute("emps", employeService.findAllHumanEmploye());
-		
-		model.addAttribute("stock", new Stock());
-		return "beerkezes";
-	}
 	
-	@RequestMapping("/eladas")
-	public String eladas(Model model) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		if (employeService.findAllHumanEmploye().isEmpty()) {
-			model.addAttribute("noemploye","");
-			return "index";
-		}
 		
-		if (productService.findAll().isEmpty()) {
-			model.addAttribute("noproduct","");
-			return "index";
-		}
-		
-		model.addAttribute("stock", new Stock());
-		model.addAttribute("emps", employeService.findAllHumanEmploye());
-		model.addAttribute("products", productService.findAll());
-		
-		return "eladas";
-	}
-	
 	@RequestMapping("/newcompany")
 	public String newcompany(Model model) {
 		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
@@ -254,29 +184,7 @@ public class HomeController {
 		return "kamion";
 	}
 	
-	@RequestMapping("/selejt")
-	public String selejt(Model model) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		if (employeService.findAllEmploye().isEmpty()) {
-			model.addAttribute("noemploye","");
-			return "index";
-		}
-		
-		if (productService.findAll().isEmpty()) {
-			model.addAttribute("noproduct","");
-			return "index";
-		}
-		
-		if (!stockService.vaneKeszlet()) {
-			model.addAttribute("nostock","");
-			return "index";
-		}
-		
-		model.addAttribute("stock", new Stock());
-		model.addAttribute("emps", employeService.findAllEmploye());
-		model.addAttribute("products", productService.findAll());
-		return "selejt";
-	}
+	
 
 	@RequestMapping("/newmachine")
 	public String newMachine(Model model) {
@@ -294,16 +202,7 @@ public class HomeController {
 		return "machineList";
 	}
 	
-	@RequestMapping("/alapkeszlet")
-	public String alapkeszlet(Model model) {
-		if (reminderService.vizsgal().size()>0) model.addAttribute("reminder", "");
-		if (productService.findAll().isEmpty()) {
-			model.addAttribute("noproduct","");
-			return "index";
-		}
-		model.addAttribute("products", productService.findAll());
-		return "alapkeszlet";
-	}
+	
 	
 	
 	@RequestMapping("/lekerdezes")
@@ -375,5 +274,24 @@ public class HomeController {
 	}
 
 
+	@RequestMapping("/elszamolasBE")
+	public String elszamolasbe(Model model) {
+		model.addAttribute("emps", employeService.findAllHumanEmploye());
+		model.addAttribute("termekek", productService.findAll());
+		return "beerkezes";
+	}
+	
+	@RequestMapping("/eladas")
+	public String elszamolaski(Model model) {
+		model.addAttribute("emps", employeService.findAllHumanEmploye());
+		model.addAttribute("termekek", productService.findAll());
+		return "eladas";
+	}
+	
+	@RequestMapping("/alapkeszlet")
+	public String alapbeallitas(Model model) {
+		model.addAttribute("products", productService.findAll());
+		return "alapkeszlet";
+	}
 	
 }

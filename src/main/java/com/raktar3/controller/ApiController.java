@@ -20,6 +20,7 @@ public class ApiController {
 
 	@Autowired
 	StockService stockService;
+
 	
 	@Autowired
 	ProductService productService;
